@@ -348,35 +348,18 @@ function tlogo(url, sz=27, rd=3){
   return `<img src="${url}" style="width:${sz}px;height:${sz}px;object-fit:contain;border-radius:${rd}px;flex-shrink:0;" onerror="this.style.opacity='.2'" alt="">`;
 }
 
-// ── API 호출 (직접 → CORS 차단 시 corsproxy 우회) ──
+// ── API 호출 (Netlify Function — 환경변수 키 사용) ──
 async function apiFetch(path, params={}){
-  if(!KEY) return null;
   const ck = path + JSON.stringify(params);
   if(cache[ck] && Date.now()-cache[ck].ts < 90000) return cache[ck].data;
 
-  const qs = new URLSearchParams(params).toString();
-  const target = `https://v3.football.api-sports.io${path}${qs?'?'+qs:''}`;
-  const hdrs = {'x-apisports-key': KEY, 'x-apisports-host': 'v3.football.api-sports.io'};
-
-  // 1차: 직접 호출
   try {
-    const r = await fetch(target, {headers: hdrs});
-    if(r.ok){
-      const data = await r.json();
-      if(!data.errors || !Object.keys(data.errors).length){
-        cache[ck] = {data, ts:Date.now()};
-        return data;
-      }
-    }
-  } catch {}
-
-  // 2차: corsproxy.io 우회
-  try {
-    const proxy = `https://corsproxy.io/?url=${encodeURIComponent(target)}`;
-    const r2 = await fetch(proxy, {headers: hdrs});
-    if(!r2.ok) return null;
-    const data = await r2.json();
+    const qs = new URLSearchParams({path, ...params}).toString();
+    const r = await fetch(`/api/football?${qs}`);
+    if(!r.ok) return null;
+    const data = await r.json();
     if(data.errors && Object.keys(data.errors).length) return null;
+    if(!data.response) return null;
     cache[ck] = {data, ts:Date.now()};
     return data;
   } catch { return null; }
@@ -430,7 +413,6 @@ function empty(t,s){ return `<div class="empty"><strong>${t}</strong>${s||''}</d
 // ── 라이브 ───────────────────────────
 async function loadLive(){
   const c = document.getElementById('live-body');
-  if(!KEY){ c.innerHTML = noKeyMsg(); return; }
   c.innerHTML = spin('라이브 경기 불러오는 중...');
   const td = dStr(new Date());
   let data = await apiFetch('/fixtures', {league:CL.lid, season:SEASON, date:td});
@@ -547,7 +529,6 @@ function pickDate(ds,el){
 async function loadSched(){ buildDateBar(); loadSchedDate(selDate); }
 async function loadSchedDate(ds){
   const c = document.getElementById('sched-body');
-  if(!KEY){ c.innerHTML = noKeyMsg(); return; }
   c.innerHTML = spin('일정 불러오는 중...');
   const data = await apiFetch('/fixtures', {league:CL.lid, season:SEASON, date:ds});
   if(!data?.response?.length){ c.innerHTML = empty('이 날 경기 없음','다른 날짜를 선택해보세요'); return; }
@@ -566,7 +547,6 @@ async function loadSchedDate(ds){
 // ── 순위표 ────────────────────────────
 async function loadStd(){
   const c = document.getElementById('std-body');
-  if(!KEY){ c.innerHTML = noKeyMsg(); return; }
   c.innerHTML = spin('순위표 불러오는 중...');
   const data = await apiFetch('/standings', {league:CL.lid, season:SEASON});
   if(!data?.response?.length){ c.innerHTML = empty('불러오기 실패','잠시 후 다시 시도해주세요'); return; }
@@ -592,7 +572,6 @@ async function loadStd(){
 // ── 득점 순위 ─────────────────────────
 async function loadPlayers(){
   const c = document.getElementById('player-body');
-  if(!KEY){ c.innerHTML = noKeyMsg(); return; }
   c.innerHTML = spin('선수 데이터 불러오는 중...');
   const data = await apiFetch('/players/topscorers', {league:CL.lid, season:SEASON});
   if(!data?.response?.length){ c.innerHTML = empty('불러오기 실패',''); return; }
@@ -654,8 +633,7 @@ function renderSpec(){
 function init(){
   renderSpec();
   loadLive();
-  if(!KEY) document.getElementById('setup-wrap').style.display = 'block';
-  else document.getElementById('refBtn').style.display = 'block';
+  document.getElementById('refBtn').style.display = 'block';
 }
 init();
 setInterval(()=>{ if(document.querySelector('.page.on').id==='pg-live') loadLive(); }, 60000);
