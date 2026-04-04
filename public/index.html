@@ -396,6 +396,91 @@ body{
 /* ── 모달 ── */
 #match-modal{scrollbar-width:none;}
 #match-modal::-webkit-scrollbar{display:none;}
+
+/* ── SVG 네비 아이콘 ── */
+.nb-svg{width:22px;height:22px;color:var(--text3);transition:all .2s;}
+.nb.on .nb-svg{color:var(--grass);filter:drop-shadow(0 0 6px rgba(0,255,135,.6));}
+
+/* ── FotMob 스타일 날짜 네비 ── */
+.date-nav-wrap{
+  background:var(--bg2);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+}
+.date-nav-row{
+  display:flex;align-items:center;
+  padding:0 4px;
+  height:48px;
+  gap:0;
+}
+.date-nav-arr{
+  width:36px;height:48px;
+  background:none;border:none;
+  color:var(--text3);font-size:20px;
+  cursor:pointer;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  transition:color .15s;
+}
+.date-nav-arr:active{color:var(--grass);}
+.date-strip{
+  display:flex;flex:1;overflow-x:auto;
+  scrollbar-width:none;gap:0;
+}
+.date-strip::-webkit-scrollbar{display:none;}
+.dday{
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:center;
+  min-width:44px;height:48px;
+  cursor:pointer;flex-shrink:0;
+  border-bottom:2px solid transparent;
+  transition:all .15s;position:relative;
+  padding:0 4px;
+}
+.dday.on{border-bottom:2px solid var(--grass);}
+.dday-dow{font-size:9px;color:var(--text3);font-weight:500;line-height:1;}
+.dday.on .dday-dow{color:var(--grass);}
+.dday-dom{font-size:15px;font-weight:700;color:var(--text2);font-family:'Bebas Neue',sans-serif;line-height:1.1;}
+.dday.on .dday-dom{color:var(--grass);}
+.dday-dot{width:4px;height:4px;border-radius:50%;background:var(--grass);margin-top:2px;box-shadow:0 0 4px var(--grass);}
+
+/* ── 리그 그룹 (FotMob 스타일) ── */
+.league-group{margin-bottom:2px;}
+.league-hd{
+  display:flex;align-items:center;gap:8px;
+  padding:8px 12px;
+  background:rgba(0,255,135,.03);
+  border-bottom:1px solid var(--border);
+  cursor:pointer;
+  position:sticky;top:48px;z-index:10;
+}
+.league-hd-img{width:18px;height:18px;object-fit:contain;border-radius:2px;flex-shrink:0;}
+.league-hd-name{font-size:11px;font-weight:700;color:var(--text2);flex:1;}
+.league-hd-cnt{font-size:9px;color:var(--text3);background:rgba(255,255,255,.06);padding:2px 7px;border-radius:20px;}
+.league-toggle{font-size:12px;color:var(--text3);transition:transform .2s;}
+.league-toggle.closed{transform:rotate(-90deg);}
+.league-matches{overflow:hidden;transition:max-height .3s ease;}
+
+/* ── FotMob 스타일 경기 행 ── */
+.match-row{
+  display:flex;align-items:center;
+  padding:10px 12px;
+  border-bottom:1px solid rgba(0,255,135,.04);
+  cursor:pointer;transition:background .15s;
+  gap:8px;
+}
+.match-row:active{background:rgba(0,255,135,.05);}
+.match-time{font-size:10px;color:var(--text3);width:38px;text-align:center;flex-shrink:0;font-weight:500;}
+.match-time.live{color:var(--red);font-weight:700;}
+.match-teams{flex:1;display:flex;flex-direction:column;gap:5px;min-width:0;}
+.match-team-row{display:flex;align-items:center;gap:7px;}
+.match-team-logo{width:16px;height:16px;object-fit:contain;flex-shrink:0;}
+.match-team-name{font-size:12px;color:var(--text);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500;}
+.match-team-name.win{color:#fff;font-weight:700;}
+.match-score{font-size:14px;font-weight:900;color:#fff;font-family:'Bebas Neue',sans-serif;width:14px;text-align:right;flex-shrink:0;}
+.match-score.live-score{color:var(--grass);}
+.match-right{display:flex;flex-direction:column;align-items:center;gap:2px;flex-shrink:0;width:32px;}
+.match-status{font-size:9px;color:var(--text3);text-align:center;}
+.match-live-dot{width:6px;height:6px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);animation:pu 1s infinite;margin:0 auto;}
 </style>
 </head>
 <body>
@@ -482,7 +567,7 @@ body{
 </div>
 
 <div class="page" id="pg-sched">
-  <div id="date-bar"></div>
+  <div id="date-nav"></div>
   <div id="sched-body"></div>
 </div>
 
@@ -539,11 +624,46 @@ body{
 </div>
 
 <div class="bnav">
-  <button class="nb on" onclick="swP('live',this)"><span class="nb-ic">🔴</span><span class="nb-lb">전체라이브</span></button>
-  <button class="nb" onclick="swP('sched',this)"><span class="nb-ic">📅</span><span class="nb-lb">일정</span></button>
-  <button class="nb" onclick="swP('std',this)"><span class="nb-ic">📊</span><span class="nb-lb">순위</span></button>
-  <button class="nb" onclick="swP('player',this)"><span class="nb-ic">👤</span><span class="nb-lb">선수</span></button>
-  <button class="nb" onclick="swP('spec',this)"><span class="nb-ic">🔥</span><span class="nb-lb">분석</span></button>
+  <button class="nb on" onclick="swP('live',this)">
+    <svg class="nb-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="12" r="3" fill="currentColor"/>
+      <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".5"/>
+      <circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1" fill="none" opacity=".2"/>
+    </svg>
+    <span class="nb-lb">라이브</span>
+  </button>
+  <button class="nb" onclick="swP('sched',this)">
+    <svg class="nb-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M3 9h18" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      <circle cx="8" cy="14" r="1.2" fill="currentColor"/>
+      <circle cx="12" cy="14" r="1.2" fill="currentColor"/>
+      <circle cx="16" cy="14" r="1.2" fill="currentColor"/>
+    </svg>
+    <span class="nb-lb">일정</span>
+  </button>
+  <button class="nb" onclick="swP('std',this)">
+    <svg class="nb-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="3" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/>
+      <rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/>
+      <rect x="17" y="4" width="4" height="17" rx="1" fill="currentColor"/>
+    </svg>
+    <span class="nb-lb">순위</span>
+  </button>
+  <button class="nb" onclick="swP('player',this)">
+    <svg class="nb-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/>
+      <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+    </svg>
+    <span class="nb-lb">선수</span>
+  </button>
+  <button class="nb" onclick="swP('spec',this)">
+    <svg class="nb-svg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M12 3L14.5 8.5L20.5 9.3L16.3 13.4L17.4 19.4L12 16.6L6.6 19.4L7.7 13.4L3.5 9.3L9.5 8.5L12 3Z" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+    </svg>
+    <span class="nb-lb">분석</span>
+  </button>
 </div>
 
 <script>
@@ -785,6 +905,9 @@ function swP(name,btn){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('pg-'+name).classList.add('on');
   btn.classList.add('on');
+  // 일정탭은 상단 리그탭 숨김, 나머지는 표시
+  const ltabs=document.querySelector('.ltabs');
+  if(ltabs) ltabs.style.display = name==='sched' ? 'none' : 'flex';
   loadCur();
 }
 function selL(el){
@@ -891,35 +1014,164 @@ function mkCard(m, type){
 }
 
 // ── 일정 ─────────────────────────────
-function buildDateBar(){
+function buildDateNav(){
   const kst=getKSTDate();
   const today=new Date(Date.UTC(kst.year,kst.month-1,kst.date));
-  let pills='';
-  for(let i=-2;i<=8;i++){
+  let days='';
+  for(let i=-3;i<=10;i++){
     const d=new Date(today.getTime()+i*86400000);
     const y=d.getUTCFullYear(), m=d.getUTCMonth()+1, dt=d.getUTCDate(), dow=d.getUTCDay();
     const ds=`${y}-${String(m).padStart(2,'0')}-${String(dt).padStart(2,'0')}`;
     const isT=i===0;
-    pills+=`<div class="dpill ${ds===selDate?'on':''}" onclick="pickDate('${ds}',this)"><span class="dow" style="${ds===selDate?'color:rgba(0,20,8,.8);':''} ">${isT?'오늘':DOW[dow]}</span><span class="dom">${dt}</span>${isT?'<div class="todot"></div>':''}</div>`;
+    days+=`<div class="dday ${ds===selDate?'on':''}" onclick="pickDate('${ds}')" data-date="${ds}">
+      <span class="dday-dow">${isT?'오늘':DOW[dow]}</span>
+      <span class="dday-dom">${dt}</span>
+      ${isT?'<div class="dday-dot"></div>':''}
+    </div>`;
   }
-  document.getElementById('date-bar').innerHTML=`<div class="dscroll">${pills}</div>`;
+  const nav=document.getElementById('date-nav');
+  if(!nav) return;
+  nav.innerHTML=`<div class="date-nav-wrap">
+    <div class="date-nav-row">
+      <button class="date-nav-arr" onclick="shiftDate(-1)">‹</button>
+      <div class="date-strip" id="date-strip">${days}</div>
+      <button class="date-nav-arr" onclick="shiftDate(1)">›</button>
+    </div>
+  </div>`;
+  // 오늘 날짜로 스크롤
+  setTimeout(()=>{
+    const on=document.querySelector('.dday.on');
+    if(on) on.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+  },50);
 }
-function pickDate(ds,el){ selDate=ds; document.querySelectorAll('.dpill').forEach(p=>p.classList.remove('on')); el.classList.add('on'); loadSchedDate(ds); }
-async function loadSched(){ buildDateBar(); loadSchedDate(selDate); }
+function shiftDate(dir){
+  const kst=getKSTDate();
+  const cur=new Date(selDate+'T00:00:00Z');
+  cur.setUTCDate(cur.getUTCDate()+dir);
+  const ds=`${cur.getUTCFullYear()}-${String(cur.getUTCMonth()+1).padStart(2,'0')}-${String(cur.getUTCDate()).padStart(2,'0')}`;
+  pickDate(ds);
+}
+function pickDate(ds){
+  selDate=ds;
+  document.querySelectorAll('.dday').forEach(d=>{
+    d.classList.toggle('on',d.dataset.date===ds);
+  });
+  loadSchedDate(ds);
+}
+async function loadSched(){
+  // 일정 탭은 날짜 네비 + 전체 리그 표시
+  buildDateNav();
+  loadSchedDate(selDate);
+}
+// 모든 지원 리그 목록
+const ALL_LEAGUES = [
+  {code:'PL', name:'프리미어리그', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {code:'PD', name:'라리가', flag:'🇪🇸'},
+  {code:'SA', name:'세리에A', flag:'🇮🇹'},
+  {code:'FL1', name:'리그앙', flag:'🇫🇷'},
+  {code:'CL', name:'챔피언스리그', flag:'🌍'},
+  {code:'UEL', name:'유로파리그', flag:'🌍'},
+  {code:'FAC', name:'FA컵', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {code:'ELC', name:'카라바오컵', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿'},
+  {code:'WC', name:'FIFA 월드컵', flag:'🌍'},
+  {code:'EC', name:'UEFA 유로', flag:'🌍'},
+];
+
 async function loadSchedDate(ds){
   const c=document.getElementById('sched-body');
-  if(!CL.real){ c.innerHTML=kDemoSched(CL.lid,ds); return; }
   c.innerHTML=spin('일정 불러오는 중...');
-  const data=await fdFetch(`/competitions/${CL.code}/matches?dateFrom=${ds}&dateTo=${ds}`);
-  if(!data?.matches?.length){ c.innerHTML=empty('이 날 경기 없음','다른 날짜를 선택해보세요'); return; }
-  const live=data.matches.filter(m=>['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status));
-  const sched=data.matches.filter(m=>['SCHEDULED','TIMED'].includes(m.status));
-  const fin=data.matches.filter(m=>['FINISHED','AWARDED'].includes(m.status));
-  let html=`<div style="padding:4px 13px 2px;"><span class="srctag">football-data.org · ${ds} (KST)</span></div>`;
-  if(live.length){ html+=`<div class="sec"><span class="sl">● LIVE</span></div>`; live.forEach(m=>{html+=mkCard(m,'live');}); }
-  if(sched.length){ html+=`<div class="sec"><span class="sl">예정</span></div>`; sched.forEach(m=>{html+=mkCard(m,'sched');}); }
-  if(fin.length){ html+=`<div class="sec"><span class="sl">종료</span></div>`; fin.forEach(m=>{html+=mkCard(m,'fin');}); }
+
+  // 선택 리그만 or 전체 로드
+  const leaguesToLoad = CL.real ? [CL] : ALL_LEAGUES;
+  const results = await Promise.all(leaguesToLoad.map(l=>
+    fdFetch(`/competitions/${l.code}/matches?dateFrom=${ds}&dateTo=${ds}`)
+  ));
+
+  // 리그별 그룹핑
+  let hasAny=false;
+  let html=`<div style="padding:5px 12px 3px;"><span class="srctag">football-data.org · ${ds} (KST)</span></div>`;
+
+  results.forEach((data,i)=>{
+    const league = leaguesToLoad[i];
+    const matches = data?.matches||[];
+    if(!matches.length) return;
+    hasAny=true;
+
+    const live=matches.filter(m=>['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status));
+    const sched=matches.filter(m=>['SCHEDULED','TIMED'].includes(m.status));
+    const fin=matches.filter(m=>['FINISHED','AWARDED'].includes(m.status));
+    const sorted=[...live,...sched,...fin];
+
+    const logoUrl=`https://crests.football-data.org/${league.code}.png`;
+    const liveTag=live.length?`<span style="font-size:9px;color:var(--red);margin-right:4px;">● ${live.length}</span>`:'';
+    const groupId=`lg-${league.code}`;
+
+    html+=`<div class="league-group">
+      <div class="league-hd" onclick="toggleLeague('${groupId}')">
+        <img class="league-hd-img" src="${logoUrl}" onerror="this.style.display='none'" alt="">
+        <span class="league-hd-name">${league.name}</span>
+        ${liveTag}
+        <span class="league-hd-cnt">${sorted.length}경기</span>
+        <span class="league-toggle" id="arr-${groupId}">▾</span>
+      </div>
+      <div class="league-matches" id="${groupId}">
+        ${sorted.map(m=>matchRow(m,league)).join('')}
+      </div>
+    </div>`;
+  });
+
+  if(!hasAny){ c.innerHTML=empty('이 날 경기 없음','다른 날짜를 선택해보세요'); return; }
   c.innerHTML=html;
+}
+
+function toggleLeague(id){
+  const el=document.getElementById(id);
+  const arr=document.getElementById('arr-'+id);
+  if(!el) return;
+  const isOpen=el.style.maxHeight!=='0px'&&el.style.maxHeight!=='';
+  if(isOpen){
+    el.style.maxHeight='0px';
+    el.style.overflow='hidden';
+    arr?.classList.add('closed');
+  } else {
+    el.style.maxHeight=el.scrollHeight+'px';
+    el.style.overflow='visible';
+    arr?.classList.remove('closed');
+  }
+}
+
+function matchRow(m, league){
+  const h=m.homeTeam, a=m.awayTeam;
+  const isLive=['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status);
+  const isFin=['FINISHED','AWARDED'].includes(m.status);
+  const hg=m.score?.fullTime?.home??m.score?.halfTime?.home;
+  const ag=m.score?.fullTime?.away??m.score?.halfTime?.away;
+  const timeKST=kstTime(m.utcDate);
+  const statusLabel={IN_PLAY:'진행중',PAUSED:'HT',HALFTIME:'HT',EXTRA_TIME:'연장',PENALTY_SHOOTOUT:'PK',FINISHED:'FT',AWARDED:'FT'}[m.status]||timeKST;
+  const min=m.minute?`${m.minute}'`:statusLabel;
+
+  // 승팀 결정
+  const hWin=isFin&&hg>ag, aWin=isFin&&ag>hg;
+
+  return `<div class="match-row" onclick="showMatchDetail(${m.id},'${(h.shortName||h.name).replace(/'/g,'')}','${(a.shortName||a.name).replace(/'/g,'')}','${league.code}')">
+    <div class="match-time ${isLive?'live':''}">${isLive?min:timeKST}</div>
+    <div class="match-teams">
+      <div class="match-team-row">
+        <img class="match-team-logo" src="${h.crest||''}" onerror="this.style.opacity='.2'" alt="">
+        <span class="match-team-name ${hWin?'win':''}">${h.shortName||h.name}</span>
+        <span class="match-score ${isLive?'live-score':''}">${hg??''}</span>
+      </div>
+      <div class="match-team-row">
+        <img class="match-team-logo" src="${a.crest||''}" onerror="this.style.opacity='.2'" alt="">
+        <span class="match-team-name ${aWin?'win':''}">${a.shortName||a.name}</span>
+        <span class="match-score ${isLive?'live-score':''}">${ag??''}</span>
+      </div>
+    </div>
+    <div class="match-right">
+      ${isLive?'<div class="match-live-dot"></div>':''}
+      <span class="match-status">${isFin?'FT':isLive?'':''}</span>
+    </div>
+  </div>`;
 }
 
 // ── 순위 ─────────────────────────────
@@ -1137,6 +1389,9 @@ function renderSpec(){
 renderSpec();
 loadLive();
 document.getElementById('refBtn').style.display='block';
+// 초기 리그탭 표시
+const _lt=document.querySelector('.ltabs');
+if(_lt) _lt.style.display='flex';
 // ESC 키로 모달 닫기
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 setInterval(()=>{
