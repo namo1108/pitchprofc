@@ -541,6 +541,7 @@ body{
 
 <!-- 페이지들 -->
 <div class="page on" id="pg-live">
+  <div id="live-date-hd"></div>
   <div id="setup-wrap" style="display:none;">
     <div class="setup">
       <div class="setup-ttl">⚙ API-Football 키 설정</div>
@@ -905,9 +906,9 @@ function swP(name,btn){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   document.getElementById('pg-'+name).classList.add('on');
   btn.classList.add('on');
-  // 일정탭은 상단 리그탭 숨김, 나머지는 표시
+  // 라이브·일정탭은 리그탭 숨김
   const ltabs=document.querySelector('.ltabs');
-  if(ltabs) ltabs.style.display = name==='sched' ? 'none' : 'flex';
+  if(ltabs) ltabs.style.display = (name==='sched'||name==='live') ? 'none' : 'flex';
   loadCur();
 }
 function selL(el){
@@ -933,6 +934,17 @@ function empty(t,s){ return `<div class="empty"><strong>${t}</strong>${s||''}</d
 
 // ── 라이브 ───────────────────────────
 async function loadLive(){
+  // 오늘 날짜 헤더 렌더링
+  const kst=getKSTDate();
+  const months=['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+  const days=['일요일','월요일','화요일','수요일','목요일','금요일','토요일'];
+  const dhd=document.getElementById('live-date-hd');
+  if(dhd) dhd.innerHTML=`
+    <div style="padding:12px 14px 10px;display:flex;align-items:baseline;gap:8px;border-bottom:1px solid var(--border);">
+      <span style="font-size:22px;font-weight:900;color:#fff;font-family:'Bebas Neue',sans-serif;letter-spacing:1px;">${kst.month}월 ${kst.date}일</span>
+      <span style="font-size:13px;color:var(--grass);font-weight:700;">${days[kst.day]}</span>
+      <span style="margin-left:auto;font-size:9px;color:var(--text3);background:rgba(0,255,135,.06);padding:3px 9px;border-radius:20px;border:1px solid var(--border);">전체 라이브</span>
+    </div>`;
   const c=document.getElementById('live-body');
   c.innerHTML=spin('전체 라이브 경기 불러오는 중...');
   const td=dStr(new Date());
@@ -1420,9 +1432,9 @@ function renderSpec(){
 renderSpec();
 loadLive();
 document.getElementById('refBtn').style.display='block';
-// 초기 리그탭 표시
+// 초기 라이브탭 → 리그탭 숨김
 const _lt=document.querySelector('.ltabs');
-if(_lt) _lt.style.display='flex';
+if(_lt) _lt.style.display='none';
 // ESC 키로 모달 닫기
 document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
 setInterval(()=>{
