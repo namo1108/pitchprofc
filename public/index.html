@@ -503,7 +503,7 @@ body{
 
 <!-- 온보딩 화면 -->
 <div id="onboarding" style="display:none;position:fixed;inset:0;z-index:9999;background:#050e08;overflow-y:auto;">
-  <div style="min-height:100vh;display:flex;flex-direction:column;padding:0 0 30px;">
+  <div style="min-height:100vh;display:flex;flex-direction:column;padding:0 0 30px;position:relative;">
     <!-- 헤더 -->
     <div style="text-align:center;padding:48px 20px 24px;">
       <div style="font-size:40px;margin-bottom:12px;animation:spin3d 6s linear infinite;display:inline-block;">⚽</div>
@@ -539,7 +539,7 @@ body{
   <div class="logo"><span class="logo-ball">⚽</span> K FOOTBALL</div>
   <div class="top-right">
     <span class="live-badge" id="lcnt">● LIVE</span>
-    <button class="icon-btn" id="my-team-badge" onclick="openTeamPicker()" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;">⚙</button>
+    <button class="icon-btn" id="my-team-badge" onclick="openTeamPicker()" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0;font-size:16px;">⚙</button>
     <button class="icon-btn" id="refBtn" onclick="doRefresh()" style="display:none;">↻</button>
   </div>
 </div>
@@ -722,48 +722,85 @@ body{
 let CL = {lid:'PL', code:'PL', name:'프리미어리그', real:true};
 
 const TEAM_COLORS = {
-  // 프리미어리그
-  33:  {name:'Manchester United', primary:'#DA291C', secondary:'#FBE122', bg:'#1a0404'},
-  40:  {name:'Liverpool',         primary:'#C8102E', secondary:'#F6EB61', bg:'#1a0307'},
-  50:  {name:'Manchester City',   primary:'#6CABDD', secondary:'#1C2C5B', bg:'#040d1a'},
-  57:  {name:'Arsenal',          primary:'#EF0107', secondary:'#9C824A', bg:'#1a0303'},
-  49:  {name:'Chelsea',          primary:'#034694', secondary:'#DBA111', bg:'#000d1f'},
-  66:  {name:'Aston Villa',       primary:'#95BFE5', secondary:'#670E36', bg:'#0d0208'},
-  73:  {name:'Tottenham',         primary:'#132257', secondary:'#FFFFFF', bg:'#050810'},
-  39:  {name:'Wolves',            primary:'#FDB913', secondary:'#231F20', bg:'#1a1400'},
-  34:  {name:'Newcastle',         primary:'#241F20', secondary:'#FFFFFF', bg:'#0a0a0a'},
-  51:  {name:'Brighton',          primary:'#0057B8', secondary:'#FFCD00', bg:'#000d1f'},
+  // 프리미어리그 (football-data.org team IDs)
+  66:  {name:'Man United',   primary:'#DA291C', secondary:'#FBE122', bg:'#1a0303', crest:'https://crests.football-data.org/66.png'},
+  64:  {name:'Liverpool',    primary:'#C8102E', secondary:'#F6EB61', bg:'#1a0307', crest:'https://crests.football-data.org/64.png'},
+  65:  {name:'Man City',     primary:'#6CABDD', secondary:'#1C2C5B', bg:'#04111a', crest:'https://crests.football-data.org/65.png'},
+  57:  {name:'Arsenal',      primary:'#EF0107', secondary:'#9C824A', bg:'#1a0303', crest:'https://crests.football-data.org/57.png'},
+  61:  {name:'Chelsea',      primary:'#034694', secondary:'#DBA111', bg:'#000d1f', crest:'https://crests.football-data.org/61.png'},
+  58:  {name:'Aston Villa',  primary:'#95BFE5', secondary:'#670E36', bg:'#0d0208', crest:'https://crests.football-data.org/58.png'},
+  73:  {name:'Tottenham',    primary:'#132257', secondary:'#FFFFFF', bg:'#050810', crest:'https://crests.football-data.org/73.png'},
+  76:  {name:'Wolves',       primary:'#FDB913', secondary:'#231F20', bg:'#1a1400', crest:'https://crests.football-data.org/76.png'},
+  67:  {name:'Newcastle',    primary:'#241F20', secondary:'#FFFFFF', bg:'#0a0a0a', crest:'https://crests.football-data.org/67.png'},
+  397: {name:'Brighton',     primary:'#0057B8', secondary:'#FFCD00', bg:'#000d1f', crest:'https://crests.football-data.org/397.png'},
+  563: {name:'West Ham',     primary:'#7A263A', secondary:'#1BB1E7', bg:'#150308', crest:'https://crests.football-data.org/563.png'},
+  354: {name:'Crystal Palace',primary:'#1B458F',secondary:'#C4122E', bg:'#00041a', crest:'https://crests.football-data.org/354.png'},
+  340: {name:'Southampton',  primary:'#D71920', secondary:'#FFFFFF', bg:'#1a0202', crest:'https://crests.football-data.org/340.png'},
+  72:  {name:'Fulham',       primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000', crest:'https://crests.football-data.org/72.png'},
+  402: {name:'Brentford',    primary:'#E30613', secondary:'#FFFFFF', bg:'#1a0101', crest:'https://crests.football-data.org/402.png'},
+  74:  {name:'Everton',      primary:'#003399', secondary:'#FFFFFF', bg:'#00031a', crest:'https://crests.football-data.org/74.png'},
+  75:  {name:'Leicester',    primary:'#003090', secondary:'#FDBE11', bg:'#00031a', crest:'https://crests.football-data.org/75.png'},
+  1044:{name:'Nottm Forest', primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000', crest:'https://crests.football-data.org/1044.png'},
+  68:  {name:'Ipswich',      primary:'#0033A0', secondary:'#FFFFFF', bg:'#00031a', crest:'https://crests.football-data.org/68.png'},
+  70:  {name:'Bournemouth',  primary:'#CC0000', secondary:'#000000', bg:'#1a0000', crest:'https://crests.football-data.org/70.png'},
+
   // 라리가
-  541: {name:'Real Madrid',       primary:'#FEBE10', secondary:'#00529F', bg:'#1a1300'},
-  529: {name:'Barcelona',         primary:'#A50044', secondary:'#004D98', bg:'#1a000d'},
-  530: {name:'Atletico Madrid',   primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000'},
-  548: {name:'Villarreal',        primary:'#FFD700', secondary:'#009640', bg:'#1a1500'},
-  532: {name:'Valencia',          primary:'#FF7F00', secondary:'#000000', bg:'#1a0e00'},
+  86:  {name:'Real Madrid',  primary:'#FEBE10', secondary:'#00529F', bg:'#1a1300', crest:'https://crests.football-data.org/86.png'},
+  81:  {name:'Barcelona',    primary:'#A50044', secondary:'#004D98', bg:'#1a000d', crest:'https://crests.football-data.org/81.png'},
+  78:  {name:'Atletico',     primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000', crest:'https://crests.football-data.org/78.png'},
+  94:  {name:'Villarreal',   primary:'#FFD700', secondary:'#009640', bg:'#1a1500', crest:'https://crests.football-data.org/94.png'},
+  95:  {name:'Valencia',     primary:'#FF7F00', secondary:'#000000', bg:'#1a0e00', crest:'https://crests.football-data.org/95.png'},
+  82:  {name:'Sevilla',      primary:'#D40511', secondary:'#FFFFFF', bg:'#1a0101', crest:'https://crests.football-data.org/82.png'},
+  90:  {name:'Real Betis',   primary:'#00954C', secondary:'#FFFFFF', bg:'#001a0e', crest:'https://crests.football-data.org/90.png'},
+  92:  {name:'Real Sociedad',primary:'#0067B1', secondary:'#FFFFFF', bg:'#00091a', crest:'https://crests.football-data.org/92.png'},
+  87:  {name:'Athletic Club',primary:'#EE2523', secondary:'#FFFFFF', bg:'#1a0202', crest:'https://crests.football-data.org/87.png'},
+  98:  {name:'Celta Vigo',   primary:'#79C0D0', secondary:'#FFFFFF', bg:'#0a1518', crest:'https://crests.football-data.org/98.png'},
+
   // 세리에A
-  489: {name:'AC Milan',          primary:'#FB090B', secondary:'#000000', bg:'#1a0000'},
-  505: {name:'Inter Milan',       primary:'#0068A8', secondary:'#000000', bg:'#00061a'},
-  492: {name:'Napoli',            primary:'#12A0D7', secondary:'#FFFFFF', bg:'#00121a'},
-  496: {name:'Juventus',          primary:'#000000', secondary:'#FFFFFF', bg:'#0a0a0a'},
-  497: {name:'AS Roma',           primary:'#8E1F2F', secondary:'#F5BC13', bg:'#1a0008'},
+  98:  {name:'AC Milan',     primary:'#FB090B', secondary:'#000000', bg:'#1a0000', crest:'https://crests.football-data.org/98.png'},
+  108: {name:'Inter Milan',  primary:'#0068A8', secondary:'#000000', bg:'#00061a', crest:'https://crests.football-data.org/108.png'},
+  113: {name:'Napoli',       primary:'#12A0D7', secondary:'#FFFFFF', bg:'#00121a', crest:'https://crests.football-data.org/113.png'},
+  109: {name:'Juventus',     primary:'#FFFFFF', secondary:'#000000', bg:'#0a0a0a', crest:'https://crests.football-data.org/109.png'},
+  100: {name:'AS Roma',      primary:'#8E1F2F', secondary:'#F5BC13', bg:'#1a0008', crest:'https://crests.football-data.org/100.png'},
+  102: {name:'Lazio',        primary:'#87D8F7', secondary:'#FFFFFF', bg:'#0a1518', crest:'https://crests.football-data.org/102.png'},
+  107: {name:'Fiorentina',   primary:'#4C2D8C', secondary:'#FFFFFF', bg:'#0d0520', crest:'https://crests.football-data.org/107.png'},
+  114: {name:'Torino',       primary:'#8B1A1A', secondary:'#FFFFFF', bg:'#1a0505', crest:'https://crests.football-data.org/114.png'},
+  115: {name:'Atalanta',     primary:'#1E3F6D', secondary:'#000000', bg:'#00050f', crest:'https://crests.football-data.org/115.png'},
+  103: {name:'Bologna',      primary:'#CC0000', secondary:'#004B98', bg:'#1a0000', crest:'https://crests.football-data.org/103.png'},
+
   // 분데스리가
-  157: {name:'Bayern Munich',     primary:'#DC052D', secondary:'#0066B2', bg:'#1a0006'},
-  165: {name:'Borussia Dortmund', primary:'#FDE100', secondary:'#000000', bg:'#1a1600'},
-  // UCL 참가팀
-  559: {name:'Bayer Leverkusen',  primary:'#E32221', secondary:'#000000', bg:'#1a0000'},
-  // K리그
-  2729:{name:'전북 현대',          primary:'#003DA5', secondary:'#FFD700', bg:'#00051a'},
-  2730:{name:'울산 HD',           primary:'#0057A8', secondary:'#FFB81C', bg:'#00051a'},
-  2733:{name:'FC 서울',           primary:'#E61E2B', secondary:'#FFFFFF', bg:'#1a0002'},
-  2731:{name:'포항 스틸러스',      primary:'#E31E24', secondary:'#FFFFFF', bg:'#1a0002'},
-  2732:{name:'대전 하나',          primary:'#005BAC', secondary:'#FFD700', bg:'#00051a'},
-  2741:{name:'강원 FC',           primary:'#1B4F9A', secondary:'#FFFFFF', bg:'#00051a'},
-  2740:{name:'광주 FC',           primary:'#FFD700', secondary:'#000000', bg:'#1a1400'},
-  2737:{name:'인천 유나이티드',    primary:'#0D47A1', secondary:'#FFCA28', bg:'#00041a'},
-  10155:{name:'부천 FC',          primary:'#003087', secondary:'#FFFFFF', bg:'#00031a'},
-  2744:{name:'FC 안양',           primary:'#FF6B00', secondary:'#FFFFFF', bg:'#1a0800'},
-  2742:{name:'제주 SK',           primary:'#FF6600', secondary:'#000000', bg:'#1a0800'},
-  10152:{name:'김천 상무',         primary:'#004B87', secondary:'#FFD700', bg:'#00041a'},
+  5:   {name:'Bayern Munich',primary:'#DC052D', secondary:'#0066B2', bg:'#1a0006', crest:'https://crests.football-data.org/5.png'},
+  4:   {name:'Dortmund',     primary:'#FDE100', secondary:'#000000', bg:'#1a1600', crest:'https://crests.football-data.org/4.png'},
+  3:   {name:'Bayer 04',     primary:'#E32221', secondary:'#000000', bg:'#1a0000', crest:'https://crests.football-data.org/3.png'},
+  721: {name:'Union Berlin', primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000', crest:'https://crests.football-data.org/721.png'},
+  11:  {name:'Stuttgart',    primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000', crest:'https://crests.football-data.org/11.png'},
+  10:  {name:'Freiburg',     primary:'#CC0000', secondary:'#FFFFFF', bg:'#1a0000', crest:'https://crests.football-data.org/10.png'},
+  13:  {name:'Eintracht',    primary:'#E2001A', secondary:'#000000', bg:'#1a0101', crest:'https://crests.football-data.org/13.png'},
+  18:  {name:'Wolfsburg',    primary:'#65B32E', secondary:'#FFFFFF', bg:'#0a1a00', crest:'https://crests.football-data.org/18.png'},
+
+  // 리그앙
+  516: {name:'PSG',          primary:'#003F8B', secondary:'#DA291C', bg:'#00041a', crest:'https://crests.football-data.org/516.png'},
+  511: {name:'Monaco',       primary:'#DA291C', secondary:'#FFFFFF', bg:'#1a0202', crest:'https://crests.football-data.org/511.png'},
+  518: {name:'Lyon',         primary:'#0055A4', secondary:'#FFFFFF', bg:'#00061a', crest:'https://crests.football-data.org/518.png'},
+  519: {name:'Marseille',    primary:'#009AC7', secondary:'#FFFFFF', bg:'#00111a', crest:'https://crests.football-data.org/519.png'},
+  512: {name:'Lille',        primary:'#BE2127', secondary:'#FFFFFF', bg:'#1a0202', crest:'https://crests.football-data.org/512.png'},
+
+  // K리그 (api-sports ID 유지 - 다른 엠블럼 소스)
+  2729:{name:'전북 현대',    primary:'#003DA5', secondary:'#FFD700', bg:'#00051a', crest:`https://media.api-sports.io/football/teams/2729.png`},
+  2730:{name:'울산 HD',      primary:'#0057A8', secondary:'#FFB81C', bg:'#00051a', crest:`https://media.api-sports.io/football/teams/2730.png`},
+  2733:{name:'FC 서울',      primary:'#E61E2B', secondary:'#FFFFFF', bg:'#1a0002', crest:`https://media.api-sports.io/football/teams/2733.png`},
+  2731:{name:'포항',         primary:'#E31E24', secondary:'#FFFFFF', bg:'#1a0002', crest:`https://media.api-sports.io/football/teams/2731.png`},
+  2732:{name:'대전 하나',    primary:'#005BAC', secondary:'#FFD700', bg:'#00051a', crest:`https://media.api-sports.io/football/teams/2732.png`},
+  2741:{name:'강원 FC',      primary:'#1B4F9A', secondary:'#FFFFFF', bg:'#00051a', crest:`https://media.api-sports.io/football/teams/2741.png`},
+  2740:{name:'광주 FC',      primary:'#FFD700', secondary:'#000000', bg:'#1a1400', crest:`https://media.api-sports.io/football/teams/2740.png`},
+  2737:{name:'인천',         primary:'#0D47A1', secondary:'#FFCA28', bg:'#00041a', crest:`https://media.api-sports.io/football/teams/2737.png`},
+  10155:{name:'부천 FC',     primary:'#003087', secondary:'#FFFFFF', bg:'#00031a', crest:`https://media.api-sports.io/football/teams/10155.png`},
+  2744:{name:'FC 안양',      primary:'#FF6B00', secondary:'#FFFFFF', bg:'#1a0800', crest:`https://media.api-sports.io/football/teams/2744.png`},
+  2742:{name:'제주 SK',      primary:'#FF6600', secondary:'#000000', bg:'#1a0800', crest:`https://media.api-sports.io/football/teams/2742.png`},
+  10152:{name:'김천 상무',   primary:'#004B87', secondary:'#FFD700', bg:'#00041a', crest:`https://media.api-sports.io/football/teams/10152.png`},
 };
+
+// 기본 테마 (초록 잔디)};
 
 // 기본 테마 (초록 잔디)
 const DEFAULT_THEME = {
@@ -804,6 +841,25 @@ function applyTheme(teamId){
 }
 
 function openTeamPicker(){
+  // 온보딩 화면으로 팀 재선택
+  const ob=document.getElementById('onboarding');
+  if(ob){
+    ob.style.display='block';
+    ob.style.opacity='1';
+    obSelected=myTeam?.id||null;
+    renderObLeagues();
+    // 닫기 버튼 표시 (재진입시)
+    const closeBtn=document.getElementById('ob-close-btn');
+    if(closeBtn) closeBtn.style.display='block';
+    // 이미 선택된 팀 표시
+    if(obSelected){
+      setTimeout(()=>obSelect(obSelected),50);
+    }
+    return;
+  }
+  _openTeamPickerModal();
+}
+function _openTeamPickerModal(){
   let modal = document.getElementById('team-modal');
   if(!modal){
     modal = document.createElement('div');
@@ -815,10 +871,11 @@ function openTeamPicker(){
   modal.style.display='block';
 
   const leagues = [
-    {name:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 프리미어리그', ids:[33,40,50,57,49,66,73,39,34,51]},
-    {name:'🇪🇸 라리가', ids:[541,529,530,548,532]},
-    {name:'🇮🇹 세리에A', ids:[489,505,492,496,497]},
-    {name:'🇩🇪 분데스리가', ids:[157,165,559]},
+    {name:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 프리미어리그', ids:[66,64,65,57,61,58,73,76,67,397,563,354,340,72,402,74,75,1044,68,70]},
+    {name:'🇪🇸 라리가', ids:[86,81,78,94,95,82,90,92,87]},
+    {name:'🇮🇹 세리에A', ids:[108,113,109,100,102,107,114,115,103]},
+    {name:'🇩🇪 분데스리가', ids:[5,4,3,721,11,10,13,18]},
+    {name:'🇫🇷 리그앙', ids:[516,511,518,519,512]},
     {name:'🇰🇷 K리그1', ids:[2729,2730,2733,2731,2732,2741,2740,2737,10155,2744,2742,10152]},
   ];
 
@@ -846,7 +903,7 @@ function openTeamPicker(){
       const isSelected = myTeam?.id === id;
       const pr=parseInt(tc.primary.slice(1,3),16),pg=parseInt(tc.primary.slice(3,5),16),pb=parseInt(tc.primary.slice(5,7),16);
       html += `<div onclick="selectTeam(${id})" style="padding:9px 6px;border-radius:10px;cursor:pointer;text-align:center;border:1.5px solid ${isSelected?tc.primary:'rgba(255,255,255,.07)'};background:${isSelected?`rgba(${pr},${pg},${pb},.18)`:'rgba(255,255,255,.03)'};transition:all .15s;">
-        <img src="https://media.api-sports.io/football/teams/${id}.png" style="width:28px;height:28px;object-fit:contain;margin-bottom:4px;" onerror="this.style.opacity='.3'" alt="">
+        <img src="${tc.crest||''}" style="width:30px;height:30px;object-fit:contain;margin-bottom:4px;" onerror="this.style.opacity='.3'" alt="">
         <div style="font-size:9px;color:${isSelected?tc.primary:'#6a8caa'};font-weight:${isSelected?700:400};line-height:1.3;">${tc.name.length>8?tc.name.slice(0,8)+'..':tc.name}</div>
         <div style="width:16px;height:3px;border-radius:2px;background:${tc.primary};margin:4px auto 0;"></div>
       </div>`;
@@ -873,6 +930,7 @@ function selectTeam(id){
   showTeamBadge();
 }
 
+}
 function closeTeamModal(){
   const m=document.getElementById('team-modal');
   if(m) m.style.display='none';
@@ -882,7 +940,7 @@ function showTeamBadge(){
   const badge=document.getElementById('my-team-badge');
   if(!badge) return;
   if(myTeam){
-    badge.innerHTML=`<img src="https://media.api-sports.io/football/teams/${myTeam.id}.png" style="width:20px;height:20px;object-fit:contain;" onerror="this.style.opacity='.3'" alt="">`;
+    badge.innerHTML=`<img src="${myTeam.crest||''}" style="width:20px;height:20px;object-fit:contain;" onerror="this.style.opacity='.3'" alt="">`;
     badge.style.display='flex';
     badge.title=myTeam.name;
   } else {
@@ -895,8 +953,8 @@ function showTeamBadge(){
 let obSelected = null; // 선택된 팀 ID (null=기본)
 
 function initOnboarding(){
-  // 이미 선택한 팀 있으면 온보딩 스킵
-  if(localStorage.getItem('kf_myteam') !== null || localStorage.getItem('kf_ob_done') === '1'){
+  // 이미 온보딩 완료했으면 스킵
+  if(localStorage.getItem('kf_ob_done') === '1'){
     return;
   }
   // 온보딩 표시
@@ -906,10 +964,11 @@ function initOnboarding(){
 
 function renderObLeagues(){
   const leagues = [
-    {name:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 프리미어리그', ids:[33,40,50,57,49,66,73,39,34,51]},
-    {name:'🇪🇸 라리가',             ids:[541,529,530,548,532]},
-    {name:'🇮🇹 세리에A',            ids:[489,505,492,496,497]},
-    {name:'🇩🇪 분데스리가',          ids:[157,165,559]},
+    {name:'🏴󠁧󠁢󠁥󠁮󠁧󠁿 프리미어리그', ids:[66,64,65,57,61,58,73,76,67,397,563,354,340,72,402,74,75,1044,68,70]},
+    {name:'🇪🇸 라리가',             ids:[86,81,78,94,95,82,90,92,87,98]},
+    {name:'🇮🇹 세리에A',            ids:[108,113,109,100,102,107,114,115,103]},
+    {name:'🇩🇪 분데스리가',          ids:[5,4,3,721,11,10,13,18]},
+    {name:'🇫🇷 리그앙',             ids:[516,511,518,519,512]},
     {name:'🇰🇷 K리그1',             ids:[2729,2730,2733,2731,2732,2741,2740,2737,10155,2744,2742,10152]},
   ];
 
@@ -924,7 +983,7 @@ function renderObLeagues(){
       if(!tc) return;
       const pr=parseInt(tc.primary.slice(1,3),16),pg_=parseInt(tc.primary.slice(3,5),16),pb=parseInt(tc.primary.slice(5,7),16);
       html+=`<div id="ob-team-${id}" onclick="obSelect(${id})" style="padding:12px 6px 10px;border-radius:12px;cursor:pointer;text-align:center;border:1.5px solid rgba(255,255,255,.07);background:rgba(255,255,255,.03);transition:all .2s;-webkit-tap-highlight-color:transparent;">
-        <img src="https://media.api-sports.io/football/teams/${id}.png" style="width:34px;height:34px;object-fit:contain;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto;" onerror="this.style.opacity='.3'" alt="">
+        <img src="${tc.crest||''}" style="width:36px;height:36px;object-fit:contain;margin-bottom:6px;display:block;margin-left:auto;margin-right:auto;" onerror="this.style.opacity='.3'" alt="">
         <div style="font-size:9px;color:#6a8caa;font-weight:500;line-height:1.3;word-break:keep-all;">${tc.name.length>8?tc.name.slice(0,9)+'..':tc.name}</div>
         <div style="width:20px;height:3px;border-radius:2px;background:${tc.primary};margin:5px auto 0;opacity:.7;"></div>
       </div>`;
@@ -978,6 +1037,10 @@ function obSelect(id){
   btn.textContent=tc?`${tc.name} 팀으로 시작하기 →`:'기본 테마로 시작하기 →';
 }
 
+function obClose(){
+  const ob=document.getElementById('onboarding');
+  if(ob){ ob.style.transition='opacity .3s'; ob.style.opacity='0'; setTimeout(()=>{ ob.style.display='none'; ob.style.opacity='1'; },300); }
+}
 function obFinish(){
   localStorage.setItem('kf_ob_done','1');
   if(obSelected!==null){
