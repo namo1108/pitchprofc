@@ -346,18 +346,36 @@ body{background:var(--bg);color:var(--text);font-family:'Noto Sans KR',sans-seri
   <button class="nb" onclick="swP('sched',this)"><span class="nb-ic">📅</span><span class="nb-lb">일정</span></button>
   <button class="nb" onclick="swP('std',this)"><span class="nb-ic">📊</span><span class="nb-lb">순위</span></button>
   <button class="nb" onclick="swP('player',this)"><span class="nb-ic">👤</span><span class="nb-lb">선수</span></button>
-  <button class="nb" onclick="swP('odds',this)"><span class="nb-ic">💰</span><span class="nb-lb">배당률</span></button>
+  <button class="nb" onclick="swP('spec',this)"><span class="nb-ic">🔥</span><span class="nb-lb">분석</span></button>
 </div>
 
 <script>
 // ── 상태 ─────────────────────────────
 let CL = {lid:'PL', code:'PL', name:'프리미어리그', real:true};
-let selDate = dStr(new Date());
+const _kstNow=new Date(new Date().getTime()+9*60*60*1000); let selDate=`${_kstNow.getUTCFullYear()}-${String(_kstNow.getUTCMonth()+1).padStart(2,'0')}-${String(_kstNow.getUTCDate()).padStart(2,'0')}`;
 const cache = {};
 const DOW = ['일','월','화','수','목','금','토'];
 
 function dStr(d){ return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`; }
 function addD(d,n){ const r=new Date(d); r.setDate(r.getDate()+n); return r; }
+
+// 한국 시간 변환
+function toKST(utcStr){
+  const d = new Date(utcStr);
+  return new Date(d.getTime() + 9*60*60*1000);
+}
+function kstTime(utcStr){
+  const k=toKST(utcStr);
+  return `${String(k.getUTCHours()).padStart(2,'0')}:${String(k.getUTCMinutes()).padStart(2,'0')}`;
+}
+function kstDate(utcStr){
+  const k=toKST(utcStr);
+  return `${k.getUTCMonth()+1}/${k.getUTCDate()} ${DOW[k.getUTCDay()]}`;
+}
+function kstDateStr(utcStr){
+  const k=toKST(utcStr);
+  return `${k.getUTCFullYear()}-${String(k.getUTCMonth()+1).padStart(2,'0')}-${String(k.getUTCDate()).padStart(2,'0')}`;
+}
 
 // ── 로고 ─────────────────────────────
 function tlogo(url,sz=27,rd=3){
@@ -384,8 +402,7 @@ async function fdFetch(path){
 function swP(name,btn){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  const pgId = name==='odds' ? 'pg-odds' : 'pg-'+name;
-  document.getElementById(pgId).classList.add('on');
+  document.getElementById('pg-'+name).classList.add('on');
   btn.classList.add('on');
   loadCur();
 }
@@ -402,7 +419,6 @@ function loadCur(){
   if(pg==='pg-sched') loadSched();
   if(pg==='pg-std') loadStd();
   if(pg==='pg-player') loadPlayers();
-  if(pg==='pg-odds') loadOdds();
 }
 function doRefresh(){ Object.keys(cache).forEach(k=>delete cache[k]); loadCur(); }
 function toggleSetup(){ alert('API 키는 서버에 설정돼 있어요!'); }
@@ -454,23 +470,49 @@ function mkCard(m, type){
   const h=m.homeTeam, a=m.awayTeam;
   const hg=m.score?.fullTime?.home??m.score?.halfTime?.home??'–';
   const ag=m.score?.fullTime?.away??m.score?.halfTime?.away??'–';
-  if(type==='sched'){
-    const dt=new Date(m.utcDate);
-    const time=dt.toLocaleTimeString('ko-KR',{hour:'2-digit',minute:'2-digit'});
-    const dl=`${dt.getMonth()+1}/${dt.getDate()} ${DOW[dt.getDay()]}`;
-    return `<div class="fcard fu"><div class="ft">${dl} ${time} · ${m.competition?.name||CL.name} ${m.matchday?m.matchday+'R':''}</div><div class="fr"><div class="fteam">${tlogo(h.crest,22)}<span class="ftn">${h.shortName||h.name}</span></div><span class="fvs">vs</span><div class="fteam r"><span class="ftn">${a.shortName||a.name}</span>${tlogo(a.crest,22)}</div></div></div>`;
-  }
+  const odds=calcOdds(m);
   const isLive=type==='live';
+  const isFin=type==='fin';
   const statusLabel={IN_PLAY:'진행중',PAUSED:'HT',HALFTIME:'HT',EXTRA_TIME:'연장',PENALTY_SHOOTOUT:'PK',FINISHED:'FT',AWARDED:'FT'}[m.status]||m.status||'FT';
   const minStr=m.minute?`${m.minute}'`:statusLabel;
-  return `<div class="mcard fu"><div class="mc-top"><div class="lrow">${isLive?'<div class="pdot"></div>':''}<span class="lmin" style="${isLive?'':'color:var(--text2);font-size:10px;font-weight:500;'}">${isLive?minStr:statusLabel}</span></div><span class="ltag">${m.competition?.name||CL.name} ${m.matchday?m.matchday+'R':''}</span></div><div class="mct"><div class="ts">${tlogo(h.crest,27)}<span class="tn">${h.shortName||h.name}</span></div><div class="sb"><span class="sn">${hg}</span><span class="ssep">:</span><span class="sn">${ag}</span></div><div class="ts r">${tlogo(a.crest,27)}<span class="tn r">${a.shortName||a.name}</span></div></div></div>`;
+  const timeKST=kstTime(m.utcDate);
+  const dateKST=kstDate(m.utcDate);
+  const oddsHtml=!isFin?`
+    <div class="oddsg" style="margin:6px 0 4px;">
+      <div class="obtn"><div class="otype">${(h.shortName||h.name).slice(0,7)}</div><div class="oval ${parseFloat(odds.hw)<2.5?'fav':''}" style="font-size:15px;">${odds.hw}</div></div>
+      <div class="obtn"><div class="otype">무승부</div><div class="oval" style="font-size:15px;">${odds.dr}</div></div>
+      <div class="obtn"><div class="otype">${(a.shortName||a.name).slice(0,7)}</div><div class="oval ${parseFloat(odds.aw)<2.5?'fav':''}" style="font-size:15px;">${odds.aw}</div></div>
+    </div>
+    <div class="omore">
+      <div class="oex"><div class="oextype">오버2.5</div><div class="oexval" style="color:var(--gold);font-size:11px;">${odds.ov}</div></div>
+      <div class="oex"><div class="oextype">언더2.5</div><div class="oexval" style="font-size:11px;">${odds.un}</div></div>
+      <div class="oex"><div class="oextype">양팀득점</div><div class="oexval" style="font-size:11px;">${odds.btts}</div></div>
+      <div class="oex"><div class="oextype">핸디-1</div><div class="oexval" style="color:var(--gold);font-size:11px;">${odds.hc}</div></div>
+    </div>`:'';
+
+  return `<div class="mcard fu">
+    <div class="mc-top">
+      <div class="lrow">
+        ${isLive?'<div class="pdot"></div>':''}
+        <span class="lmin" style="${isLive?'':'color:var(--text2);font-size:10px;font-weight:500;'}">${isLive?minStr:statusLabel}</span>
+        ${!isLive?`<span style="font-size:8px;color:var(--text3);margin-left:4px;">${dateKST} ${timeKST} KST</span>`:''}
+      </div>
+      <span class="ltag">${m.competition?.name||CL.name} ${m.matchday?m.matchday+'R':''}</span>
+    </div>
+    <div class="mct">
+      <div class="ts">${tlogo(h.crest,27)}<span class="tn">${h.shortName||h.name}</span></div>
+      <div class="sb"><span class="sn">${hg}</span><span class="ssep">:</span><span class="sn">${ag}</span></div>
+      <div class="ts r">${tlogo(a.crest,27)}<span class="tn r">${a.shortName||a.name}</span></div>
+    </div>
+    ${oddsHtml}
+  </div>`;
 }
 
 // ── 일정 ─────────────────────────────
 function buildDateBar(){
-  const td=new Date(); let pills='';
+  const now=new Date(); const td=new Date(now.getTime()+9*60*60*1000); let pills='';
   for(let i=-2;i<=8;i++){
-    const d=addD(td,i),ds=dStr(d),isT=i===0;
+    const d=addD(td,i),ds=`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`,isT=i===0;
     pills+=`<div class="dpill ${ds===selDate?'on':''}" onclick="pickDate('${ds}',this)"><span class="dow">${isT?'오늘':DOW[d.getDay()]}</span><span class="dom">${d.getDate()}</span>${isT?'<div class="todot"></div>':''}</div>`;
   }
   document.getElementById('date-bar').innerHTML=`<div class="dscroll">${pills}</div>`;
@@ -486,7 +528,7 @@ async function loadSchedDate(ds){
   const live=data.matches.filter(m=>['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status));
   const sched=data.matches.filter(m=>['SCHEDULED','TIMED'].includes(m.status));
   const fin=data.matches.filter(m=>['FINISHED','AWARDED'].includes(m.status));
-  let html=`<div style="padding:4px 13px 2px;"><span class="srctag">football-data.org · ${ds}</span></div>`;
+  let html=`<div style="padding:4px 13px 2px;"><span class="srctag">football-data.org · ${ds} (KST)</span></div>`;
   if(live.length){ html+=`<div class="sec"><span class="sl">● LIVE</span></div>`; live.forEach(m=>{html+=mkCard(m,'live');}); }
   if(sched.length){ html+=`<div class="sec"><span class="sl">예정</span></div>`; sched.forEach(m=>{html+=mkCard(m,'sched');}); }
   if(fin.length){ html+=`<div class="sec"><span class="sl">종료</span></div>`; fin.forEach(m=>{html+=mkCard(m,'fin');}); }
