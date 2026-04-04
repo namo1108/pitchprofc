@@ -346,13 +346,13 @@ body{
 .oddsg{display:flex;gap:5px;margin-bottom:7px;}
 .obtn{
   flex:1;
-  background:rgba(0,255,135,.04);
-  border-radius:11px;padding:9px 4px;
+  background:rgba(255,255,255,.04);
+  border-radius:10px;padding:9px 4px;
   text-align:center;
-  border:1px solid var(--border);
+  border:1px solid rgba(255,255,255,.08);
   transition:all .18s;
 }
-.obtn:active{background:rgba(0,255,135,.12);border-color:var(--border2);}
+.obtn:active{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);}
 .otype{font-size:8px;color:var(--text3);margin-bottom:4px;font-weight:500;}
 .oval{font-size:19px;font-weight:700;color:#fff;font-family:'Bebas Neue',sans-serif;line-height:1.1;}
 .oval.fav{color:var(--grass);text-shadow:0 0 10px rgba(0,255,135,.4);}
@@ -532,15 +532,16 @@ body{
 /* ── 라이브 타이머 ── */
 .live-timer{
   font-family:'Bebas Neue',sans-serif;
-  font-size:13px;color:var(--red);
-  background:rgba(255,51,85,.1);
-  border:1px solid rgba(255,51,85,.25);
-  padding:2px 8px;border-radius:20px;
+  font-size:12px;color:#ff6680;
+  background:rgba(255,51,85,.08);
+  border:1px solid rgba(255,51,85,.18);
+  padding:2px 8px;border-radius:6px;
   display:inline-flex;align-items:center;gap:4px;
+  letter-spacing:.5px;
 }
 .live-timer-dot{
   width:5px;height:5px;border-radius:50%;
-  background:var(--red);
+  background:#ff3355;
   animation:pu .8s infinite;
   flex-shrink:0;
 }
@@ -554,32 +555,32 @@ body{
 .goal-event{
   display:flex;align-items:center;gap:3px;
   font-size:10px;color:var(--text2);
-  background:rgba(0,255,135,.06);
-  border:1px solid var(--border);
-  border-radius:6px;padding:3px 7px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:6px;padding:3px 8px;
 }
-.goal-event .min{color:var(--grass2);font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:12px;}
+.goal-event .min{color:#fff;font-weight:700;font-family:'Bebas Neue',sans-serif;font-size:12px;}
 
 /* ── 순위 배지 ── */
 .pos-badge{
-  font-size:9px;font-weight:700;
-  background:rgba(0,255,135,.1);
-  color:var(--grass2);
-  border:1px solid var(--border);
+  font-size:10px;font-weight:700;
+  background:rgba(255,255,255,.07);
+  color:var(--text3);
+  border:1px solid rgba(255,255,255,.1);
   border-radius:4px;
-  padding:1px 4px;
+  padding:1px 5px;
   font-family:'Bebas Neue',sans-serif;
-  font-size:11px;
   flex-shrink:0;
+  min-width:22px;
+  text-align:center;
 }
-.pos-badge.top{background:rgba(0,255,135,.18);color:var(--grass);border-color:rgba(0,255,135,.3);}
-.pos-badge.bot{background:rgba(255,51,85,.1);color:var(--red);border-color:rgba(255,51,85,.25);}
+.pos-badge.top{background:rgba(0,255,135,.12);color:var(--grass2);border-color:rgba(0,255,135,.2);}
+.pos-badge.bot{background:rgba(255,51,85,.08);color:#ff6680;border-color:rgba(255,51,85,.18);}
 
 /* ── 라이브 카드 강조 ── */
 .mcard.live-card{
-  border-color:rgba(255,51,85,.2);
-  background:rgba(255,51,85,.03);
-  animation:goalGlow 3s infinite;
+  border-color:rgba(255,255,255,.12);
+  background:rgba(255,255,255,.02);
 }
 </style>
 </head>
@@ -1482,8 +1483,22 @@ function mkCard(m, type){
   const isFin=type==='fin';
   const statusMap={IN_PLAY:'진행중',PAUSED:'HT',HALFTIME:'HT',EXTRA_TIME:'연장',PENALTY_SHOOTOUT:'PK',FINISHED:'FT',AWARDED:'FT'};
   const statusLabel=statusMap[m.status]||m.status||'FT';
-  const elapsed=m.minute||(m.status==='IN_PLAY'?'?':null);
-  const minStr=elapsed?`${elapsed}'`:statusLabel;
+  // football-data.org: minute 없음 → status + 실제 시간으로 추정
+  const matchStarted = m.utcDate ? new Date(m.utcDate) : null;
+  let elapsed = '';
+  if(m.status==='IN_PLAY' && matchStarted){
+    const diffMs = Date.now() - matchStarted.getTime();
+    const diffMin = Math.floor(diffMs/60000);
+    if(diffMin>0 && diffMin<=90) elapsed = String(Math.min(diffMin,90));
+    else if(diffMin>90) elapsed = '90+';
+  } else if(m.status==='PAUSED'||m.status==='HALFTIME'){
+    elapsed = 'HT';
+  } else if(m.status==='EXTRA_TIME'){
+    elapsed = '연장';
+  } else if(m.status==='PENALTY_SHOOTOUT'){
+    elapsed = 'PK';
+  }
+  const minStr = elapsed ? `${elapsed}${elapsed==='HT'||elapsed==='연장'||elapsed==='PK'?'':"'"}` : statusLabel;
   const timeKST=kstTime(m.utcDate);
   const dateKST=kstDate(m.utcDate);
 
@@ -1535,13 +1550,15 @@ function mkCard(m, type){
       <span class="ltag">${m.competition?.name||CL.name} ${m.matchday?m.matchday+'R':''}</span>
     </div>
     <div class="mct">
-      <div class="ts">${tlogo(h.crest,27)}${hPosBadge}<span class="tn">${h.shortName||h.name}</span></div>
-      <div class="sb">
-        <span class="sn" style="${isLive?'color:var(--grass);text-shadow:0 0 10px rgba(0,255,135,.4);':''}">${hg}</span>
-        <span class="ssep">:</span>
-        <span class="sn" style="${isLive?'color:var(--grass);text-shadow:0 0 10px rgba(0,255,135,.4);':''}">${ag}</span>
+      <div class="ts">${tlogo(h.crest,28)}<div style="display:flex;flex-direction:column;min-width:0;"><span class="tn">${h.shortName||h.name}</span>${hPosBadge?`<span style="margin-top:2px;">${hPosBadge}</span>`:''}</div></div>
+      <div class="sb" style="flex-direction:column;align-items:center;gap:2px;">
+        <div style="display:flex;align-items:center;gap:4px;">
+          <span class="sn">${hg}</span>
+          <span class="ssep">:</span>
+          <span class="sn">${ag}</span>
+        </div>
       </div>
-      <div class="ts r">${aPosBadge}${tlogo(a.crest,27)}<span class="tn r">${a.shortName||a.name}</span></div>
+      <div class="ts r"><div style="display:flex;flex-direction:column;align-items:flex-end;min-width:0;"><span class="tn r">${a.shortName||a.name}</span>${aPosBadge?`<span style="margin-top:2px;text-align:right;">${aPosBadge}</span>`:''}</div>${tlogo(a.crest,28)}</div>
     </div>
     ${goalEventsHtml}
     ${oddsHtml}
