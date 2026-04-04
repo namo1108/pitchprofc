@@ -406,6 +406,7 @@ body{
   background:var(--bg2);
   border-bottom:1px solid var(--border);
   position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(10px);
 }
 .date-nav-row{
   display:flex;align-items:center;
@@ -448,10 +449,11 @@ body{
 .league-hd{
   display:flex;align-items:center;gap:8px;
   padding:8px 12px;
-  background:rgba(0,255,135,.03);
+  background:rgba(6,14,8,.97);
   border-bottom:1px solid var(--border);
   cursor:pointer;
   position:sticky;top:48px;z-index:10;
+  backdrop-filter:blur(8px);
 }
 .league-hd-img{width:18px;height:18px;object-fit:contain;border-radius:2px;flex-shrink:0;}
 .league-hd-name{font-size:11px;font-weight:700;color:var(--text2);flex:1;}
@@ -1093,8 +1095,8 @@ async function loadSchedDate(ds){
   const c=document.getElementById('sched-body');
   c.innerHTML=spin('일정 불러오는 중...');
 
-  // 선택 리그만 or 전체 로드
-  const leaguesToLoad = CL.real ? [CL] : ALL_LEAGUES;
+  // 일정탭은 항상 전체 리그 로드
+  const leaguesToLoad = ALL_LEAGUES;
   const results = await Promise.all(leaguesToLoad.map(l=>
     fdFetch(`/competitions/${l.code}/matches?dateFrom=${ds}&dateTo=${ds}`)
   ));
@@ -1118,6 +1120,7 @@ async function loadSchedDate(ds){
     const liveTag=live.length?`<span style="font-size:9px;color:var(--red);margin-right:4px;">● ${live.length}</span>`:'';
     const groupId=`lg-${league.code}`;
 
+    const rowsHtml=sorted.map(m=>matchRow(m,league)).join('');
     html+=`<div class="league-group">
       <div class="league-hd" onclick="toggleLeague('${groupId}')">
         <img class="league-hd-img" src="${logoUrl}" onerror="this.style.display='none'" alt="">
@@ -1126,13 +1129,13 @@ async function loadSchedDate(ds){
         <span class="league-hd-cnt">${sorted.length}경기</span>
         <span class="league-toggle" id="arr-${groupId}">▾</span>
       </div>
-      <div class="league-matches" id="${groupId}">
-        ${sorted.map(m=>matchRow(m,league)).join('')}
+      <div class="league-matches" id="${groupId}" style="max-height:2000px;">
+        ${rowsHtml}
       </div>
     </div>`;
   });
 
-  if(!hasAny){ c.innerHTML=empty('이 날 경기 없음','다른 날짜를 선택해보세요'); return; }
+  if(!hasAny){ c.innerHTML=empty('이 날 경기 없음','다른 날짜를 선택해보세요 (football-data.org 지원 리그 기준)'); return; }
   c.innerHTML=html;
 }
 
