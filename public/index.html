@@ -1014,7 +1014,6 @@ function selectTeam(id){
   showTeamBadge();
 }
 
-}
 function closeTeamModal(){
   const m=document.getElementById('team-modal');
   if(m) m.style.display='none';
@@ -1521,7 +1520,9 @@ function mkCard(m, type){
       <div class="oex"><div class="oextype">핸디-1</div><div class="oexval" style="color:var(--gold);font-size:11px;">${odds.hc}</div></div>
     </div>`:'';
 
-  return `<div class="mcard fu ${isLive?'live-card':''}" onclick="showMatchDetail(${m.id},'${(h.shortName||h.name).replace(/'/g,"'")}','${(a.shortName||a.name).replace(/'/g,"'")}','${CL.code||''}')" style="cursor:pointer;">
+  const _hN=(h.shortName||h.name).replace(/['"]/g,'');
+  const _aN=(a.shortName||a.name).replace(/['"]/g,'');
+  return `<div class="mcard fu ${isLive?'live-card':''}" onclick="showMatchDetail(${m.id},'${_hN}','${_aN}','${CL.code||''}')" style="cursor:pointer;">
     <div class="mc-top">
       <div class="lrow">
         ${isLive?'<div class="pdot"></div>':''}
@@ -1703,7 +1704,9 @@ function matchRow(m, league){
   // 승팀 결정
   const hWin=isFin&&hg>ag, aWin=isFin&&ag>hg;
 
-  return `<div class="match-row" onclick="showMatchDetail(${m.id},'${(h.shortName||h.name).replace(/'/g,'')}','${(a.shortName||a.name).replace(/'/g,'')}','${league.code}')">
+  const _mrH=(h.shortName||h.name).replace(/['"]/g,'');
+  const _mrA=(a.shortName||a.name).replace(/['"]/g,'');
+  return `<div class="match-row" onclick="showMatchDetail(${m.id},'${_mrH}','${_mrA}','${league.code}')">
     <div class="match-time ${isLive?'live':''}">${isLive?min:timeKST}</div>
     <div class="match-teams">
       <div class="match-team-row">
@@ -1925,7 +1928,9 @@ async function loadAnalysis(){
     const pred=predictWin(hw,dr,aw);
     const timeKST=kstTime(m.utcDate);
     const isLive=['IN_PLAY','PAUSED'].includes(m.status);
-    return `<div class="feat fu" onclick="showMatchDetail(${m.id},'${(h.shortName||h.name).replace(/'/g,'')}','${(a.shortName||a.name).replace(/'/g,'')}','${CL.code}')" style="cursor:pointer;">
+  const _ahN=(h.shortName||h.name).replace(/['"]/g,'');
+    const _aaN=(a.shortName||a.name).replace(/['"]/g,'');
+    return `<div class="feat fu" onclick="showMatchDetail(${m.id},'${_ahN}','${_aaN}','${CL.code}')" style="cursor:pointer;">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
         ${isLive?'<div class="pdot"></div>':''}
         <div style="display:flex;align-items:center;gap:6px;flex:1;">
