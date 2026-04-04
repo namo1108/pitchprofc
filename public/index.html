@@ -1097,8 +1097,18 @@ async function loadSchedDate(ds){
 
   // 일정탭은 항상 전체 리그 로드
   const leaguesToLoad = ALL_LEAGUES;
+  // KST 날짜 → UTC 범위 변환 (KST = UTC+9, 하루 전날 UTC 15:00 ~ 당일 UTC 14:59)
+  const selD = new Date(ds + 'T00:00:00+09:00');
+  const utcFrom = new Date(selD.getTime() - 9*60*60*1000); // KST 0시 = UTC 전날 15시
+  const utcTo   = new Date(selD.getTime() - 9*60*60*1000 + 86400000 - 1);
+  const ufStr = utcFrom.toISOString().slice(0,10);
+  const utStr = utcTo.toISOString().slice(0,10);
+  // UTC 날짜가 같으면 그냥 ds 사용, 다르면 두 날짜 범위로
+  const dateFrom = ufStr;
+  const dateTo   = utStr !== ufStr ? utStr : ufStr;
+
   const results = await Promise.all(leaguesToLoad.map(l=>
-    fdFetch(`/competitions/${l.code}/matches?dateFrom=${ds}&dateTo=${ds}`)
+    fdFetch(`/competitions/${l.code}/matches?dateFrom=${dateFrom}&dateTo=${dateTo}`)
   ));
 
   // 리그별 그룹핑
@@ -1107,7 +1117,12 @@ async function loadSchedDate(ds){
 
   results.forEach((data,i)=>{
     const league = leaguesToLoad[i];
-    const matches = data?.matches||[];
+    // KST 날짜로 필터링 (API는 UTC 범위로 더 넓게 줄 수 있음)
+    const allMatches = data?.matches||[];
+    const matches = allMatches.filter(m=>{
+      if(!m.utcDate) return true;
+      return kstDateStr(m.utcDate) === ds;
+    });
     if(!matches.length) return;
     hasAny=true;
 
