@@ -16,7 +16,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--t); font-family: 'Noto Sans KR', sans-serif; max-width: 480px; margin: 0 auto; overflow: hidden; height: 100vh; position: relative; }
 
-        /* [Header & Nav] */
         .header { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: rgba(1,4,6,0.9); border-bottom: 1px solid rgba(0,255,135,0.1); z-index: 100; }
         .container { flex: 1; overflow-y: auto; padding: 15px; display: none; padding-bottom: 100px; height: calc(100vh - 135px); }
         .container.active { display: block; animation: slideUp 0.4s ease; }
@@ -27,46 +26,41 @@
         .nav-item i { font-size: 18px; }
         .nav-item span { font-size: 8px; font-weight: 700; font-family: 'Orbitron'; }
 
-        /* [Components] */
         .card { background: var(--card); border-radius: 16px; padding: 15px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
         .match-card { background: var(--card); border-radius: 16px; padding: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); position: relative; }
         .m-row { display: flex; align-items: center; justify-content: space-between; text-align: center; }
         .m-team img { width: 35px; height: 35px; margin-bottom: 8px; }
         .m-score { font-family: 'Orbitron'; font-size: 28px; font-weight: 900; width: 80px; }
 
-        /* [Goal Overlay] */
-        #goal-overlay { position: fixed; inset: 0; z-index: 9999; display: none; background: rgba(0,0,0,0.95); flex-direction: column; align-items: center; justify-content: center; pointer-events: none; }
-        .goal-text { font-family: 'Orbitron'; font-size: 70px; font-weight: 900; color: var(--p-color); text-shadow: 0 0 30px var(--p-glow); animation: goalZoom 0.5s infinite alternate; }
+        /* Standing Table */
+        .std-table { width: 100%; border-collapse: collapse; font-family: 'Share Tech Mono'; font-size: 11px; margin-top: 10px; }
+        .std-table th { background: var(--t3); color: var(--p-color); padding: 8px; text-align: left; }
+        .std-table td { padding: 10px 8px; border-bottom: 1px solid rgba(255,255,255,0.03); }
+        .my-team-row { background: var(--p-glow); color: #fff; font-weight: 900; }
 
-        /* [Onboarding] */
         #onboarding { position: fixed; inset: 0; background: var(--bg); z-index: 5000; display: flex; flex-direction: column; transition: 0.8s; }
         .ob-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; padding: 20px; flex: 1; overflow-y: auto; }
         .t-card { background: var(--bg2); padding: 15px; border-radius: 15px; text-align: center; cursor: pointer; border: 1px solid rgba(255,255,255,0.05); }
 
-        @keyframes goalZoom { from { transform: scale(1); } to { transform: scale(1.1); } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .shake { animation: shake 0.5s both; }
-        @keyframes shake { 10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); } 30%, 70% { transform: translate3d(-4px, 0, 0); } }
         .loading-spin { width: 30px; height: 30px; border: 3px solid var(--t3); border-top-color: var(--p-color); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; }
         @keyframes spin { to { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div id="goal-overlay"><div class="goal-text">GOAL!!</div></div>
-
     <div id="onboarding">
         <div style="text-align:center; padding:50px 20px;">
             <h1 style="font-family:'Orbitron'; color:var(--p-color); letter-spacing:3px;">PITCH PRO</h1>
-            <p style="color:var(--t2); font-size:11px; margin-top:10px;">데이터를 불러올 팀을 선택하세요.</p>
+            <p style="color:var(--t2); font-size:11px; margin-top:10px;">팀을 선택하면 CORS 프록시를 통해 데이터를 동기화합니다.</p>
         </div>
         <div class="ob-grid">
-            <div class="t-card" onclick="selectTeam(73, 'Tottenham', '#ffffff')"><img src="https://crests.football-data.org/73.svg"><div>Tottenham</div></div>
-            <div class="t-card" onclick="selectTeam(86, 'Real Madrid', '#ffffff')"><img src="https://crests.football-data.org/86.svg"><div>Real Madrid</div></div>
-            <div class="t-card" onclick="selectTeam(65, 'Man City', '#6caddf')"><img src="https://crests.football-data.org/65.svg"><div>Man City</div></div>
-            <div class="t-card" onclick="selectTeam(64, 'Liverpool', '#e31b23')"><img src="https://crests.football-data.org/64.svg"><div>Liverpool</div></div>
-            <div class="t-card" onclick="selectTeam(81, 'Barcelona', '#a50044')"><img src="https://crests.football-data.org/81.svg"><div>Barcelona</div></div>
-            <div class="t-card" onclick="selectTeam(503, 'Bayern', '#dc052d')"><img src="https://crests.football-data.org/503.svg"><div>Bayern</div></div>
+            <div class="t-card" onclick="selectTeam(73, 'PL', '#ffffff')"><img src="https://crests.football-data.org/73.svg"><div>Tottenham</div></div>
+            <div class="t-card" onclick="selectTeam(86, 'PD', '#ffffff')"><img src="https://crests.football-data.org/86.svg"><div>Real Madrid</div></div>
+            <div class="t-card" onclick="selectTeam(65, 'PL', '#6caddf')"><img src="https://crests.football-data.org/65.svg"><div>Man City</div></div>
+            <div class="t-card" onclick="selectTeam(503, 'BL1', '#dc052d')"><img src="https://crests.football-data.org/503.svg"><div>Bayern</div></div>
+            <div class="t-card" onclick="selectTeam(524, 'FL1', '#004170')"><img src="https://crests.football-data.org/524.svg"><div>PSG</div></div>
+            <div class="t-card" onclick="selectTeam(108, 'SA', '#0066b2')"><img src="https://crests.football-data.org/108.svg"><div>Inter Milan</div></div>
         </div>
     </div>
 
@@ -76,24 +70,12 @@
             <div id="user-club-logo"></div>
         </header>
 
-        <main id="view-lives" class="container active">
-            <div id="live-feed"></div>
-        </main>
-
-        <main id="view-schedule" class="container">
-            <div id="my-next-match"></div>
-            <div id="schedule-feed"></div>
-        </main>
-
-        <main id="view-news" class="container">
-            <div id="news-feed"></div>
-        </main>
-
+        <main id="view-lives" class="container active"><div id="live-feed"></div></main>
+        <main id="view-schedule" class="container"><div id="schedule-feed"></div></main>
         <main id="view-data" class="container">
-            <div style="font-family:'Orbitron'; font-size:11px; color:var(--p-color); margin-bottom:12px;">TACTICAL PLAYER DATA</div>
-            <div id="data-feed"></div>
+            <div style="font-family:'Orbitron'; font-size:11px; color:var(--p-color); margin-bottom:12px;">LEAGUE STANDINGS</div>
+            <div id="standing-feed"></div>
         </main>
-
         <main id="view-stadium" class="container">
             <div class="card" style="background:linear-gradient(135deg, var(--card), var(--bg2));">
                 <div style="font-family:'Orbitron'; font-size:20px; color:var(--p-color);" id="user-rank">방구석 퍼거슨</div>
@@ -105,128 +87,106 @@
         <nav class="bottom-nav">
             <div class="nav-item active" onclick="sw('lives', this)"><i class="fa-solid fa-bolt"></i><span>LIVES</span></div>
             <div class="nav-item" onclick="sw('schedule', this)"><i class="fa-solid fa-calendar"></i><span>SCHEDULE</span></div>
-            <div class="nav-item" onclick="sw('news', this)"><i class="fa-solid fa-newspaper"></i><span>NEWS</span></div>
-            <div class="nav-item" onclick="sw('data', this)"><i class="fa-solid fa-database"></i><span>DATA</span></div>
+            <div class="nav-item" onclick="sw('data', this)"><i class="fa-solid fa-table-list"></i><span>TABLE</span></div>
             <div class="nav-item" onclick="sw('stadium', this)"><i class="fa-solid fa-stadium"></i><span>STADIUM</span></div>
         </nav>
     </div>
 
     <script>
         const API_KEY = 'b00e3059f51741b7add3fcaab7eaadf0';
-        const BASE_URL = 'https://api.football-data.org/v4';
         let myTeamId = null;
-        let lastScore = {};
+        let myLeagueCode = '';
 
-        async function fetchAPI(path) {
+        // CORS 우회 함수
+        async function fetchProxy(path) {
+            const targetUrl = `https://api.football-data.org/v4${path}`;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(targetUrl)}`;
+            
             try {
-                const response = await fetch(BASE_URL + path, { headers: { 'X-Auth-Token': API_KEY } });
-                if (!response.ok) throw new Error('API Error');
-                return await response.json();
+                const response = await fetch(proxyUrl);
+                const data = await response.json();
+                // allorigins는 결과값을 문자열로 반환하므로 JSON.parse 필요
+                return JSON.parse(data.contents);
             } catch (e) {
-                console.error(e);
+                console.error("CORS Proxy Error:", e);
                 return null;
             }
         }
 
-        function selectTeam(id, name, color) {
+        function selectTeam(id, league, color) {
             myTeamId = id;
+            myLeagueCode = league;
             document.documentElement.style.setProperty('--p-color', color);
             document.getElementById('user-club-logo').innerHTML = `<img src="https://crests.football-data.org/${id}.svg" width="25">`;
             document.getElementById('onboarding').style.display = 'none';
             document.getElementById('app').style.display = 'flex';
             
-            loadAllData();
-            setInterval(loadLive, 30000); // 30초마다 갱신
-        }
-
-        async function loadAllData() {
-            loadLive();
+            loadLives();
+            loadStandings();
             loadSchedule();
-            loadNews();
-            loadDataHub();
         }
 
-        async function loadLive() {
+        async function loadLives() {
             const feed = document.getElementById('live-feed');
             feed.innerHTML = '<div class="loading-spin"></div>';
-            const res = await fetchAPI('/matches?status=IN_PLAY');
+            const res = await fetchProxy('/matches?status=IN_PLAY');
             
-            if (!res || !res.matches.length) {
+            if (!res || !res.matches || res.matches.length === 0) {
                 feed.innerHTML = '<div style="text-align:center; padding:50px; color:var(--t3);">NO LIVE MATCHES</div>';
                 return;
             }
 
-            feed.innerHTML = res.matches.map(m => {
-                const score = `${m.score.fullTime.home}-${m.score.fullTime.away}`;
-                if (lastScore[m.id] && lastScore[m.id] !== score) triggerGoal();
-                lastScore[m.id] = score;
-
-                return `
-                    <div class="match-card">
-                        <div style="font-size:9px; color:var(--p-color); font-family:'Orbitron'; margin-bottom:10px;">⚡ ${m.competition.name}</div>
-                        <div class="m-row">
-                            <div class="m-team"><img src="${m.homeTeam.crest}"><div>${m.homeTeam.shortName}</div></div>
-                            <div class="m-score">${m.score.fullTime.home} : ${m.score.fullTime.away}</div>
-                            <div class="m-team"><img src="${m.awayTeam.crest}"><div>${m.awayTeam.shortName}</div></div>
-                        </div>
+            feed.innerHTML = res.matches.map(m => `
+                <div class="match-card">
+                    <div style="font-size:9px; color:var(--p-color); font-family:'Orbitron'; margin-bottom:10px;">⚡ ${m.competition.name}</div>
+                    <div class="m-row">
+                        <div class="m-team"><img src="${m.homeTeam.crest}"><div>${m.homeTeam.shortName}</div></div>
+                        <div class="m-score">${m.score.fullTime.home} : ${m.score.fullTime.away}</div>
+                        <div class="m-team"><img src="${m.awayTeam.crest}"><div>${m.awayTeam.shortName}</div></div>
                     </div>
-                `;
-            }).join('');
+                </div>
+            `).join('');
+        }
+
+        async function loadStandings() {
+            const feed = document.getElementById('standing-feed');
+            feed.innerHTML = '<div class="loading-spin"></div>';
+            const res = await fetchProxy(`/competitions/${myLeagueCode}/standings`);
+            
+            if (!res || !res.standings) return;
+            const table = res.standings[0].table;
+
+            feed.innerHTML = `
+                <table class="std-table">
+                    <tr><th>#</th><th>CLUB</th><th>MP</th><th>GD</th><th>PTS</th></tr>
+                    ${table.map(r => `
+                        <tr class="${r.team.id === myTeamId ? 'my-team-row' : ''}">
+                            <td>${r.position}</td>
+                            <td style="display:flex; align-items:center; gap:8px;"><img src="${r.team.crest}" width="15">${r.team.shortName}</td>
+                            <td>${r.playedGames}</td>
+                            <td>${r.goalDifference}</td>
+                            <td style="color:var(--p-color); font-weight:900;">${r.points}</td>
+                        </tr>
+                    `).join('')}
+                </table>
+            `;
         }
 
         async function loadSchedule() {
-            const nextMatchDiv = document.getElementById('my-next-match');
-            const res = await fetchAPI(`/teams/${myTeamId}/matches?status=SCHEDULED&limit=1`);
-            if (res && res.matches[0]) {
-                const m = res.matches[0];
-                nextMatchDiv.innerHTML = `
-                    <div class="card" style="border:1px solid var(--p-color); background:var(--p-glow);">
-                        <div style="font-size:9px; font-family:'Orbitron'; margin-bottom:10px;">MY CLUB NEXT</div>
+            const feed = document.getElementById('schedule-feed');
+            const res = await fetchProxy(`/teams/${myTeamId}/matches?status=SCHEDULED&limit=3`);
+            if (res && res.matches) {
+                feed.innerHTML = res.matches.map(m => `
+                    <div class="card">
+                        <div style="font-size:9px; color:var(--t2); margin-bottom:10px;">${new Date(m.utcDate).toLocaleDateString()}</div>
                         <div class="m-row">
-                            <div class="m-team"><img src="${m.homeTeam.crest}"><div>${m.homeTeam.shortName}</div></div>
-                            <div style="font-family:'Orbitron'; font-size:18px; color:var(--p-color);">VS</div>
-                            <div class="m-team"><img src="${m.awayTeam.crest}"><div>${m.awayTeam.shortName}</div></div>
+                            <div class="m-team"><div>${m.homeTeam.shortName}</div></div>
+                            <div style="font-family:'Orbitron'; font-size:12px; color:var(--p-color);">VS</div>
+                            <div class="m-team"><div>${m.awayTeam.shortName}</div></div>
                         </div>
-                        <div style="text-align:center; font-size:11px; margin-top:10px; font-family:'Share Tech Mono'; color:var(--accent);">${new Date(m.utcDate).toLocaleString()}</div>
                     </div>
-                `;
+                `).join('');
             }
-        }
-
-        function loadNews() {
-            const feed = document.getElementById('news-feed');
-            feed.innerHTML = `
-                <div class="card" style="padding:0; overflow:hidden;">
-                    <div style="height:150px; background:url('https://images.unsplash.com/photo-1522778119026-d647f0596c20?w=500') center/cover;"></div>
-                    <div style="padding:15px;">
-                        <div style="color:var(--p-color); font-size:9px; font-weight:900; margin-bottom:5px;">OFFICIAL UPDATE</div>
-                        <div style="font-size:15px; font-weight:700; color:#fff;">전술 분석: 내 팀의 이번 시즌 기대 득점(xG) 변화 추이</div>
-                    </div>
-                </div>
-            `;
-        }
-
-        function loadDataHub() {
-            const feed = document.getElementById('data-feed');
-            feed.innerHTML = `
-                <div class="card" style="padding:0;">
-                    <table style="width:100%; border-collapse:collapse; font-family:'Share Tech Mono'; font-size:12px;">
-                        <tr style="background:var(--fm-blue); color:var(--t2);"><th style="padding:10px; text-align:left;">PLAYER</th><th style="text-align:left;">POS</th><th>xG</th><th>RTG</th></tr>
-                        <tr><td style="padding:12px 10px;">STAR PLAYER A</td><td>FW</td><td>0.92</td><td style="color:var(--p-color)">8.5</td></tr>
-                        <tr><td style="padding:12px 10px;">STAR PLAYER B</td><td>MF</td><td>0.34</td><td style="color:var(--p-color)">7.8</td></tr>
-                    </table>
-                </div>
-            `;
-        }
-
-        function triggerGoal() {
-            const overlay = document.getElementById('goal-overlay');
-            overlay.style.display = 'flex';
-            document.body.classList.add('shake');
-            setTimeout(() => {
-                overlay.style.display = 'none';
-                document.body.classList.remove('shake');
-            }, 3000);
         }
 
         function sw(id, btn) {
@@ -240,7 +200,7 @@
             const list = document.getElementById('stadium-list');
             const div = document.createElement('div');
             div.style.cssText = "background:var(--bg2); padding:12px; border-radius:12px; margin-bottom:10px; border-left:3px solid var(--p-color); display:flex; justify-content:space-between; align-items:center;";
-            div.innerHTML = `<div><div style="font-size:10px; color:var(--t2);">${new Date().toLocaleDateString()}</div><div style="font-size:13px; font-weight:700;">직관 인증 완료</div></div><div style="color:var(--p-color); font-family:'Orbitron'; font-size:9px;">VERIFIED</div>`;
+            div.innerHTML = `<div><div style="font-size:10px; color:var(--t2);">${new Date().toLocaleDateString()}</div><div style="font-size:13px; font-weight:700;">직관 인증 성공</div></div><div style="color:var(--p-color); font-family:'Orbitron'; font-size:9px;">VERIFIED</div>`;
             list.prepend(div);
         }
     </script>
