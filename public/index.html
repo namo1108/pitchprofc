@@ -1,942 +1,213 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#020608">
-<title>PITCH — 전술 작전실</title>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;500;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
-<style>
-:root {
-  --bg:#020608; --bg2:#040c10; --bg3:#071218; --bg4:#0a1820;
-  --g:#00ff87; --g2:#00cc6a; --g3:#008844;
-  --amber:#ffb800; --red:#ff3b5c; --blue:#00d4ff; --purple:#b06aff;
-  --t:#d0ffe8; --t2:#5a8870; --t3:#1e3d2e;
-  --b:rgba(0,255,135,.1); --b2:rgba(0,255,135,.22);
-  --card:rgba(4,12,16,.94);
-  --br:1; --ct:1; --warm:0deg;
-}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
-html,body{height:100%;overflow:hidden;}
-body{
-  background:var(--bg);color:var(--t);
-  font-family:'Noto Sans KR',sans-serif;
-  max-width:480px;margin:0 auto;
-  filter:brightness(var(--br)) contrast(var(--ct)) hue-rotate(var(--warm));
-  transition:filter .8s;
-  position:relative;
-}
-/* 배경 그리드 패턴 */
-body::before{
-  content:'';position:fixed;inset:0;
-  background-image:
-    linear-gradient(rgba(0,255,135,.04) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(0,255,135,.04) 1px,transparent 1px);
-  background-size:40px 40px;
-  pointer-events:none;z-index:0;
-}
-body::after{
-  content:'';position:fixed;inset:0;
-  background:radial-gradient(ellipse 120% 50% at 50% 0%,rgba(0,255,135,.05) 0%,transparent 60%);
-  pointer-events:none;z-index:0;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+    <title>PITCH Pro — Tactical Ops Center</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #020608; --bg2: #040c10; --card: rgba(4, 12, 16, 0.95);
+            --p-color: #00ff87; /* 기본 포인트 컬러 */
+            --p-glow: rgba(0, 255, 135, 0.5);
+            --t: #d0ffe8; --t2: #5a8870; --t3: #1e3d2e;
+            --red: #ff3b5c;
+        }
 
-/* TOPBAR */
-.topbar{
-  position:sticky;top:0;z-index:200;
-  background:rgba(2,6,8,.97);
-  border-bottom:1px solid var(--b2);
-  padding:0 14px;
-  display:flex;align-items:center;justify-content:space-between;
-  height:52px;
-  box-shadow:0 0 30px rgba(0,255,135,.08);
-}
-.logo{
-  display:flex;flex-direction:column;gap:0;
-  font-family:'Orbitron',sans-serif;
-}
-.logo-main{
-  font-size:18px;font-weight:900;letter-spacing:6px;
-  color:var(--g);
-  text-shadow:0 0 12px rgba(0,255,135,.6),0 0 30px rgba(0,255,135,.2);
-  line-height:1;
-}
-.logo-sub{font-size:7px;color:var(--t3);letter-spacing:3px;font-weight:400;margin-top:2px;font-family:'Share Tech Mono';}
-.top-r{display:flex;align-items:center;gap:6px;}
-.tbtn{
-  width:34px;height:34px;border-radius:8px;
-  background:rgba(0,255,135,.06);border:1px solid var(--b);
-  color:var(--t2);font-size:14px;display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:all .15s;
-}
-.tbtn:active{background:rgba(0,255,135,.15);border-color:var(--b2);color:var(--g);}
-.live-sig{
-  display:none;align-items:center;gap:4px;
-  background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.25);
-  border-radius:6px;padding:3px 8px;
-  font-family:'Share Tech Mono';font-size:10px;color:var(--red);letter-spacing:1px;
-}
-.live-sig.show{display:flex;}
-.lsdot{width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 6px var(--red);animation:ldot 1s infinite;}
-@keyframes ldot{0%,100%{opacity:1}50%{opacity:.2}}
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body { 
+            background: var(--bg); color: var(--t); font-family: 'Noto Sans KR', sans-serif;
+            max-width: 480px; margin: 0 auto; overflow-x: hidden; height: 100vh;
+        }
 
-/* NIGHT WATCH 배너 */
-.nw-bar{
-  background:linear-gradient(135deg,rgba(176,106,255,.08) 0%,rgba(0,255,135,.04) 100%);
-  border-bottom:1px solid rgba(176,106,255,.18);
-  padding:7px 14px;display:flex;align-items:center;gap:9px;cursor:pointer;
-  position:relative;z-index:1;transition:all .3s;
-}
-.nw-bar.on{background:linear-gradient(135deg,rgba(176,106,255,.16) 0%,rgba(0,255,135,.08) 100%);}
-.nw-ico{font-size:16px;}
-.nw-info{flex:1;}
-.nw-ttl{font-family:'Orbitron';font-size:9px;font-weight:700;color:var(--purple);letter-spacing:2px;}
-.nw-sub{font-size:9px;color:var(--t3);margin-top:1px;font-family:'Share Tech Mono';}
-.tog{width:38px;height:20px;border-radius:10px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);position:relative;flex-shrink:0;transition:all .3s;cursor:pointer;}
-.tog.on{background:var(--purple);border-color:var(--purple);box-shadow:0 0 10px rgba(176,106,255,.4);}
-.tog::after{content:'';position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,.4);}
-.tog.on::after{transform:translateX(18px);}
+        /* --- 온보딩 화면 --- */
+        #onboarding {
+            position: fixed; inset: 0; background: var(--bg); z-index: 1000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            padding: 40px; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .ob-title { font-family: 'Orbitron'; font-size: 24px; font-weight: 900; color: var(--p-color); letter-spacing: 4px; margin-bottom: 10px; text-shadow: 0 0 20px var(--p-glow); }
+        .ob-sub { color: var(--t2); font-size: 13px; margin-bottom: 40px; text-align: center; }
+        .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; width: 100%; }
+        .team-card { 
+            background: var(--bg2); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px;
+            padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.3s;
+        }
+        .team-card:hover { border-color: var(--p-color); transform: translateY(-5px); background: rgba(255,255,255,0.02); }
+        .team-card img { width: 50px; height: 50px; margin-bottom: 10px; filter: drop-shadow(0 0 5px rgba(0,0,0,0.5)); }
+        .team-card span { display: block; font-family: 'Orbitron'; font-size: 10px; font-weight: 700; color: #fff; }
 
-/* NAV */
-.ntabs{
-  display:flex;background:var(--bg2);
-  border-bottom:1px solid var(--b);
-  overflow-x:auto;scrollbar-width:none;
-  position:relative;z-index:1;
-}
-.ntabs::-webkit-scrollbar{display:none;}
-.ntab{
-  flex-shrink:0;padding:10px 14px 8px;
-  font-family:'Orbitron';font-size:9px;font-weight:700;
-  color:var(--t3);letter-spacing:1px;
-  border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;
-}
-.ntab.on{color:var(--g);border-bottom-color:var(--g);text-shadow:0 0 8px rgba(0,255,135,.4);}
+        /* --- 메인 레이아웃 --- */
+        .topbar { padding: 15px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Orbitron'; font-size: 18px; font-weight: 900; color: var(--p-color); letter-spacing: 2px; }
+        
+        .nav { display: flex; overflow-x: auto; background: var(--bg2); border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .nav-item { padding: 15px 20px; font-family: 'Orbitron'; font-size: 11px; font-weight: 700; color: var(--t3); cursor: pointer; white-space: nowrap; }
+        .nav-item.active { color: var(--p-color); border-bottom: 2px solid var(--p-color); }
 
-/* PAGES */
-.page{display:none;height:calc(100vh - 128px);overflow-y:auto;scrollbar-width:thin;scrollbar-color:var(--t3) transparent;padding-bottom:74px;}
-.page::-webkit-scrollbar{width:2px;}
-.page::-webkit-scrollbar-thumb{background:var(--t3);border-radius:2px;}
-.page.on{display:block;}
+        /* --- 아코디언 일정 --- */
+        .league-wrap { margin: 15px 10px; }
+        .league-header { 
+            background: var(--bg2); padding: 12px 15px; border-radius: 12px; 
+            display: flex; justify-content: space-between; align-items: center;
+            cursor: pointer; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 8px;
+        }
+        .league-title { display: flex; align-items: center; gap: 10px; font-family: 'Orbitron'; font-size: 12px; font-weight: 700; }
+        .league-icon { width: 20px; height: 20px; }
+        .league-content { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-in-out; }
+        .league-content.open { max-height: 1000px; }
 
-/* SECTION TITLE */
-.sec{padding:12px 14px 5px;display:flex;align-items:center;justify-content:space-between;}
-.stl{
-  font-family:'Orbitron';font-size:9px;font-weight:700;
-  color:var(--g2);letter-spacing:2px;text-transform:uppercase;
-  display:flex;align-items:center;gap:7px;
-}
-.stl::before{content:'';width:2px;height:14px;background:var(--g);border-radius:1px;box-shadow:0 0 6px var(--g);}
-.sbadge{font-family:'Share Tech Mono';font-size:9px;color:var(--t3);background:rgba(255,255,255,.04);border:1px solid var(--b);padding:2px 8px;border-radius:4px;}
+        .match-card { 
+            background: var(--card); border: 1px solid rgba(255,255,255,0.03); 
+            border-radius: 12px; padding: 15px; margin-bottom: 8px; display: flex; align-items: center;
+        }
+        .m-time { font-family: 'Share Tech Mono'; font-size: 12px; color: var(--t2); width: 50px; }
+        .m-teams { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+        .m-team { display: flex; align-items: center; gap: 10px; }
+        .m-team img { width: 18px; height: 18px; }
+        .m-team span { font-size: 13px; font-weight: 500; }
+        .m-score { font-family: 'Orbitron'; font-size: 16px; font-weight: 900; margin-left: auto; color: var(--p-color); }
 
-/* MATCH CARD */
-.mc{
-  margin:0 10px 10px;
-  background:var(--card);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:12px;overflow:hidden;
-  cursor:pointer;transition:border-color .2s;
-  position:relative;z-index:1;
-}
-.mc::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at top right,rgba(0,255,135,.03) 0%,transparent 60%);pointer-events:none;}
-.mc:active{border-color:var(--b2);}
-.mc.live{border-color:rgba(255,59,92,.25);}
-.mc.live::before{background:radial-gradient(ellipse at top right,rgba(255,59,92,.04) 0%,transparent 60%);}
+        /* --- 골 애니메이션 --- */
+        #goal-overlay {
+            position: fixed; inset: 0; pointer-events: none; z-index: 2000;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(circle, var(--p-glow) 0%, transparent 70%);
+            opacity: 0; transition: opacity 0.3s;
+        }
+        #goal-overlay.active { opacity: 1; animation: flash 0.5s infinite; }
+        @keyframes flash { 50% { background: radial-gradient(circle, var(--p-glow) 30%, transparent 80%); } }
+        .goal-text { font-family: 'Orbitron'; font-size: 60px; font-weight: 900; color: #fff; text-shadow: 0 0 30px var(--p-color); }
 
-.mc-hd{
-  padding:8px 12px;display:flex;align-items:center;justify-content:space-between;
-  background:rgba(255,255,255,.02);border-bottom:1px solid rgba(255,255,255,.05);
-}
-.mc-league{font-family:'Share Tech Mono';font-size:9px;color:var(--t3);letter-spacing:.5px;}
-.mc-tb{display:flex;align-items:center;gap:4px;font-family:'Orbitron';font-size:10px;font-weight:700;padding:2px 8px;border-radius:4px;}
-.mc-tb.live{background:rgba(255,59,92,.1);border:1px solid rgba(255,59,92,.25);color:var(--red);}
-.mc-tb.fin{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);color:var(--t3);}
-.mc-tb.sch{background:rgba(0,255,135,.06);border:1px solid var(--b);color:var(--g2);}
-.pulse{width:5px;height:5px;border-radius:50%;background:var(--red);box-shadow:0 0 5px var(--red);animation:ldot .8s infinite;}
-
-.mc-body{padding:13px;}
-.mc-teams{display:flex;align-items:center;gap:8px;}
-.mc-team{flex:1;display:flex;align-items:center;gap:8px;min-width:0;}
-.mc-team.away{flex-direction:row-reverse;}
-.mc-cr{width:30px;height:30px;object-fit:contain;flex-shrink:0;filter:drop-shadow(0 0 4px rgba(0,0,0,.8));}
-.mc-nm{font-family:'Orbitron';font-size:11px;font-weight:700;color:var(--t);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;letter-spacing:.5px;}
-.mc-team.away .mc-nm{text-align:right;}
-.mc-score{font-family:'Orbitron';font-size:28px;font-weight:900;color:#fff;display:flex;align-items:center;gap:5px;flex-shrink:0;letter-spacing:-1px;}
-.mc-sep{font-size:16px;color:var(--t3);font-weight:400;}
-
-/* MOMENTUM BAR */
-.mom{padding:9px 12px 11px;border-top:1px solid rgba(255,255,255,.04);}
-.mom-lbl{display:flex;justify-content:space-between;font-family:'Share Tech Mono';font-size:8px;color:var(--t3);margin-bottom:5px;}
-.mom-bar{height:5px;background:rgba(255,255,255,.05);border-radius:3px;display:flex;overflow:hidden;gap:1px;}
-.ms{height:100%;flex:1;border-radius:2px;transition:background .6s;}
-.ms.h{background:var(--g);}
-.ms.a{background:var(--red);}
-.ms.n{background:rgba(255,255,255,.1);}
-/* 위험 지역 침투 표시 */
-.danger-row{display:flex;gap:4px;margin-top:6px;align-items:center;}
-.danger-lbl{font-family:'Share Tech Mono';font-size:8px;color:var(--t3);white-space:nowrap;}
-.danger-home,.danger-away{font-family:'Orbitron';font-size:11px;font-weight:700;}
-.danger-home{color:var(--g);}
-.danger-away{color:var(--red);}
-.danger-bar{flex:1;height:3px;background:rgba(255,255,255,.05);border-radius:2px;overflow:hidden;position:relative;}
-.danger-fill-h{position:absolute;left:0;top:0;bottom:0;background:var(--g);border-radius:2px;}
-.danger-fill-a{position:absolute;right:0;top:0;bottom:0;background:var(--red);border-radius:2px;}
-
-/* TACTIC CARD */
-.tac{
-  margin:0 10px 10px;
-  background:linear-gradient(135deg,rgba(176,106,255,.08) 0%,rgba(0,20,10,.9) 100%);
-  border:1px solid rgba(176,106,255,.2);
-  border-radius:12px;padding:13px;
-  position:relative;z-index:1;
-}
-.tac-hd{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
-.tac-tag{font-family:'Orbitron';font-size:8px;font-weight:700;color:var(--purple);letter-spacing:2px;}
-.tac-live{font-family:'Share Tech Mono';font-size:8px;color:var(--t3);margin-left:auto;}
-.tac-txt{font-size:11px;color:var(--t2);line-height:1.75;}
-.tac-tp{
-  margin-top:9px;padding:8px 10px;
-  background:linear-gradient(135deg,rgba(255,184,0,.08) 0%,rgba(255,59,92,.05) 100%);
-  border:1px solid rgba(255,184,0,.2);
-  border-radius:8px;font-size:10px;color:var(--amber);line-height:1.65;
-  display:flex;align-items:flex-start;gap:6px;
-}
-
-/* QUICK POLL */
-.poll{
-  margin:0 10px 10px;
-  background:var(--card);border:1px solid rgba(255,184,0,.15);
-  border-radius:12px;overflow:hidden;
-  position:relative;z-index:1;
-}
-.poll-hd{
-  padding:9px 13px;
-  background:linear-gradient(135deg,rgba(255,184,0,.08) 0%,rgba(255,59,92,.04) 100%);
-  border-bottom:1px solid rgba(255,255,255,.05);
-  display:flex;align-items:center;gap:7px;
-}
-.poll-tag{font-family:'Orbitron';font-size:8px;font-weight:700;color:var(--amber);letter-spacing:2px;}
-.poll-pax{margin-left:auto;font-family:'Share Tech Mono';font-size:9px;color:var(--t3);}
-.poll-q{padding:10px 13px 7px;font-size:13px;font-weight:700;color:var(--t);line-height:1.5;}
-.poll-opts{padding:0 13px 13px;display:flex;flex-direction:column;gap:6px;}
-.popt{
-  position:relative;padding:10px 12px;
-  border:1px solid rgba(255,255,255,.08);border-radius:8px;
-  cursor:pointer;overflow:hidden;transition:all .2s;
-  display:flex;align-items:center;justify-content:space-between;
-}
-.popt:active{transform:scale(.98);}
-.popt.sel{border-color:var(--g);box-shadow:0 0 10px rgba(0,255,135,.1);}
-.pfill{position:absolute;inset:0;background:rgba(0,255,135,.07);transform-origin:left;transition:transform .7s cubic-bezier(.4,0,.2,1);}
-.popt.sel .pfill{background:rgba(0,255,135,.12);}
-.pt{font-size:12px;color:var(--t);position:relative;z-index:1;font-weight:500;}
-.pp{font-family:'Orbitron';font-size:12px;color:var(--g);position:relative;z-index:1;font-weight:700;}
-
-/* AI SUMMARY */
-.aisum{
-  margin:0 10px 10px;
-  background:linear-gradient(135deg,rgba(0,212,255,.06) 0%,rgba(0,255,135,.03) 100%);
-  border:1px solid rgba(0,212,255,.15);border-radius:12px;padding:13px;
-  position:relative;z-index:1;
-}
-.ai-hd{display:flex;align-items:center;gap:6px;margin-bottom:9px;}
-.ai-tag{font-family:'Orbitron';font-size:8px;font-weight:700;color:var(--blue);letter-spacing:2px;}
-.cur{display:inline-block;width:5px;height:11px;background:var(--blue);border-radius:1px;animation:blink .9s infinite;vertical-align:middle;margin-left:2px;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
-.ai-lines{display:flex;flex-direction:column;gap:6px;}
-.ai-line{display:flex;align-items:flex-start;gap:8px;font-size:11px;color:var(--t2);line-height:1.7;}
-.ai-n{font-family:'Orbitron';font-size:10px;color:var(--blue);flex-shrink:0;margin-top:2px;font-weight:700;}
-
-/* K-PLAYER */
-.kpc{
-  margin:0 10px 10px;
-  background:var(--card);border:1px solid rgba(255,255,255,.07);
-  border-radius:12px;overflow:hidden;position:relative;z-index:1;
-}
-.kpc-hd{
-  padding:12px 13px;display:flex;align-items:center;gap:10px;
-  background:linear-gradient(135deg,rgba(0,100,200,.1) 0%,transparent 100%);
-  border-bottom:1px solid rgba(255,255,255,.05);
-}
-.kpc-nm{font-family:'Orbitron';font-size:13px;font-weight:900;color:#fff;letter-spacing:1px;}
-.kpc-en{font-size:9px;color:var(--t3);margin-top:1px;font-family:'Share Tech Mono';}
-.kpc-rtg{font-family:'Orbitron';font-size:26px;font-weight:900;line-height:1;}
-.kpc-rtg.hi{color:var(--g);text-shadow:0 0 10px rgba(0,255,135,.5);}
-.kpc-rtg.mid{color:var(--amber);}
-.kpc-rtg.lo{color:var(--red);}
-.kpc-stats{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid rgba(255,255,255,.05);}
-.kst{padding:9px 4px;text-align:center;border-right:1px solid rgba(255,255,255,.05);}
-.kst:last-child{border-right:none;}
-.ksv{font-family:'Orbitron';font-size:16px;font-weight:700;color:#fff;}
-.ksl{font-size:8px;color:var(--t3);margin-top:2px;font-family:'Share Tech Mono';}
-/* 히트맵 */
-.hmap{padding:10px 13px;border-top:1px solid rgba(255,255,255,.05);}
-.hmap-lbl{font-family:'Share Tech Mono';font-size:8px;color:var(--t3);letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;}
-.pitch{width:100%;height:88px;position:relative;border-radius:6px;overflow:hidden;}
-.pitch-bg{position:absolute;inset:0;background:rgba(0,40,15,.5);border:1px solid rgba(0,255,135,.15);}
-.pitch-line-h{position:absolute;top:50%;left:0;right:0;height:1px;background:rgba(0,255,135,.15);}
-.pitch-line-v{position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(0,255,135,.1);}
-.pitch-circle{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:30px;height:30px;border:1px solid rgba(0,255,135,.15);border-radius:50%;}
-.heat{position:absolute;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;}
-/* 평점 변화 그래프 */
-.rtg-chart{padding:10px 13px;border-top:1px solid rgba(255,255,255,.05);}
-.rtg-chart-lbl{font-family:'Share Tech Mono';font-size:8px;color:var(--t3);margin-bottom:6px;letter-spacing:1px;}
-.rtg-bars{display:flex;align-items:flex-end;gap:3px;height:36px;}
-.rtg-bar{flex:1;border-radius:2px 2px 0 0;transition:height .5s;}
-.rtg-dates{display:flex;gap:3px;margin-top:3px;}
-.rtg-date{flex:1;font-family:'Share Tech Mono';font-size:7px;color:var(--t3);text-align:center;}
-
-/* STANDING */
-.str{display:flex;align-items:center;padding:8px 13px;border-bottom:1px solid rgba(255,255,255,.04);position:relative;cursor:pointer;transition:background .15s;}
-.str:active{background:rgba(0,255,135,.03);}
-.str.cl{background:linear-gradient(90deg,rgba(0,255,135,.04) 0%,transparent 100%);}
-.str.cl::before,.str.el::before,.str.drop::before{content:'';position:absolute;left:0;top:0;bottom:0;width:2px;border-radius:0 2px 2px 0;}
-.str.cl::before{background:var(--g);}
-.str.el::before{background:var(--amber);}
-.str.drop::before{background:var(--red);}
-.stp{font-family:'Orbitron';font-size:12px;font-weight:700;color:var(--t3);width:20px;text-align:center;flex-shrink:0;}
-.stp.top{color:var(--g);text-shadow:0 0 6px rgba(0,255,135,.4);}
-.stp.bot{color:var(--red);}
-.stcr{width:20px;height:20px;object-fit:contain;margin:0 8px;flex-shrink:0;}
-.stnm{flex:1;font-size:12px;font-weight:600;color:var(--t);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.stnum{font-size:10px;color:var(--t2);width:18px;text-align:center;flex-shrink:0;}
-.stpts{font-family:'Orbitron';font-size:12px;font-weight:700;color:#fff;width:22px;text-align:center;flex-shrink:0;}
-.stfm{display:flex;gap:2px;flex-shrink:0;}
-.fd{width:8px;height:8px;border-radius:50%;}
-
-/* NIGHT WATCH PANEL */
-.nwp{display:none;margin:0 10px 10px;background:linear-gradient(135deg,rgba(176,106,255,.1) 0%,rgba(2,6,8,.95) 100%);border:1px solid rgba(176,106,255,.22);border-radius:12px;padding:14px;position:relative;z-index:1;}
-.nwp.show{display:block;}
-.nwp-ttl{font-family:'Orbitron';font-size:10px;font-weight:700;color:var(--purple);letter-spacing:2px;margin-bottom:12px;}
-.nwo{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05);}
-.nwo:last-child{border-bottom:none;}
-.nwo-ic{font-size:17px;width:26px;text-align:center;flex-shrink:0;}
-.nwo-inf{flex:1;}
-.nwo-nm{font-size:12px;font-weight:600;color:var(--t);margin-bottom:1px;}
-.nwo-ds{font-size:9px;color:var(--t3);line-height:1.5;font-family:'Share Tech Mono';}
-.nwsl{width:80px;-webkit-appearance:none;height:4px;border-radius:2px;background:rgba(255,255,255,.1);outline:none;}
-.nwsl::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:var(--purple);box-shadow:0 0 8px rgba(176,106,255,.6);}
-
-/* ATTENDANCE */
-.att{margin:0 10px 10px;background:linear-gradient(135deg,rgba(255,184,0,.09) 0%,rgba(255,59,92,.05) 100%);border:1px solid rgba(255,184,0,.18);border-radius:12px;padding:13px;display:flex;align-items:center;gap:12px;position:relative;z-index:1;}
-.att-ic{font-size:26px;}
-.att-info{flex:1;}
-.att-ttl{font-family:'Orbitron';font-size:11px;font-weight:700;color:var(--amber);letter-spacing:1px;margin-bottom:3px;}
-.att-sub{font-size:10px;color:var(--t3);line-height:1.65;font-family:'Share Tech Mono';}
-.att-btn{background:rgba(255,184,0,.14);border:1px solid rgba(255,184,0,.3);border-radius:6px;padding:8px 12px;color:var(--amber);font-size:10px;font-weight:700;cursor:pointer;white-space:nowrap;font-family:'Orbitron';letter-spacing:.5px;}
-
-/* SCHEDULE ROW */
-.sr{display:flex;align-items:center;padding:9px 13px;border-bottom:1px solid rgba(255,255,255,.04);gap:8px;cursor:pointer;}
-.sr:active{background:rgba(0,255,135,.03);}
-.sr-time{font-family:'Orbitron';font-size:11px;font-weight:700;width:36px;flex-shrink:0;}
-.sr-teams{flex:1;display:flex;flex-direction:column;gap:5px;}
-.sr-team{display:flex;align-items:center;gap:6px;}
-.sr-cr{width:14px;height:14px;object-fit:contain;flex-shrink:0;}
-.sr-nm{font-size:12px;font-family:'Orbitron';font-weight:400;letter-spacing:.3px;}
-.sr-sc{margin-left:auto;font-family:'Orbitron';font-size:13px;font-weight:700;}
-
-/* BOTTOM NAV */
-.bnav{
-  position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;
-  background:rgba(2,6,8,.98);border-top:1px solid var(--b2);
-  display:flex;padding:8px 0 max(10px,env(safe-area-inset-bottom));z-index:200;
-  box-shadow:0 -4px 30px rgba(0,0,0,.7),0 -1px 0 rgba(0,255,135,.08);
-}
-.nb{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;transition:all .2s;}
-.nb:active{transform:scale(.88);}
-.nb svg{width:22px;height:22px;color:var(--t3);transition:all .2s;}
-.nb.on svg{color:var(--g);filter:drop-shadow(0 0 6px rgba(0,255,135,.7));}
-.nb-lb{font-family:'Orbitron';font-size:7px;font-weight:700;color:var(--t3);letter-spacing:1px;}
-.nb.on .nb-lb{color:var(--g);}
-
-/* LOADER */
-.ldr{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 20px;gap:12px;}
-.spin{width:28px;height:28px;border:2px solid var(--b);border-top-color:var(--g);border-radius:50%;animation:sp .7s linear infinite;box-shadow:0 0 10px rgba(0,255,135,.15);}
-@keyframes sp{to{transform:rotate(360deg);}}
-.spin-t{font-family:'Share Tech Mono';font-size:10px;color:var(--t3);letter-spacing:1px;}
-
-/* GOAL TOAST */
-.gt{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:9999;text-align:center;pointer-events:none;animation:gta 3.5s ease forwards;}
-@keyframes gta{0%{opacity:0;transform:translate(-50%,-50%) scale(.3);}15%{opacity:1;transform:translate(-50%,-50%) scale(1.1);}25%{transform:translate(-50%,-50%) scale(1);}80%{opacity:1;}100%{opacity:0;}}
-.gt-ball{font-size:54px;display:block;animation:bs .5s ease;}
-@keyframes bs{from{transform:rotate(0)}to{transform:rotate(720deg)}}
-.gt-word{font-family:'Orbitron';font-size:34px;font-weight:900;letter-spacing:6px;color:#fff;display:block;text-shadow:0 0 20px var(--g),0 0 50px var(--g);}
-.gt-info{font-size:13px;color:var(--g);display:block;margin-top:5px;font-weight:700;font-family:'Orbitron';}
-
-/* LEAGUE BTN */
-.lgbtn{font-family:'Orbitron';font-size:8px;font-weight:700;letter-spacing:1px;padding:5px 12px;border-radius:4px;border:1px solid var(--b);background:transparent;color:var(--t3);cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;}
-.lgbtn.on{background:rgba(0,255,135,.1);color:var(--g);border-color:var(--b2);}
-
-@keyframes fu{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
-.fu{animation:fu .22s ease forwards;}
-</style>
+        .hidden { display: none !important; }
+    </style>
 </head>
 <body>
 
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="logo">
-    <div class="logo-main">PITCH</div>
-    <div class="logo-sub">TACTICAL OPS CENTER</div>
-  </div>
-  <div class="top-r">
-    <div class="live-sig" id="lsig"><div class="lsdot"></div>LIVE</div>
-    <button class="tbtn" onclick="openMyTeam()" id="team-btn" title="나의 팀">⚽</button>
-    <button class="tbtn" onclick="toggleNW()" id="nw-btn" title="Night Watch">🌙</button>
-  </div>
-</div>
-
-<!-- NIGHT WATCH 배너 -->
-<div class="nw-bar" id="nwbar" onclick="toggleNWPanel()">
-  <span class="nw-ico">🌙</span>
-  <div class="nw-info">
-    <div class="nw-ttl">NIGHT WATCH MODE</div>
-    <div class="nw-sub" id="nwsub">STANDBY · TAP TO CONFIGURE</div>
-  </div>
-  <div class="tog" id="nwtog"></div>
-</div>
-
-<!-- NAV TABS -->
-<div class="ntabs">
-  <div class="ntab on" onclick="swTab('live',this)">⚡ LIVE</div>
-  <div class="ntab" onclick="swTab('sched',this)">📅 일정</div>
-  <div class="ntab" onclick="swTab('std',this)">📊 순위</div>
-  <div class="ntab" onclick="swTab('kleg',this)">🇰🇷 K-군단</div>
-  <div class="ntab" onclick="swTab('nws',this)">🌙 야간설정</div>
-</div>
-
-<!-- LIVE -->
-<div class="page on" id="pg-live">
-  <div class="nwp" id="nwpanel">
-    <div class="nwp-ttl">🌙 NIGHT WATCH CONTROLS</div>
-    <div class="nwo">
-      <span class="nwo-ic">🔆</span>
-      <div class="nwo-inf"><div class="nwo-nm">화면 밝기</div><div class="nwo-ds">새벽 눈 피로 최소화</div></div>
-      <input class="nwsl" type="range" min="30" max="100" value="100" oninput="setBr(this.value)">
+    <div id="onboarding">
+        <div class="ob-title">SELECT SQUAD</div>
+        <div class="ob-sub">가장 좋아하는 팀을 선택해 보세요.<br>팀 컬러에 맞춰 인터페이스가 변합니다.</div>
+        <div class="team-grid" id="team-list">
+            </div>
     </div>
-    <div class="nwo">
-      <span class="nwo-ic">🌡️</span>
-      <div class="nwo-inf"><div class="nwo-nm">색온도</div><div class="nwo-ds">따뜻하게 → 블루라이트 감소</div></div>
-      <input class="nwsl" type="range" min="0" max="30" value="0" oninput="setWm(this.value)">
-    </div>
-    <div class="nwo">
-      <span class="nwo-ic">🙈</span>
-      <div class="nwo-inf"><div class="nwo-nm">스코어 스포일러 방지</div><div class="nwo-ds">탭 전까지 점수 숨김 · 녹화 시청용</div></div>
-      <div class="tog" id="sptog" onclick="togSp()"></div>
-    </div>
-    <div class="nwo">
-      <span class="nwo-ic">📳</span>
-      <div class="nwo-inf"><div class="nwo-nm">골 알림 10분 지연</div><div class="nwo-ds">스포방지 알림 모드</div></div>
-      <div class="tog" id="deltog" onclick="this.classList.toggle('on')"></div>
-    </div>
-  </div>
-  <div id="live-body"><div class="ldr"><div class="spin"></div><div class="spin-t">SCANNING FOR LIVE MATCHES...</div></div></div>
-</div>
 
-<!-- SCHEDULE -->
-<div class="page" id="pg-sched">
-  <div id="sched-body"><div class="ldr"><div class="spin"></div><div class="spin-t">LOADING FIXTURES...</div></div></div>
-</div>
-
-<!-- STANDING -->
-<div class="page" id="pg-std">
-  <div style="padding:8px 12px 4px;display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;position:relative;z-index:1;">
-    <button class="lgbtn on" onclick="loadStd('PL',this)">PL</button>
-    <button class="lgbtn" onclick="loadStd('PD',this)">LALIGA</button>
-    <button class="lgbtn" onclick="loadStd('SA',this)">SERIE A</button>
-    <button class="lgbtn" onclick="loadStd('BL1',this)">BUNDES</button>
-    <button class="lgbtn" onclick="loadStd('FL1',this)">LIGUE 1</button>
-    <button class="lgbtn" onclick="loadStd('CL',this)">UCL</button>
-  </div>
-  <div style="display:flex;padding:5px 13px;background:rgba(0,255,135,.03);border-bottom:1px solid var(--b);font-family:'Share Tech Mono';font-size:8px;color:var(--t3);letter-spacing:.5px;position:relative;z-index:1;">
-    <span style="width:20px;">#</span><span style="width:28px;"></span><span style="flex:1;">TEAM</span>
-    <span style="width:18px;text-align:center;">P</span><span style="width:18px;text-align:center;">W</span><span style="width:18px;text-align:center;">D</span><span style="width:18px;text-align:center;">L</span>
-    <span style="width:24px;text-align:center;">GD</span><span style="width:22px;text-align:center;">PTS</span><span style="width:44px;">FORM</span>
-  </div>
-  <div id="std-body"></div>
-</div>
-
-<!-- K-LEGION -->
-<div class="page" id="pg-kleg">
-  <div class="sec"><span class="stl">K-LEGIONNAIRE TRACKER</span><span class="sbadge">유럽파 LIVE</span></div>
-  <div id="kleg-body"></div>
-</div>
-
-<!-- NIGHT WATCH SETTINGS -->
-<div class="page" id="pg-nws">
-  <div class="sec"><span class="stl">NIGHT WATCH SYSTEM</span></div>
-  <div style="margin:0 10px 14px;background:var(--card);border:1px solid rgba(176,106,255,.2);border-radius:12px;padding:16px;position:relative;z-index:1;">
-    <div style="font-family:'Orbitron';font-size:10px;font-weight:700;color:var(--purple);letter-spacing:2px;margin-bottom:14px;">🌙 VISUAL OVERRIDE CONTROLS</div>
-    <div class="nwo">
-      <span class="nwo-ic">🔆</span>
-      <div class="nwo-inf"><div class="nwo-nm">전체 밝기</div><div class="nwo-ds">권장: 50~60% (새벽 2~5시)</div></div>
-      <input class="nwsl" type="range" min="30" max="100" value="100" oninput="setBr(this.value)">
-    </div>
-    <div class="nwo">
-      <span class="nwo-ic">🌡️</span>
-      <div class="nwo-inf"><div class="nwo-nm">색온도 (따뜻하게)</div><div class="nwo-ds">최대 적용 시 블루라이트 90% 감소</div></div>
-      <input class="nwsl" type="range" min="0" max="30" value="0" oninput="setWm(this.value)">
-    </div>
-    <div class="nwo">
-      <span class="nwo-ic">🙈</span>
-      <div class="nwo-inf"><div class="nwo-nm">스코어 스포일러 방지</div><div class="nwo-ds">탭하기 전까지 스코어 '??'로 표시</div></div>
-      <div class="tog" id="sptog2" onclick="togSp()"></div>
-    </div>
-    <div class="nwo">
-      <span class="nwo-ic">📳</span>
-      <div class="nwo-inf"><div class="nwo-nm">골 알림 10분 지연</div><div class="nwo-ds">녹화 시청 시 스포방지 알림</div></div>
-      <div class="tog" onclick="this.classList.toggle('on')"></div>
-    </div>
-    <div style="margin-top:12px;padding:10px;background:rgba(176,106,255,.07);border:1px solid rgba(176,106,255,.15);border-radius:8px;">
-      <div style="font-family:'Orbitron';font-size:8px;color:var(--purple);letter-spacing:1px;margin-bottom:5px;">💡 OPTIMAL SETTINGS</div>
-      <div style="font-size:10px;color:var(--t3);line-height:1.75;font-family:'Share Tech Mono';">밝기 55% + 색온도 MAX = 새벽 2~5시 최적화.<br>방 불 끄고 누운 자세에서 눈 피로 최소화.</div>
-    </div>
-  </div>
-  <!-- 직관 인증 -->
-  <div class="sec"><span class="stl">STADIUM VERIFICATION</span></div>
-  <div class="att">
-    <span class="att-ic">🎫</span>
-    <div class="att-info">
-      <div class="att-ttl">직관 인증 배지</div>
-      <div class="att-sub">경기장 1km 이내 GPS 인증 시<br>🏆 희귀 배지 + 직관러 타이틀!</div>
-    </div>
-    <div class="att-btn" onclick="doGPS()">VERIFY</div>
-  </div>
-  <div id="gps-res" style="margin:0 10px 10px;"></div>
-</div>
-
-<!-- BOTTOM NAV -->
-<div class="bnav">
-  <button class="nb on" onclick="swTab('live',null,this)">
-    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="3" fill="currentColor"/><circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.5" fill="none" opacity=".5"/><circle cx="12" cy="12" r="11" stroke="currentColor" stroke-width="1" fill="none" opacity=".2"/></svg>
-    <span class="nb-lb">LIVE</span>
-  </button>
-  <button class="nb" onclick="swTab('sched',null,this)">
-    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="4" width="18" height="17" rx="3" stroke="currentColor" stroke-width="1.5"/><path d="M3 9h18" stroke="currentColor" stroke-width="1.5"/><path d="M8 2v4M16 2v4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="8" cy="14" r="1.2" fill="currentColor"/><circle cx="12" cy="14" r="1.2" fill="currentColor"/><circle cx="16" cy="14" r="1.2" fill="currentColor"/></svg>
-    <span class="nb-lb">FIXTURES</span>
-  </button>
-  <button class="nb" onclick="swTab('std',null,this)">
-    <svg viewBox="0 0 24 24" fill="none"><rect x="3" y="14" width="4" height="7" rx="1" fill="currentColor" opacity=".4"/><rect x="10" y="9" width="4" height="12" rx="1" fill="currentColor" opacity=".7"/><rect x="17" y="4" width="4" height="17" rx="1" fill="currentColor"/></svg>
-    <span class="nb-lb">TABLE</span>
-  </button>
-  <button class="nb" onclick="swTab('kleg',null,this)">
-    <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="7" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-    <span class="nb-lb">K-LEGION</span>
-  </button>
-  <button class="nb" onclick="swTab('nws',null,this)">
-    <svg viewBox="0 0 24 24" fill="none"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-    <span class="nb-lb">NIGHT</span>
-  </button>
-</div>
-<script>
-// ── STATE ────────────────────────────
-const API='/api/football';
-const cache={};let nwOn=false,spOn=false,curStd='PL';
-const pscores={};let pollVoted=null;
-const PV={0:184,1:97,2:231,3:58};
-
-// KST utils
-function kstNow(){return new Date(Date.now()+9*3600000);}
-function dStr(d){return`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;}
-function kstTime(u){const k=new Date(new Date(u).getTime()+9*3600000);return`${String(k.getUTCHours()).padStart(2,'0')}:${String(k.getUTCMinutes()).padStart(2,'0')}`;}
-
-// API
-async function fd(path){
-  if(cache[path]&&Date.now()-cache[path].ts<90000)return cache[path].data;
-  try{const r=await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`);if(!r.ok)return null;const d=await r.json();cache[path]={data:d,ts:Date.now()};return d;}
-  catch{return null;}
-}
-
-// ── TAB SWITCH ───────────────────────
-function swTab(name,te,be){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
-  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
-  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
-  document.getElementById('pg-'+name).classList.add('on');
-  if(te)te.classList.add('on');if(be)be.classList.add('on');
-  if(name==='live')loadLive();
-  if(name==='sched')loadSched();
-  if(name==='std')loadStd(curStd);
-  if(name==='kleg')loadKLeg();
-}
-
-// ── NIGHT WATCH ──────────────────────
-function toggleNW(){
-  nwOn=!nwOn;
-  document.getElementById('nwtog').classList.toggle('on',nwOn);
-  document.getElementById('nwbar').classList.toggle('on',nwOn);
-  if(nwOn){setBr(58);setWm(15);document.getElementById('nwsub').textContent='ACTIVE · BRIGHTNESS 58% · WARM TONE';}
-  else{setBr(100);setWm(0);document.getElementById('nwsub').textContent='STANDBY · TAP TO CONFIGURE';}
-}
-function toggleNWPanel(){document.getElementById('nwpanel').classList.toggle('show');}
-function setBr(v){document.documentElement.style.setProperty('--br',v/100);}
-function setWm(v){document.documentElement.style.setProperty('--warm',v+'deg');}
-function togSp(){spOn=!spOn;document.querySelectorAll('#sptog,#sptog2').forEach(t=>t.classList.toggle('on',spOn));if(spOn)loadLive();}
-
-// ── SEED RANDOM ──────────────────────
-function sd(m){return(m.homeTeam?.id||0)+(m.awayTeam?.id||0)+(m.id||0);}
-function sr(m,n){const x=Math.sin(sd(m)+n)*43758.5453;return x-Math.floor(x);}
-
-// ── LIVE ─────────────────────────────
-async function loadLive(){
-  const c=document.getElementById('live-body');
-  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">SCANNING FOR LIVE MATCHES...</div></div>`;
-  const td=dStr(kstNow());
-  const Ls=['PL','PD','SA','BL1','FL1','CL'];
-  const res=await Promise.all(Ls.map(l=>fd(`/competitions/${l}/matches?dateFrom=${td}&dateTo=${td}`)));
-  const all=[];res.forEach((d,i)=>{if(d?.matches)all.push(...d.matches.map(m=>({...m,_l:Ls[i]})));});
-  const live=all.filter(m=>['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME'].includes(m.status));
-  const sched=all.filter(m=>['SCHEDULED','TIMED'].includes(m.status));
-  const fin=all.filter(m=>['FINISHED','AWARDED'].includes(m.status));
-  document.getElementById('lsig').classList.toggle('show',live.length>0);
-  let html='';
-  if(live.length){
-    html+=`<div class="sec"><span class="stl">● LIVE OPS · ${live.length} MATCHES</span></div>`;
-    live.forEach(m=>{chkGoal(m);html+=mkMC(m,'live');});
-    html+=mkPoll(live[0]);
-    html+=mkTac(live[0]);
-  }else{
-    html+=`<div class="sec"><span class="stl">NO LIVE OPS</span><span class="sbadge">${td}</span></div>`;
-  }
-  if(sched.length){
-    html+=`<div class="sec" style="margin-top:4px;"><span class="stl">TODAY FIXTURES · ${sched.length}</span></div>`;
-    sched.slice(0,6).forEach(m=>{html+=mkMC(m,'sch');});
-  }
-  if(fin.length){
-    html+=`<div class="sec" style="margin-top:4px;"><span class="stl">FINAL SCORE</span></div>`;
-    fin.slice(0,4).forEach((m,i)=>{if(i===0)html+=mkAI(m);html+=mkMC(m,'fin');});
-  }
-  c.innerHTML=html||`<div class="ldr"><div style="font-size:28px;">📅</div><div class="spin-t">NO MATCHES TODAY</div></div>`;
-}
-
-function mkMC(m,type){
-  const h=m.homeTeam,a=m.awayTeam;
-  let hg=m.score?.fullTime?.home??m.score?.halfTime?.home??'–';
-  let ag=m.score?.fullTime?.away??m.score?.halfTime?.away??'–';
-  if(spOn&&type==='fin'){hg='??';ag='??';}
-  const smap={IN_PLAY:'진행중',PAUSED:'HT',HALFTIME:'HT',EXTRA_TIME:'연장',PENALTY_SHOOTOUT:'PK',FINISHED:'FT',AWARDED:'FT'};
-  const sl=smap[m.status]||kstTime(m.utcDate);
-  const isL=type==='live',isF=type==='fin';
-  let ml=sl;
-  if(m.status==='IN_PLAY'&&m.utcDate){
-    const df=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);
-    if(df>0&&df<=90)ml=`${Math.min(df,90)}'`;else if(df>90)ml='90+';
-  }
-  // 모멘텀 (6구간)
-  const mom=[...Array(6)].map((_,i)=>{const v=sr(m,i);return v<.32?'a':v>.68?'h':'n';});
-  // 위험 지역 침투 횟수 (시뮬레이션)
-  const dh=Math.floor(sr(m,10)*8)+3,da=Math.floor(sr(m,11)*8)+2;
-  const momHtml=(isL||isF)?`
-    <div class="mom">
-      <div class="mom-lbl"><span>${h.shortName||h.name||''}</span><span>▶ MOMENTUM ◀</span><span>${a.shortName||a.name||''}</span></div>
-      <div class="mom-bar">${mom.map(s=>`<div class="ms ${s}"></div>`).join('')}</div>
-      <div class="danger-row">
-        <span class="danger-home">${dh}</span>
-        <span class="danger-lbl" style="margin:0 4px;">위험지역</span>
-        <div class="danger-bar">
-          <div class="danger-fill-h" style="width:${Math.round(dh/(dh+da)*100)}%"></div>
-          <div class="danger-fill-a" style="width:${Math.round(da/(dh+da)*100)}%"></div>
+    <div id="main-app" class="hidden">
+        <div class="topbar">
+            <div class="logo">PITCH PRO</div>
+            <div id="my-team-badge" style="font-size: 20px;"></div>
         </div>
-        <span class="danger-lbl" style="margin:0 4px;">침투</span>
-        <span class="danger-away">${da}</span>
-      </div>
-    </div>`:'';
-  const sc=isL?'color:var(--g);text-shadow:0 0 10px rgba(0,255,135,.4);':'';
-  const hn=(h.shortName||h.name||'').replace(/'/g,'');
-  const an=(a.shortName||a.name||'').replace(/'/g,'');
-  return`<div class="mc fu ${isL?'live':''}" onclick="openDtl(${m.id},'${hn}','${an}','${m._l||''}')">
-    <div class="mc-hd">
-      <span class="mc-league">${m.competition?.name||''} ${m.matchday?'· '+m.matchday+'R':''}</span>
-      <div class="mc-tb ${type}">${isL?'<div class="pulse"></div>':''}${isL?ml:sl}</div>
-    </div>
-    <div class="mc-body">
-      <div class="mc-teams">
-        <div class="mc-team"><img class="mc-cr" src="${h.crest||''}" onerror="this.style.opacity='.15'" alt=""><span class="mc-nm">${h.shortName||h.name||''}</span></div>
-        <div class="mc-score"><span style="${sc}">${hg}</span><span class="mc-sep">:</span><span style="${sc}">${ag}</span></div>
-        <div class="mc-team away"><img class="mc-cr" src="${a.crest||''}" onerror="this.style.opacity='.15'" alt=""><span class="mc-nm">${a.shortName||a.name||''}</span></div>
-      </div>
-    </div>
-    ${momHtml}
-  </div>`;
-}
 
-// ── 골 감지 ──────────────────────────
-function chkGoal(m){
-  const id=m.id;
-  const hg=m.score?.fullTime?.home??m.score?.halfTime?.home??0;
-  const ag=m.score?.fullTime?.away??m.score?.halfTime?.away??0;
-  const k=`${hg}:${ag}`;
-  if(pscores[id]&&pscores[id]!==k){
-    const p=pscores[id].split(':');
-    const isH=parseInt(hg)>parseInt(p[0]);
-    showGoal(isH?(m.homeTeam?.shortName||m.homeTeam?.name):(m.awayTeam?.shortName||m.awayTeam?.name),m.minute?m.minute+"'":'');
-  }
-  pscores[id]=k;
-}
-function showGoal(team,min){
-  const old=document.getElementById('gt-el');if(old)old.remove();
-  const el=document.createElement('div');el.id='gt-el';el.className='gt';
-  el.innerHTML=`<span class="gt-ball">⚽</span><span class="gt-word">GOAL!</span><span class="gt-info">${team}${min?' · '+min:''}</span>`;
-  document.body.appendChild(el);setTimeout(()=>el.remove(),3600);
-}
-
-// ── 전술 분석 ────────────────────────
-function mkTac(m){
-  if(!m)return'';
-  const h=m.homeTeam?.shortName||m.homeTeam?.name||'홈팀';
-  const a=m.awayTeam?.shortName||m.awayTeam?.name||'원정팀';
-  const ts=[
-    `${h}가 고압 압박 전술(4-3-3)로 ${a} 빌드업 차단 중. ${a} GK 롱볼 활용 빈도 증가 포착.`,
-    `${a} 우측 풀백의 인버티드 런이 ${h} 4백 사이 공간을 반복 공략. 수비 조직 균열 위험.`,
-    `전반 30분 이후 ${h} 점유율 63% → 세컨볼 경합에서 우위. 전방 압박 강도 유지 중.`,
-  ];
-  const idx=Math.floor(Date.now()/12000)%ts.length;
-  return`<div class="tac fu">
-    <div class="tac-hd">
-      <div class="tac-tag">⚡ AI TACTICAL INTEL</div>
-      <div class="tac-live">REAL-TIME</div>
-    </div>
-    <div class="tac-txt">${ts[idx]}</div>
-    <div class="tac-tp"><span>🎯</span><span><b>TURNING POINT:</b> ${h}의 측면 스위칭이 ${a} 수비 조직 균열 유발 — 세트피스 집중!</span></div>
-  </div>`;
-}
-
-// ── 퀵폴 ─────────────────────────────
-function mkPoll(m){
-  if(!m)return'';
-  const team=m.homeTeam?.shortName||m.homeTeam?.name||'홈팀';
-  const total=Object.values(PV).reduce((a,b)=>a+b,0);
-  const opts=['15분 이내','16~30분','31~45분','없음 / 모름'];
-  return`<div class="poll fu">
-    <div class="poll-hd">
-      <span>⚡</span><span class="poll-tag">LIVE PREDICTION</span>
-      <span class="poll-pax">${total.toLocaleString()} VOTERS</span>
-    </div>
-    <div class="poll-q">다음 골은 언제? (${team} 홈 기준)</div>
-    <div class="poll-opts">
-      ${opts.map((o,i)=>{
-        const pct=Math.round(PV[i]/total*100);
-        return`<div class="popt ${pollVoted===i?'sel':''}" onclick="doVote(${i},this)">
-          <div class="pfill" style="transform:scaleX(${pct/100})"></div>
-          <span class="pt">${o}</span><span class="pp">${pct}%</span>
-        </div>`;
-      }).join('')}
-    </div>
-  </div>`;
-}
-function doVote(i,el){if(pollVoted!==null)return;pollVoted=i;PV[i]++;el.classList.add('sel');el.querySelector('.pp').textContent='✓';}
-
-// ── AI 3줄 요약 ──────────────────────
-function mkAI(m){
-  const h=m.homeTeam?.shortName||m.homeTeam?.name||'홈팀';
-  const a=m.awayTeam?.shortName||m.awayTeam?.name||'원정팀';
-  const hg=m.score?.fullTime?.home??0,ag=m.score?.fullTime?.away??0;
-  const w=hg>ag?h:ag>hg?a:'양팀';
-  return`<div class="aisum fu">
-    <div class="ai-hd"><div class="ai-tag">🤖 CLAUDE AI MATCH REPORT<span class="cur"></span></div></div>
-    <div class="ai-lines">
-      <div class="ai-line"><span class="ai-n">01</span><span>${w}가 전반부터 경기를 주도하며 전술적 우위를 점했다.</span></div>
-      <div class="ai-line"><span class="ai-n">02</span><span>${hg+ag}골이 터진 공격적 경기. ${h}의 세트피스 전략이 결정적이었다.</span></div>
-      <div class="ai-line"><span class="ai-n">03</span><span>최종 ${hg}:${ag} ${w==='양팀'?'무승부':w+' 승리'}. 다음 경기 ${a}의 역습 전환 대응이 관건.</span></div>
-    </div>
-  </div>`;
-}
-
-// ── 경기 상세 모달 ───────────────────
-function openDtl(id,hn,an,league){
-  let modal=document.getElementById('dtl-modal');
-  if(!modal){
-    modal=document.createElement('div');modal.id='dtl-modal';
-    modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:999;overflow-y:auto;padding:14px;';
-    modal.onclick=e=>{if(e.target===modal)modal.style.display='none';};
-    document.body.appendChild(modal);
-  }
-  modal.style.display='block';
-  modal.innerHTML=`
-    <div style="background:#040c10;border-radius:14px;max-width:440px;margin:0 auto;border:1px solid rgba(0,255,135,.15);overflow:hidden;">
-      <div style="padding:14px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.07);">
-        <span style="font-family:'Orbitron';font-size:12px;font-weight:700;color:var(--g);letter-spacing:1px;">${hn} vs ${an}</span>
-        <button onclick="document.getElementById('dtl-modal').style.display='none'" style="background:none;border:none;color:var(--t2);font-size:22px;cursor:pointer;">×</button>
-      </div>
-      <div style="padding:14px;">
-        ${mkTac({homeTeam:{shortName:hn},awayTeam:{shortName:an},id})}
-        <div style="margin-top:10px;background:var(--card);border:1px solid var(--b);border-radius:10px;padding:12px;">
-          <div style="font-family:'Orbitron';font-size:8px;color:var(--g2);letter-spacing:1.5px;margin-bottom:9px;">📊 배당률 (추정)</div>
-          <div style="display:flex;gap:6px;">
-            ${[['홈 승',1.85],['무승부',3.40],['원정 승',4.20]].map(([l,v])=>`
-              <div style="flex:1;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:9px 4px;text-align:center;">
-                <div style="font-family:'Share Tech Mono';font-size:8px;color:var(--t3);margin-bottom:4px;">${l}</div>
-                <div style="font-family:'Orbitron';font-size:18px;font-weight:700;color:#fff;">${v}</div>
-              </div>`).join('')}
-          </div>
+        <div class="nav">
+            <div class="nav-item active">LIVE</div>
+            <div class="nav-item">FIXTURES</div>
+            <div class="nav-item">TABLES</div>
+            <div class="nav-item">MY SQUAD</div>
         </div>
-        <div style="margin-top:10px;background:var(--card);border:1px solid var(--b);border-radius:10px;padding:12px;">
-          <div style="font-family:'Orbitron';font-size:8px;color:var(--g2);letter-spacing:1.5px;margin-bottom:9px;">⚔️ 상대전적</div>
-          <div style="font-family:'Share Tech Mono';font-size:10px;color:var(--t3);text-align:center;padding:10px 0;">실데이터 연동 시 표시 (API 유료)</div>
-        </div>
-      </div>
-    </div>`;
-}
 
-// ── SCHEDULE ─────────────────────────
-async function loadSched(){
-  const c=document.getElementById('sched-body');
-  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">LOADING FIXTURES...</div></div>`;
-  const td=dStr(kstNow());
-  const Ls=['PL','PD','SA','BL1','FL1','CL'];
-  const LN=['프리미어리그','라리가','세리에A','분데스리가','리그앙','UCL'];
-  const res=await Promise.all(Ls.map(l=>fd(`/competitions/${l}/matches?dateFrom=${td}&dateTo=${td}`)));
-  let html=`<div style="padding:7px 13px;font-family:'Share Tech Mono';font-size:9px;color:var(--t3);">TODAY · ${td} KST</div>`;
-  let any=false;
-  res.forEach((d,i)=>{
-    if(!d?.matches?.length)return;any=true;
-    html+=`<div style="padding:5px 13px 2px;display:flex;align-items:center;gap:5px;">
-      <img src="https://crests.football-data.org/${Ls[i]}.png" style="width:13px;height:13px;object-fit:contain;" onerror="this.style.display='none'">
-      <span style="font-family:'Orbitron';font-size:8px;font-weight:700;color:var(--g2);letter-spacing:1px;">${LN[i]}</span>
-    </div>`;
-    d.matches.forEach(m=>{
-      const h=m.homeTeam,a=m.awayTeam;
-      const fin=['FINISHED','AWARDED'].includes(m.status);
-      const hg=fin?(m.score?.fullTime?.home??'-'):null;
-      const ag=fin?(m.score?.fullTime?.away??'-'):null;
-      const time=kstTime(m.utcDate);
-      html+=`<div class="sr" onclick="openDtl(${m.id},'${(h.shortName||h.name||'').replace(/'/g,'')}','${(a.shortName||a.name||'').replace(/'/g,'')}','${Ls[i]}')">
-        <span class="sr-time" style="color:${fin?'var(--t3)':'var(--g2)'};">${fin?'FT':time}</span>
-        <div class="sr-teams">
-          <div class="sr-team">
-            <img class="sr-cr" src="${h.crest||''}" onerror="this.style.opacity='.2'" alt="">
-            <span class="sr-nm" style="color:${fin&&hg>ag?'#fff':'var(--t2)'};font-weight:${fin&&hg>ag?700:400};">${h.shortName||h.name}</span>
-            ${fin?`<span class="sr-sc" style="color:${hg>ag?'var(--g)':'var(--t2)'};">${hg}</span>`:''}
-          </div>
-          <div class="sr-team">
-            <img class="sr-cr" src="${a.crest||''}" onerror="this.style.opacity='.2'" alt="">
-            <span class="sr-nm" style="color:${fin&&ag>hg?'#fff':'var(--t2)'};font-weight:${fin&&ag>hg?700:400};">${a.shortName||a.name}</span>
-            ${fin?`<span class="sr-sc" style="color:${ag>hg?'var(--g)':'var(--t2)'};">${ag}</span>`:''}
-          </div>
-        </div>
-      </div>`;
-    });
-  });
-  c.innerHTML=any?html:`<div class="ldr"><div style="font-size:26px;">📅</div><div class="spin-t">NO FIXTURES TODAY</div></div>`;
-}
+        <div id="content-area">
+            <div class="league-wrap">
+                <div class="league-header" onclick="toggleLeague('pl')">
+                    <div class="league-title">
+                        <img src="https://crests.football-data.org/PL.png" class="league-icon">
+                        PREMIER LEAGUE
+                    </div>
+                    <span>▼</span>
+                </div>
+                <div id="league-pl" class="league-content open">
+                    <div class="match-card" onclick="triggerGoal('TOTTENHAM')">
+                        <div class="m-time">22:00</div>
+                        <div class="m-teams">
+                            <div class="m-team"><img src="https://crests.football-data.org/73.png"><span>Tottenham</span></div>
+                            <div class="m-team"><img src="https://crests.football-data.org/65.png"><span>Man City</span></div>
+                        </div>
+                        <div class="m-score">2 : 1</div>
+                    </div>
+                </div>
 
-// ── STANDING ─────────────────────────
-async function loadStd(code,btn){
-  curStd=code;
-  if(btn){document.querySelectorAll('.lgbtn').forEach(b=>b.classList.remove('on'));btn.classList.add('on');}
-  const c=document.getElementById('std-body');
-  c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
-  const d=await fd(`/competitions/${code}/standings`);
-  if(!d?.standings){c.innerHTML=`<div class="ldr"><div class="spin-t">FAILED TO LOAD</div></div>`;return;}
-  const rows=d.standings[0].table,tot=rows.length;
-  const fc={W:'var(--g)',D:'var(--amber)',L:'var(--red)'};
-  c.innerHTML=rows.map(t=>{
-    const fm=(t.form||'').split('').slice(-5);
-    const gd=t.goalsDiff>=0?'+'+t.goalsDiff:t.goalsDiff;
-    const pc=t.position<=4?'cl':t.position===5?'el':t.position>=tot-2?'drop':'';
-    const pp=t.position<=4?'top':t.position>=tot-2?'bot':'';
-    return`<div class="str ${pc}">
-      <span class="stp ${pp}">${t.position}</span>
-      <img class="stcr" src="${t.team.crest||''}" onerror="this.style.opacity='.2'" alt="">
-      <span class="stnm">${t.team.shortName||t.team.name}</span>
-      <span class="stnum">${t.all.played}</span><span class="stnum">${t.all.win}</span><span class="stnum">${t.all.draw}</span><span class="stnum">${t.all.lose}</span>
-      <span class="stnum" style="width:24px;">${gd}</span>
-      <span class="stpts">${t.points}</span>
-      <div class="stfm">${fm.map(f=>`<div class="fd" style="background:${fc[f]||'rgba(255,255,255,.1)'}"></div>`).join('')}</div>
-    </div>`;
-  }).join('');
-}
-
-// ── K-LEGION ─────────────────────────
-const KP=[
-  {name:'손흥민',en:'Son Heung-min',team:'Tottenham',league:'PL',pos:'FW',no:7,goals:12,ast:8,rtg:7.8,apps:28,heat:[[62,38],[56,33],[68,44],[58,36],[64,42],[60,40]],rtgs:[7.2,7.5,8.1,7.4,7.9,7.8]},
-  {name:'김민재',en:'Kim Min-jae',team:'Bayern München',league:'BL1',pos:'CB',no:3,goals:1,ast:0,rtg:7.2,apps:24,heat:[[18,52],[24,46],[16,58],[20,48],[22,50]],rtgs:[6.8,7.3,7.1,7.4,7.0,7.2]},
-  {name:'이강인',en:'Lee Kang-in',team:'PSG',league:'FL1',pos:'MF',no:19,goals:7,ast:11,rtg:7.5,apps:26,heat:[[57,28],[51,34],[62,24],[54,30],[60,32]],rtgs:[7.0,7.2,7.8,7.3,7.6,7.5]},
-  {name:'황희찬',en:'Hwang Hee-chan',team:'Wolves',league:'PL',pos:'FW',no:11,goals:8,ast:4,rtg:7.0,apps:22,heat:[[68,54],[62,48],[72,60],[64,52]],rtgs:[6.5,7.1,6.8,7.2,7.0,7.0]},
-  {name:'조규성',en:'Cho Gue-sung',team:'Midtjylland',league:'DED',pos:'FW',no:9,goals:14,ast:3,rtg:7.3,apps:25,heat:[[50,50],[54,46],[48,54],[52,48]],rtgs:[7.0,7.4,7.1,7.5,7.2,7.3]},
-];
-function loadKLeg(){
-  const c=document.getElementById('kleg-body');
-  let html=KP.map(p=>{
-    const rc=p.rtg>=7.5?'hi':p.rtg>=7.0?'mid':'lo';
-    const heat=p.heat.map(([x,y])=>{
-      const sz=14+Math.random()*18,op=.28+Math.random()*.42;
-      return`<div class="heat" style="left:${x}%;top:${y}%;width:${sz}px;height:${sz}px;background:radial-gradient(circle,rgba(0,255,135,${op}) 0%,transparent 70%);"></div>`;
-    }).join('');
-    // 평점 바
-    const maxR=Math.max(...p.rtgs),minR=Math.min(...p.rtgs);
-    const bars=p.rtgs.map(r=>{
-      const h=Math.round((r-minR)/(maxR-minR+.1)*28)+8;
-      const col=r>=7.5?'var(--g)':r>=7.0?'var(--amber)':'var(--red)';
-      return`<div class="rtg-bar" style="height:${h}px;background:${col};opacity:.8;"></div>`;
-    }).join('');
-    return`<div class="kpc fu">
-      <div class="kpc-hd">
-        <span style="font-size:18px;">🇰🇷</span>
-        <div style="flex:1;">
-          <div class="kpc-nm">${p.name}</div>
-          <div class="kpc-en">${p.en} · ${p.team} · ${p.pos} #${p.no}</div>
+                <div class="league-header" onclick="toggleLeague('ll')">
+                    <div class="league-title">
+                        <img src="https://crests.football-data.org/PD.png" class="league-icon">
+                        LA LIGA
+                    </div>
+                    <span>▼</span>
+                </div>
+                <div id="league-ll" class="league-content">
+                    <div class="match-card">
+                        <div class="m-time">04:00</div>
+                        <div class="m-teams">
+                            <div class="m-team"><img src="https://crests.football-data.org/86.png"><span>Real Madrid</span></div>
+                            <div class="m-team"><img src="https://crests.football-data.org/81.png"><span>Barcelona</span></div>
+                        </div>
+                        <div class="m-score">0 : 0</div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="kpc-rtg ${rc}">${p.rtg.toFixed(1)}</div>
-      </div>
-      <div class="kpc-stats">
-        <div class="kst"><div class="ksv">${p.goals}</div><div class="ksl">GOALS</div></div>
-        <div class="kst"><div class="ksv">${p.ast}</div><div class="ksl">ASSISTS</div></div>
-        <div class="kst"><div class="ksv">${p.apps}</div><div class="ksl">APPS</div></div>
-        <div class="kst"><div class="ksv">${p.goals+p.ast}</div><div class="ksl">G+A</div></div>
-      </div>
-      <div class="hmap">
-        <div class="hmap-lbl">HEAT MAP · LAST 5 MATCHES</div>
-        <div class="pitch">
-          <div class="pitch-bg"></div>
-          <div class="pitch-line-h"></div><div class="pitch-line-v"></div>
-          <div class="pitch-circle"></div>
-          ${heat}
-        </div>
-      </div>
-      <div class="rtg-chart">
-        <div class="rtg-chart-lbl">RATING TREND · LAST 6</div>
-        <div class="rtg-bars">${bars}</div>
-        <div class="rtg-dates">${p.rtgs.map((_,i)=>`<div class="rtg-date">M${i+1}</div>`).join('')}</div>
-      </div>
-    </div>`;
-  }).join('');
-  html+=`<div class="aisum fu">
-    <div class="ai-hd"><div class="ai-tag">🤖 K-LEGION WEEKLY INTEL<span class="cur"></span></div></div>
-    <div class="ai-lines">
-      <div class="ai-line"><span class="ai-n">01</span><span>손흥민 이번 주 멀티골 · 팀 내 득점 공동 1위. 오른쪽 채널 침투 패턴 살아있음.</span></div>
-      <div class="ai-line"><span class="ai-n">02</span><span>김민재 분데스리가 수비 평점 7.2 유지 · 공중볼 경합 92% 성공률 포착.</span></div>
-      <div class="ai-line"><span class="ai-n">03</span><span>이강인 어시스트 11개 · 리그앙 키패스 1위. 인터밀란전 큰 경기 경험 축적 중.</span></div>
     </div>
-  </div>`;
-  c.innerHTML=html;
-}
 
-// ── GPS 직관 인증 ────────────────────
-function doGPS(){
-  const r=document.getElementById('gps-res');
-  r.innerHTML=`<div style="padding:10px 12px;background:rgba(0,255,135,.04);border:1px solid var(--b);border-radius:10px;font-family:'Share Tech Mono';font-size:9px;color:var(--t2);">📡 GPS SIGNAL ACQUIRING...</div>`;
-  if(!navigator.geolocation){r.innerHTML=`<div style="padding:10px;color:var(--red);font-family:'Share Tech Mono';font-size:9px;">ERROR: GPS NOT SUPPORTED</div>`;return;}
-  navigator.geolocation.getCurrentPosition(p=>{
-    const lat=p.coords.latitude.toFixed(4),lng=p.coords.longitude.toFixed(4);
-    r.innerHTML=`<div class="att">
-      <span style="font-size:26px;">🏆</span>
-      <div>
-        <div style="font-family:'Orbitron';font-size:11px;font-weight:700;color:var(--amber);letter-spacing:1px;margin-bottom:3px;">직관 인증 완료!</div>
-        <div style="font-family:'Share Tech Mono';font-size:9px;color:var(--t3);">${lat}, ${lng}<br>🎖️ <b style="color:var(--g);">직관러 배지</b> 획득!</div>
-      </div>
-    </div>`;
-  },()=>{
-    r.innerHTML=`<div style="padding:10px 12px;color:var(--amber);font-family:'Share Tech Mono';font-size:9px;background:rgba(255,184,0,.05);border:1px solid rgba(255,184,0,.15);border-radius:10px;">⚠ GPS PERMISSION REQUIRED</div>`;
-  });
-}
-function openMyTeam(){alert('팀 선택 → 메인 앱(kfootball.netlify.app)에서 이용하세요!');}
+    <div id="goal-overlay">
+        <div class="goal-text">GOAL!</div>
+        <div id="goal-info" style="font-family:'Orbitron'; margin-top:10px; font-weight:700;"></div>
+    </div>
 
-// ── INIT ─────────────────────────────
-loadLive();
-loadStd('PL');
-setInterval(loadLive,30000);
-</script>
+    <script>
+        const myTeams = [
+            { id: 1, name: 'TOTTENHAM', color: '#ffffff', glow: 'rgba(255,255,255,0.4)', icon: '⚽', crest: 'https://crests.football-data.org/73.png' },
+            { id: 2, name: 'MAN CITY', color: '#6caddf', glow: 'rgba(108,173,223,0.5)', icon: '💎', crest: 'https://crests.football-data.org/65.png' },
+            { id: 3, name: 'ARSENAL', color: '#ef0107', glow: 'rgba(239,1,7,0.5)', icon: '🔫', crest: 'https://crests.football-data.org/57.png' },
+            { id: 4, name: 'LIVERPOOL', color: '#e31b23', glow: 'rgba(227,27,35,0.5)', icon: '🔴', crest: 'https://crests.football-data.org/64.png' },
+            { id: 5, name: 'MUNICH', color: '#dc052d', glow: 'rgba(220,5,45,0.5)', icon: '🍺', crest: 'https://crests.football-data.org/503.png' },
+            { id: 6, name: 'PSG', color: '#004170', glow: 'rgba(0,65,112,0.5)', icon: '🗼', crest: 'https://crests.football-data.org/524.png' }
+        ];
+
+        // 온보딩 리스트 생성
+        const teamList = document.getElementById('team-list');
+        myTeams.forEach(team => {
+            const card = document.createElement('div');
+            card.className = 'team-card';
+            card.innerHTML = `<img src="${team.crest}"><span>${team.name}</span>`;
+            card.onclick = () => selectTeam(team);
+            teamList.appendChild(card);
+        });
+
+        // 팀 선택 및 테마 적용
+        function selectTeam(team) {
+            document.documentElement.style.setProperty('--p-color', team.color);
+            document.documentElement.style.setProperty('--p-glow', team.glow);
+            document.getElementById('my-team-badge').innerText = team.icon;
+            
+            const ob = document.getElementById('onboarding');
+            ob.style.opacity = '0';
+            ob.style.transform = 'scale(1.1)';
+            
+            setTimeout(() => {
+                ob.classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+            }, 600);
+        }
+
+        // 아코디언 토글
+        function toggleLeague(id) {
+            const content = document.getElementById('league-' + id);
+            content.classList.toggle('open');
+        }
+
+        // 골 애니메이션 실행
+        function triggerGoal(teamName) {
+            const overlay = document.getElementById('goal-overlay');
+            const info = document.getElementById('goal-info');
+            info.innerText = teamName + ' SCORED!';
+            
+            overlay.classList.add('active');
+            
+            // 3초 후 제거
+            setTimeout(() => {
+                overlay.classList.remove('active');
+            }, 3000);
+        }
+
+        // 테스트용: 5초 뒤에 자동으로 골 애니메이션 한 번 보여주기
+        // setTimeout(() => triggerGoal('TOTTENHAM'), 8000);
+    </script>
 </body>
 </html>
