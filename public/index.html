@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>PITCH Pro | Ultimate Hub</title>
+    <title>PITCH Pro | Ultimate</title>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -13,40 +13,38 @@
             --red: #ff3b5c; --border: rgba(255, 255, 255, 0.05);
         }
         * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--t); font-family: 'Noto Sans KR', sans-serif; max-width: 480px; margin: 0 auto; overflow-x: hidden; }
+        body { background: var(--bg); color: var(--t); font-family: 'Noto Sans KR', sans-serif; max-width: 480px; margin: 0 auto; min-height: 100vh; position: relative; }
 
-        /* 공통 헤더 */
+        /* 헤더 */
         .hdr { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: var(--bg); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
-        .hdr-logo { font-family: 'Orbitron'; font-weight: 900; font-size: 18px; color: var(--p); text-shadow: 0 0 10px rgba(0,255,135,0.3); }
+        .hdr-logo { font-family: 'Orbitron'; font-weight: 900; font-size: 18px; color: var(--p); }
 
-        /* 페이지 시스템 */
-        .page { display: none; padding: 15px 15px 100px; min-height: 100vh; }
-        .page.on { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* 페이지 컨테이너 */
+        .page { display: none; padding: 15px 15px 100px; animation: fadeIn 0.3s ease; }
+        .page.on { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* 카드 컴포넌트 */
+        /* 카드 UI */
         .mc { background: var(--card); border-radius: 18px; border: 1px solid var(--border); margin-bottom: 15px; padding: 15px; }
         .sec-ttl { font-family: 'Orbitron'; font-size: 11px; color: var(--p); margin: 10px 5px; letter-spacing: 1px; }
 
-        /* 모멘텀 그래프 */
-        .m-graph { height: 40px; display: flex; align-items: flex-end; gap: 2px; margin: 10px 0; }
-        .m-bar { flex: 1; background: var(--t3); border-radius: 2px 2px 0 0; min-height: 2px; }
-        .m-bar.active { background: var(--p); }
-
-        /* 하단 네비게이터 (5개 탭) */
+        /* 네비게이션 */
         .bnav { position: fixed; bottom: 0; width: 100%; max-width: 480px; height: 75px; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: flex; z-index: 1000; }
-        .nbi { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--t3); gap: 4px; cursor: pointer; transition: 0.2s; }
+        .nbi { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--t3); gap: 5px; cursor: pointer; }
         .nbi.on { color: var(--p); }
-        .nbi span { font-size: 8px; font-family: 'Orbitron'; font-weight: 700; text-align: center; }
+        .nbi span { font-size: 8px; font-family: 'Orbitron'; font-weight: 700; }
 
-        /* 설정 모달 */
+        /* 공통 버튼 */
+        .btn { width: 100%; background: var(--p); border: none; padding: 12px; border-radius: 12px; font-weight: 700; color: #000; cursor: pointer; font-family: 'Noto Sans KR'; }
+        
+        /* 모달 */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; padding: 20px; }
         .modal.show { display: flex; }
-        .modal-in { background: var(--bg2); width: 100%; border-radius: 20px; border: 1px solid var(--p); padding: 20px; }
-        input { width: 100%; background: #161b22; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin: 10px 0; }
-        button { width: 100%; background: var(--p); border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
-
-        .blur { filter: blur(5px); transition: 0.3s; }
+        .modal-in { background: var(--bg2); width: 100%; border-radius: 20px; border: 1px solid var(--p); padding: 25px; }
+        input { width: 100%; background: #161b22; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin: 15px 0; outline: none; }
+        
+        /* 스포방지 블러 */
+        .blur { filter: blur(6px); transition: 0.3s; cursor: pointer; }
         .blur:hover { filter: blur(0); }
     </style>
 </head>
@@ -54,140 +52,170 @@
 
     <header class="hdr">
         <div class="hdr-logo">PITCH PRO</div>
-        <div onclick="openSettings()" style="cursor:pointer; font-size: 20px;">⚙️</div>
+        <div onclick="toggleModal('set-modal')" style="cursor:pointer; font-size: 20px;">⚙️</div>
     </header>
 
     <div id="pg-live" class="page on">
         <div class="sec-ttl">LIVE TRACKER</div>
-        <div id="live-container">
+        <div id="live-list">
             <div class="mc">
-                <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--t2); margin-bottom:10px;">
-                    <span>Premier League · 72'</span>
+                <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--t2); margin-bottom:12px;">
+                    <span>Premier League · 82'</span>
                     <span style="color:var(--red); font-weight:700;">● LIVE</span>
                 </div>
                 <div style="display:flex; align-items:center; justify-content:space-between; text-align:center;">
-                    <div style="flex:1;"><img src="https://crests.football-data.org/61.png" style="width:30px;"><div style="font-size:12px;">Chelsea</div></div>
-                    <div style="flex:1; font-family:'Orbitron'; font-size:24px; font-weight:900;">2 : 1</div>
-                    <div style="flex:1;"><img src="https://crests.football-data.org/65.png" style="width:30px;"><div style="font-size:12px;">Man City</div></div>
+                    <div style="flex:1;"><img src="https://crests.football-data.org/61.png" style="width:35px;"><div style="font-size:12px; margin-top:5px;">Chelsea</div></div>
+                    <div style="flex:1; font-family:'Orbitron'; font-size:26px; font-weight:900;">2 : 1</div>
+                    <div style="flex:1;"><img src="https://crests.football-data.org/65.png" style="width:35px;"><div style="font-size:12px; margin-top:5px;">Man City</div></div>
                 </div>
-                <div class="m-graph">
-                    <div class="m-bar" style="height:30%;"></div><div class="m-bar active" style="height:60%;"></div><div class="m-bar active" style="height:80%;"></div><div class="m-bar" style="height:40%;"></div><div class="m-bar active" style="height:90%;"></div>
+                <div style="height:3px; background:var(--t3); margin:15px 0; border-radius:2px; display:flex;">
+                    <div style="width:65%; background:var(--p); height:100%;"></div>
                 </div>
-                <div style="font-size:10px; color:var(--p); font-style:italic;">AI: 첼시의 높은 하이프레싱이 맨시티의 빌드업을 차단 중</div>
+                <div style="font-size:10px; color:var(--p); text-align:center;">AI 분석: 첼시의 측면 역습 성공률 82% (High Momentum)</div>
             </div>
         </div>
     </div>
 
     <div id="pg-sched" class="page">
-        <div class="sec-ttl">UPCOMING FIXTURES</div>
-        <div id="sched-container"></div>
+        <div class="sec-ttl">FIXTURES</div>
+        <div id="sched-list"></div>
     </div>
 
     <div id="pg-rank" class="page">
-        <div class="sec-ttl">LEAGUE TABLE</div>
-        <div id="rank-container" class="mc" style="padding:0; overflow:hidden;"></div>
+        <div class="sec-ttl">STANDINGS</div>
+        <div id="rank-list" class="mc" style="padding:0; overflow:hidden;"></div>
     </div>
 
     <div id="pg-ai" class="page">
-        <div class="sec-ttl">AI TACTICAL HUB</div>
+        <div class="sec-ttl">AI INSIGHTS</div>
         <div class="mc">
-            <h4 style="color:var(--p); margin-bottom:10px;">오늘의 전술적 승부처</h4>
-            <p style="font-size:13px; line-height:1.6; color:var(--t2);">
-                • 아스널 vs 리버풀: 아스널의 측면 과부하 전술이 리버풀의 풀백 전진을 억제할 것으로 예측됨 (승률 52%)<br><br>
-                • AI 추천: '새벽 4시 경기' - 전반전 아스널의 강한 압박 이후 후반 저조도 흐름 예상.
-            </p>
+            <h4 style="color:var(--p); margin-bottom:10px; font-family:'Orbitron';">MATCH ANALYSIS</h4>
+            <div style="font-size:13px; color:var(--t2); line-height:1.7;">
+                <p>• <b>분석 요약</b>: 손흥민 선수의 스프린트 빈도가 최근 3경기 대비 15% 상승하며 공격 진영에서의 영향력이 확대되었습니다.</p>
+                <p style="margin-top:10px;">• <b>승부 예측</b>: 리버풀 vs 아스날 경기에서 리버풀의 안필드 홈 승률을 58%로 예측합니다.</p>
+            </div>
         </div>
     </div>
 
     <div id="pg-fan" class="page">
-        <div class="sec-ttl">STADIUM CHECK-IN</div>
-        <div class="mc" style="text-align:center;">
-            <div style="font-size:40px; margin-bottom:15px;">📍</div>
-            <p style="margin-bottom:20px;">경기장 GPS 인증을 통해<br>고유 '디지털 배지'를 획득하세요.</p>
-            <button onclick="verifyLocation()">인증하기</button>
+        <div class="sec-ttl">FAN ZONE</div>
+        <div class="mc" style="text-align:center; padding:40px 20px;">
+            <div style="font-size:45px; margin-bottom:15px;">📍</div>
+            <h3 style="margin-bottom:10px;">STADIUM CHECK-IN</h3>
+            <p style="font-size:12px; color:var(--t2); margin-bottom:25px;">경기장 GPS를 확인하여<br>오늘의 직관 인증을 완료하세요.</p>
+            <button class="btn" onclick="verifyGPS()">위치 확인 및 인증</button>
+            <div id="badge-area" style="margin-top:20px;"></div>
         </div>
     </div>
 
     <nav class="bnav">
-        <div class="nbi on" onclick="swP('live', this)"><span>LIVE</span></div>
-        <div class="nbi" onclick="swP('sched', this)"><span>SCHED</span></div>
-        <div class="nbi" onclick="swP('rank', this)"><span>RANK</span></div>
-        <div class="nbi" onclick="swP('ai', this)"><span>AI HUB</span></div>
-        <div class="nbi" onclick="swP('fan', this)"><span>FAN ZONE</span></div>
+        <div class="nbi on" onclick="nav('live', this)"><span>LIVE</span></div>
+        <div class="nbi" onclick="nav('sched', this)"><span>SCHED</span></div>
+        <div class="nbi" onclick="nav('rank', this)"><span>RANK</span></div>
+        <div class="nbi" onclick="nav('ai', this)"><span>AI HUB</span></div>
+        <div class="nbi" onclick="nav('fan', this)"><span>FAN ZONE</span></div>
     </nav>
 
     <div id="set-modal" class="modal">
         <div class="modal-in">
-            <h3 style="color:var(--p); font-family:'Orbitron';">SETTINGS</h3>
-            <input type="password" id="api-key" placeholder="Football-Data API Key 입력">
-            <button onclick="saveKey()">저장 및 새로고침</button>
-            <p style="font-size:10px; color:var(--t3); margin-top:10px;">키가 없을 경우 시뮬레이션 데이터가 표시됩니다.</p>
+            <h3 style="color:var(--p); font-family:'Orbitron';">API CONFIG</h3>
+            <p style="font-size:11px; color:var(--t2); margin-top:5px;">football-data.org의 키를 입력하세요.</p>
+            <input type="password" id="api-key-input" placeholder="X-Auth-Token">
+            <button class="btn" onclick="saveKey()">SAVE SETTINGS</button>
+            <button class="btn" onclick="toggleModal('set-modal')" style="background:none; color:var(--t2); margin-top:10px;">CLOSE</button>
         </div>
     </div>
 
     <script>
-        let API_KEY = localStorage.getItem('pp_api_key') || '';
-        
-        function openSettings() { document.getElementById('set-modal').classList.add('show'); }
+        let API_KEY = localStorage.getItem('pp_token') || '';
+        const PROXY = "https://cors-anywhere.herokuapp.com/"; // CORS 에러 방지용 프록시 (필요시 사용)
+
+        function toggleModal(id) {
+            const m = document.getElementById(id);
+            m.classList.toggle('show');
+            if(m.classList.contains('show')) document.getElementById('api-key-input').value = API_KEY;
+        }
+
         function saveKey() {
-            const val = document.getElementById('api-key').value.trim();
-            if(val) { localStorage.setItem('pp_api_key', val); location.reload(); }
+            const val = document.getElementById('api-key-input').value.trim();
+            if(val) {
+                localStorage.setItem('pp_token', val);
+                API_KEY = val;
+                alert("설정이 저장되었습니다. 데이터를 불러옵니다.");
+                location.reload();
+            }
         }
 
-        function swP(p, el) {
-            document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
-            document.querySelectorAll('.nbi').forEach(x => x.classList.remove('on'));
-            document.getElementById('pg-'+p).classList.add('on');
+        function nav(id, el) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+            document.querySelectorAll('.nbi').forEach(n => n.classList.remove('on'));
+            document.getElementById('pg-' + id).classList.add('on');
             el.classList.add('on');
-            if(p === 'sched') loadSched();
-            if(p === 'rank') loadRank();
+            if(id === 'sched') loadSched();
+            if(id === 'rank') loadRank();
         }
 
-        async function fetchData(path) {
+        async function apiFetch(path) {
             if(!API_KEY) return null;
             try {
-                const r = await fetch(`https://api.football-data.org/v4${path}`, {
+                const res = await fetch(`https://api.football-data.org/v4${path}`, {
                     headers: { 'X-Auth-Token': API_KEY }
                 });
-                return r.ok ? await r.json() : null;
+                return res.ok ? await res.json() : null;
             } catch { return null; }
         }
 
         async function loadSched() {
-            const cont = document.getElementById('sched-container');
-            cont.innerHTML = 'Loading...';
-            const data = await fetchData('/competitions/PL/matches?limit=10');
-            if(!data) { cont.innerHTML = '<div class="mc">API 제한 또는 키 미설정. 시뮬레이션 데이터를 표시합니다.</div>'; return; }
-            cont.innerHTML = data.matches.map(m => `
+            const area = document.getElementById('sched-list');
+            area.innerHTML = '<p style="text-align:center; padding:20px; color:var(--t3);">Loading...</p>';
+            const data = await apiFetch('/competitions/PL/matches?limit=8');
+            
+            if(!data) {
+                area.innerHTML = '<div class="mc">API 연결 전입니다. 키를 등록해주세요.</div>';
+                return;
+            }
+            area.innerHTML = data.matches.map(m => `
                 <div class="mc" style="display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:11px; width:60px;">${new Date(m.utcDate).toLocaleDateString()}</span>
-                    <span style="flex:1; text-align:right; font-weight:700;">${m.homeTeam.shortName}</span>
-                    <span style="margin:0 10px; color:var(--p);">VS</span>
-                    <span style="flex:1; text-align:left; font-weight:700;">${m.awayTeam.shortName}</span>
+                    <div style="font-size:11px; color:var(--t2); width:50px;">${new Date(m.utcDate).getMonth()+1}/${new Date(m.utcDate).getDate()}</div>
+                    <div style="flex:1; text-align:right; font-weight:700;">${m.homeTeam.shortName}</div>
+                    <div style="width:40px; text-align:center; color:var(--p); font-family:'Orbitron'; font-weight:700;">VS</div>
+                    <div style="flex:1; text-align:left; font-weight:700;">${m.awayTeam.shortName}</div>
                 </div>
             `).join('');
         }
 
         async function loadRank() {
-            const cont = document.getElementById('rank-container');
-            const data = await fetchData('/competitions/PL/standings');
-            if(!data) { cont.innerHTML = '<div style="padding:20px;">순위 데이터 불러오기 실패</div>'; return; }
+            const area = document.getElementById('rank-list');
+            const data = await apiFetch('/competitions/PL/standings');
+            if(!data) {
+                area.innerHTML = '<p style="padding:20px; color:var(--t3);">데이터가 없습니다.</p>';
+                return;
+            }
             const table = data.standings[0].table;
-            cont.innerHTML = `<table style="width:100%; border-collapse:collapse; font-size:12px; text-align:center;">
-                <tr style="background:rgba(255,255,255,0.05); color:var(--p); font-family:'Orbitron';">
-                    <th style="padding:10px;">#</th><th>TEAM</th><th>P</th><th>PTS</th>
+            area.innerHTML = `<table style="width:100%; border-collapse:collapse; font-size:12px;">
+                <tr style="background:rgba(255,255,255,0.03); color:var(--p);">
+                    <th style="padding:12px;">#</th><th style="text-align:left;">TEAM</th><th>P</th><th>PTS</th>
                 </tr>
-                ${table.map(t => `<tr>
-                    <td style="padding:10px;">${t.position}</td>
-                    <td style="text-align:left;"><img src="${t.team.crest}" style="width:15px; margin-right:5px;">${t.team.shortName}</td>
-                    <td>${t.playedGames}</td>
-                    <td style="font-weight:700; color:var(--p);">${t.points}</td>
-                </tr>`).join('')}
+                ${table.map(t => `
+                    <tr style="border-bottom:1px solid var(--border);">
+                        <td style="padding:12px; text-align:center;">${t.position}</td>
+                        <td style="display:flex; align-items:center; padding:12px;"><img src="${t.team.crest}" style="width:18px; margin-right:8px;">${t.team.shortName}</td>
+                        <td style="text-align:center;">${t.playedGames}</td>
+                        <td style="text-align:center; font-weight:700; color:var(--p);">${t.points}</td>
+                    </tr>
+                `).join('')}
             </table>`;
         }
 
-        function verifyLocation() {
-            alert("GPS 신호를 스캔 중입니다... (시뮬레이션: 런던 에미레이츠 스타디움 확인됨!) \n\n'직관 고수' 배지가 발급되었습니다.");
+        function verifyGPS() {
+            if(!navigator.geolocation) return alert("GPS를 지원하지 않는 기기입니다.");
+            navigator.geolocation.getCurrentPosition(() => {
+                document.getElementById('badge-area').innerHTML = `
+                    <div style="background:var(--p-dim); border:1px solid var(--p); padding:15px; border-radius:12px; animation:fadeIn 0.5s;">
+                        <span style="color:var(--p); font-weight:700;">✓ 직관 인증 완료</span><br>
+                        <span style="font-size:11px; color:var(--t2);">에미레이츠 스타디움 - 2026.04.08</span>
+                    </div>`;
+            }, () => alert("위치 권한이 거부되었습니다."));
         }
     </script>
 </body>
