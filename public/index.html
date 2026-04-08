@@ -1,5 +1,23 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>PitchPro 안정 테스트</title>
+</head>
+<body style="background:#0b0f14; color:white; font-family:sans-serif;">
+
+<h1 style="color:#00ff9f;">PITCH PRO</h1>
+
+<p id="status">상태: 준비됨</p>
+<button id="btn">경기 불러오기</button>
+
+<div id="matches" style="margin-top:20px;"></div>
+
 <script>
-const API_KEY = "b00e3059f51741b7add3fcaab7eaadf0";
+console.log("스크립트 정상 실행됨");
+
+// 버튼 이벤트 (onclick 대신 안전하게)
+document.getElementById("btn").addEventListener("click", loadMatches);
 
 async function loadMatches() {
   const status = document.getElementById("status");
@@ -13,41 +31,42 @@ async function loadMatches() {
       "https://cors-anywhere.herokuapp.com/https://v3.football.api-sports.io/fixtures?date=2024-04-01",
       {
         headers: {
-          "x-apisports-key": API_KEY
+          "x-apisports-key": "b00e3059f51741b7add3fcaab7eaadf0"
         }
       }
     );
 
+    console.log("응답 상태:", res.status);
+
     const data = await res.json();
+    console.log("데이터:", data);
 
-    console.log(data);
-
-    const matches = data.response;
-
-    if (!matches || matches.length === 0) {
+    if (!data.response || data.response.length === 0) {
       status.innerText = "⚠️ 경기 없음";
       return;
     }
 
-    status.innerText = "✅ 성공 (" + matches.length + "경기)";
+    status.innerText = "✅ 성공";
 
-    matches.forEach(match => {
+    data.response.forEach(match => {
       const div = document.createElement("div");
 
-      div.innerHTML = `
-        <div style="margin-bottom:15px;">
-          <b>${match.teams.home.name}</b> vs 
-          <b>${match.teams.away.name}</b><br/>
-          <span style="color:gray">${match.fixture.date}</span>
-        </div>
-      `;
+      div.style.marginBottom = "12px";
+
+      div.innerHTML = 
+        match.teams.home.name + " vs " + 
+        match.teams.away.name + "<br>" +
+        "<span style='color:gray'>" + match.fixture.date + "</span>";
 
       container.appendChild(div);
     });
 
   } catch (e) {
-    console.error(e);
-    status.innerText = "❌ 실패";
+    console.error("에러:", e);
+    status.innerText = "❌ 실패: " + e.message;
   }
 }
 </script>
+
+</body>
+</html>
