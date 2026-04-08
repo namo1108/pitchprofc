@@ -1,83 +1,29 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-<meta charset="UTF-8">
-<title>PitchPro</title>
-
 <style>
-body {
-  margin:0;
-  background:#0b0f14;
-  color:white;
-  font-family:sans-serif;
+.goal {
+  animation: flash 1s ease;
 }
 
-header {
-  padding:15px;
-  color:#00ff9f;
-  font-size:20px;
-  font-weight:bold;
+@keyframes flash {
+  0% { background: #00ff9f; }
+  100% { background: #111; }
 }
 
-#content {
-  padding:15px;
-  margin-bottom:70px;
-}
-
-.match {
-  margin-bottom:15px;
-  padding:10px;
-  border-radius:10px;
-  background:#111;
-}
-
-.nav {
+.popup {
   position:fixed;
   bottom:0;
+  left:0;
   width:100%;
-  height:60px;
+  height:60%;
   background:#111;
-  display:flex;
-  justify-content:space-around;
-  align-items:center;
-  border-top:1px solid #222;
-}
-
-.nav div {
-  cursor:pointer;
-  color:#888;
-}
-
-.nav .active {
-  color:#00ff9f;
+  border-top:2px solid #00ff9f;
+  padding:15px;
+  overflow:auto;
 }
 </style>
-</head>
-
-<body>
-
-<header>PITCH PRO</header>
-
-<div id="content">로딩중...</div>
-
-<div class="nav">
-  <div onclick="loadLive(this)" class="active">Live</div>
-  <div onclick="loadFixtures(this)">Fixtures</div>
-  <div onclick="loadStandings(this)">Rank</div>
-  <div onclick="loadAI(this)">AI Hub</div>
-  <div onclick="loadFan(this)">집관인증</div>
-</div>
 
 <script>
-const API_KEY = "b00e3059f51741b7add3fcaab7eaadf0";
-const BASE = "https://cors-anywhere.herokuapp.com/https://v3.football.api-sports.io";
+let lastScores = {}; // 골 변화 감지용
 
-function setActive(el) {
-  document.querySelectorAll(".nav div").forEach(d => d.classList.remove("active"));
-  el.classList.add("active");
-}
-
-// 🔴 LIVE 경기
 async function loadLive(el) {
   setActive(el);
   const content = document.getElementById("content");
@@ -87,22 +33,42 @@ async function loadLive(el) {
     const res = await fetch(BASE + "/fixtures?live=all", {
       headers: { "x-apisports-key": API_KEY }
     });
-    const data = await res.json();
 
+    const data = await res.json();
     const matches = data.response;
 
     if (!matches.length) {
-      content.innerHTML = "현재 진행중인 경기 없음";
+      content.innerHTML = "오늘 진행중인 경기 없음";
       return;
     }
 
     content.innerHTML = "";
+
     matches.forEach(m => {
+      const id = m.fixture.id;
+      const home = m.teams.home.name;
+      const away = m.teams.away.name;
+      const score = `${m.goals.home} : ${m.goals.away}`;
+      const minute = m.fixture.status.elapsed || "진행중";
+      const league = m.league.name;
+
+      const key = id;
+      const prev = lastScores[key];
+
+      let className = "match";
+
+      if (prev && prev !== score) {
+        className += " goal"; // 골 애니메이션
+      }
+
+      lastScores[key] = score;
+
       content.innerHTML += `
-        <div class="match">
-          🔴 LIVE<br>
-          ${m.teams.home.name} vs ${m.teams.away.name}<br>
-          ${m.goals.home} : ${m.goals.away}
+        <div class="${className}" onclick="openMatch(${id})">
+          <b>${league}</b><br>
+          ${home} vs ${away}<br>
+          ⏱ ${minute}분<br>
+          🔴 ${score}
         </div>
       `;
     });
@@ -112,81 +78,78 @@ async function loadLive(el) {
   }
 }
 
-// 📅 예정 경기
-async function loadFixtures(el) {
-  setActive(el);
-  const content = document.getElementById("content");
-  content.innerHTML = "경기 일정 불러오는중...";
+// 🔥 상세 팝업
+async function openMatch(id) {
+  const popup = document.createElement("div");
+  popup.className = "popup";
+  popup.innerHTML = "불러오는중...";
+  document.body.appendChild(popup);
 
   try {
-    const res = await fetch(BASE + "/fixtures?league=39&season=2024", {
+    // 이벤트 (골/어시스트)
+    const eventsRes = await fetch(BASE + `/fixtures/events?fixture=${id}`, {
       headers: { "x-apisports-key": API_KEY }
     });
-    const data = await res.json();
 
-    const matches = data.response.slice(0, 20);
+    const eventsData = await eventsRes.json();
 
-    content.innerHTML = "";
-    matches.forEach(m => {
-      content.innerHTML += `
-        <div class="match">
-          ${m.teams.home.name} vs ${m.teams.away.name}<br>
-          <span style="color:gray">${m.fixture.date}</span>
-        </div>
-      `;
-    });
-
-  } catch(e) {
-    content.innerHTML = "에러 발생";
-  }
-}
-
-// 📊 순위
-async function loadStandings(el) {
-  setActive(el);
-  const content = document.getElementById("content");
-  content.innerHTML = "순위 불러오는중...";
-
-  try {
-    const res = await fetch(BASE + "/standings?league=39&season=2024", {
+    // 스탯
+    const statRes = await fetch(BASE + `/fixtures/statistics?fixture=${id}`, {
       headers: { "x-apisports-key": API_KEY }
     });
-    const data = await res.json();
 
-    const table = data.response[0].league.standings[0];
+    const statData = await statRes.json();
 
-    content.innerHTML = "";
-    table.forEach(team => {
-      content.innerHTML += `
-        <div class="match">
-          ${team.rank}. ${team.team.name} (${team.points}점)
-        </div>
-      `;
+    // 배당률
+    const oddsRes = await fetch(BASE + `/odds?fixture=${id}`, {
+      headers: { "x-apisports-key": API_KEY }
     });
 
+    const oddsData = await oddsRes.json();
+
+    // 🔥 AI 승부예측 (간단 로직)
+    const homeGoals = statData.response?.[0]?.statistics?.[0]?.value || 0;
+    const awayGoals = statData.response?.[1]?.statistics?.[0]?.value || 0;
+
+    let prediction = "비등";
+    if (homeGoals > awayGoals) prediction = "홈 우세";
+    if (awayGoals > homeGoals) prediction = "원정 우세";
+
+    // 골 이벤트
+    let goals = "";
+    eventsData.response.forEach(e => {
+      if (e.type === "Goal") {
+        goals += `
+          ⚽ ${e.player.name} (${e.team.name})
+          ${e.assist.name ? "🅰️ " + e.assist.name : ""}
+          <br>
+        `;
+      }
+    });
+
+    popup.innerHTML = `
+      <h3>경기 상세</h3>
+      <button onclick="this.parentElement.remove()">닫기</button>
+      <hr>
+
+      <b>⚽ 득점</b><br>
+      ${goals || "없음"}
+
+      <hr>
+      <b>📊 AI 예측</b><br>
+      ${prediction}
+
+      <hr>
+      <b>💰 배당률</b><br>
+      ${JSON.stringify(oddsData.response?.[0]?.bookmakers?.[0]?.bets?.[0]?.values || "없음")}
+
+      <hr>
+      <b>📈 스탯</b><br>
+      ${JSON.stringify(statData.response || "없음")}
+    `;
+
   } catch(e) {
-    content.innerHTML = "에러 발생";
+    popup.innerHTML = "데이터 불러오기 실패";
   }
 }
-
-// 🤖 AI Hub
-function loadAI(el) {
-  setActive(el);
-  document.getElementById("content").innerHTML =
-    "🤖 AI 분석 기능 준비중 (선수 비교, 승부 예측 등)";
-}
-
-// 📸 집관 인증
-function loadFan(el) {
-  setActive(el);
-  document.getElementById("content").innerHTML =
-    "📸 집관 인증 기능 (사진 업로드 + 커뮤니티 예정)";
-}
-
-// 초기 로딩
-loadLive(document.querySelector(".nav div"));
-
 </script>
-
-</body>
-</html>
