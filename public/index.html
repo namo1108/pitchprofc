@@ -1,17 +1,63 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>PitchPro LIVE</title>
+
 <style>
-.goal {
-  animation: flash 1s ease;
+body {
+  margin:0;
+  background:#0b0f14;
+  color:white;
+  font-family:sans-serif;
 }
 
-@keyframes flash {
-  0% { background: #00ff9f; }
-  100% { background: #111; }
+header {
+  padding:15px;
+  color:#00ff9f;
+  font-size:20px;
+  font-weight:bold;
+}
+
+#content {
+  padding:15px;
+}
+
+.match {
+  background:#111;
+  padding:12px;
+  border-radius:10px;
+  margin-bottom:12px;
+  cursor:pointer;
+}
+
+.league {
+  color:#00ff9f;
+  font-size:13px;
+}
+
+.goal-banner {
+  position:fixed;
+  top:20px;
+  left:50%;
+  transform:translateX(-50%);
+  background:#00ff9f;
+  color:black;
+  padding:15px 25px;
+  border-radius:15px;
+  font-weight:bold;
+  animation:fadeOut 3s forwards;
+}
+
+@keyframes fadeOut {
+  0% {opacity:1;}
+  80% {opacity:1;}
+  100% {opacity:0;}
 }
 
 .popup {
   position:fixed;
   bottom:0;
-  left:0;
   width:100%;
   height:60%;
   background:#111;
@@ -20,14 +66,40 @@
   overflow:auto;
 }
 </style>
+</head>
+
+<body>
+
+<header id="today"></header>
+<div id="content">로딩중...</div>
 
 <script>
-let lastScores = {}; // 골 변화 감지용
+const API_KEY = "b00e3059f51741b7add3fcaab7eaadf0";
+const BASE = "https://cors-anywhere.herokuapp.com/https://v3.football.api-sports.io";
 
-async function loadLive(el) {
-  setActive(el);
+let lastScores = {};
+
+// 오늘 날짜 표시
+const today = new Date().toLocaleDateString();
+document.getElementById("today").innerText = "PITCH PRO - " + today;
+
+// 골 사운드
+function playGoal() {
+  new Audio("https://www.soundjay.com/human/goal-cheer-01.mp3").play();
+}
+
+// 골 배너
+function showGoal(text) {
+  const el = document.createElement("div");
+  el.className = "goal-banner";
+  el.innerText = text;
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+
+// LIVE 불러오기
+async function loadLive() {
   const content = document.getElementById("content");
-  content.innerHTML = "LIVE 불러오는중...";
 
   try {
     const res = await fetch(BASE + "/fixtures?live=all", {
@@ -37,48 +109,56 @@ async function loadLive(el) {
     const data = await res.json();
     const matches = data.response;
 
-    if (!matches.length) {
+    if (!matches || matches.length === 0) {
       content.innerHTML = "오늘 진행중인 경기 없음";
       return;
     }
 
-    content.innerHTML = "";
+    // 리그별 그룹
+    const leagues = {};
 
     matches.forEach(m => {
-      const id = m.fixture.id;
-      const home = m.teams.home.name;
-      const away = m.teams.away.name;
-      const score = `${m.goals.home} : ${m.goals.away}`;
-      const minute = m.fixture.status.elapsed || "진행중";
       const league = m.league.name;
-
-      const key = id;
-      const prev = lastScores[key];
-
-      let className = "match";
-
-      if (prev && prev !== score) {
-        className += " goal"; // 골 애니메이션
-      }
-
-      lastScores[key] = score;
-
-      content.innerHTML += `
-        <div class="${className}" onclick="openMatch(${id})">
-          <b>${league}</b><br>
-          ${home} vs ${away}<br>
-          ⏱ ${minute}분<br>
-          🔴 ${score}
-        </div>
-      `;
+      if (!leagues[league]) leagues[league] = [];
+      leagues[league].push(m);
     });
 
+    content.innerHTML = "";
+
+    for (let league in leagues) {
+      content.innerHTML += `<h3 class="league">${league}</h3>`;
+
+      leagues[league].forEach(m => {
+        const id = m.fixture.id;
+        const home = m.teams.home.name;
+        const away = m.teams.away.name;
+        const score = (m.goals.home || 0) + "-" + (m.goals.away || 0);
+
+        // 골 감지
+        if (lastScores[id] && lastScores[id] !== score) {
+          playGoal();
+          showGoal(`⚽ GOAL! ${home} ${score} ${away}`);
+        }
+        lastScores[id] = score;
+
+        const minute = m.fixture.status.elapsed || "-";
+
+        content.innerHTML += `
+          <div class="match" onclick="openMatch(${id})">
+            ${home} vs ${away}<br>
+            ⏱ ${minute}분 | 🔴 ${score}
+          </div>
+        `;
+      });
+    }
+
   } catch(e) {
+    console.error(e);
     content.innerHTML = "에러 발생";
   }
 }
 
-// 🔥 상세 팝업
+// 상세 팝업
 async function openMatch(id) {
   const popup = document.createElement("div");
   popup.className = "popup";
@@ -86,70 +166,70 @@ async function openMatch(id) {
   document.body.appendChild(popup);
 
   try {
-    // 이벤트 (골/어시스트)
-    const eventsRes = await fetch(BASE + `/fixtures/events?fixture=${id}`, {
+    // 이벤트
+    const eRes = await fetch(BASE + `/fixtures/events?fixture=${id}`, {
       headers: { "x-apisports-key": API_KEY }
     });
+    const eData = await eRes.json();
 
-    const eventsData = await eventsRes.json();
-
-    // 스탯
-    const statRes = await fetch(BASE + `/fixtures/statistics?fixture=${id}`, {
+    // 배당
+    const oRes = await fetch(BASE + `/odds?fixture=${id}`, {
       headers: { "x-apisports-key": API_KEY }
     });
+    const oData = await oRes.json();
 
-    const statData = await statRes.json();
+    // AI 예측 (간단)
+    let homeGoals = 0;
+    let awayGoals = 0;
 
-    // 배당률
-    const oddsRes = await fetch(BASE + `/odds?fixture=${id}`, {
-      headers: { "x-apisports-key": API_KEY }
-    });
-
-    const oddsData = await oddsRes.json();
-
-    // 🔥 AI 승부예측 (간단 로직)
-    const homeGoals = statData.response?.[0]?.statistics?.[0]?.value || 0;
-    const awayGoals = statData.response?.[1]?.statistics?.[0]?.value || 0;
-
-    let prediction = "비등";
-    if (homeGoals > awayGoals) prediction = "홈 우세";
-    if (awayGoals > homeGoals) prediction = "원정 우세";
-
-    // 골 이벤트
-    let goals = "";
-    eventsData.response.forEach(e => {
+    eData.response.forEach(e => {
       if (e.type === "Goal") {
-        goals += `
-          ⚽ ${e.player.name} (${e.team.name})
-          ${e.assist.name ? "🅰️ " + e.assist.name : ""}
-          <br>
-        `;
+        if (e.team.name) {
+          if (e.team.name === e.fixture?.teams?.home?.name) homeGoals++;
+          else awayGoals++;
+        }
+      }
+    });
+
+    let ai = "비등";
+    if (homeGoals > awayGoals) ai = "홈 우세";
+    if (awayGoals > homeGoals) ai = "원정 우세";
+
+    // 골 리스트
+    let goals = "";
+    eData.response.forEach(e => {
+      if (e.type === "Goal") {
+        goals += `⚽ ${e.player.name} (${e.team.name})<br>`;
       }
     });
 
     popup.innerHTML = `
-      <h3>경기 상세</h3>
       <button onclick="this.parentElement.remove()">닫기</button>
-      <hr>
+      <h3>경기 상세</h3>
 
-      <b>⚽ 득점</b><br>
+      <b>득점</b><br>
       ${goals || "없음"}
 
       <hr>
-      <b>📊 AI 예측</b><br>
-      ${prediction}
+      <b>AI 예측</b><br>
+      ${ai}
 
       <hr>
-      <b>💰 배당률</b><br>
-      ${JSON.stringify(oddsData.response?.[0]?.bookmakers?.[0]?.bets?.[0]?.values || "없음")}
-
-      <hr>
-      <b>📈 스탯</b><br>
-      ${JSON.stringify(statData.response || "없음")}
+      <b>배당률</b><br>
+      ${JSON.stringify(oData.response?.[0] || "없음")}
     `;
 
   } catch(e) {
     popup.innerHTML = "데이터 불러오기 실패";
   }
 }
+
+// 자동 새로고침
+setInterval(loadLive, 10000);
+
+// 최초 실행
+loadLive();
 </script>
+
+</body>
+</html>
