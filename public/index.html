@@ -3,170 +3,148 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
-    <title>PITCH Pro | Tactical Hub</title>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Noto+Sans+KR:wght@300;500;700&display=swap" rel="stylesheet">
+    <title>PITCH Pro | Live Connection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Noto+Sans+KR:wght@400;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #05070a; --bg2: #0a0e14; --card: #11151c;
-            --p: #00ff87; --p-dim: rgba(0, 255, 135, 0.1);
-            --t: #e1e1e1; --t2: #8b949e; --t3: #485058;
-            --red: #ff3b5c; --border: rgba(255, 255, 255, 0.05);
+            --bg: #05070a; --card: #11151c; --p: #00ff87; --t: #e1e1e1; --t3: #485058; --border: rgba(255, 255, 255, 0.05);
         }
-        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--t); font-family: 'Noto Sans KR', sans-serif; max-width: 480px; margin: 0 auto; overflow-x: hidden; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); color: var(--t); font-family: 'Noto Sans KR', sans-serif; max-width: 480px; margin: 0 auto; }
+        
+        .hdr { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; border-bottom: 1px solid var(--border); }
+        .hdr-logo { font-family: 'Orbitron'; font-weight: 900; color: var(--p); letter-spacing: 2px; }
+        
+        .status-bar { padding: 10px 20px; font-size: 11px; background: rgba(0,255,135,0.05); color: var(--p); display: flex; justify-content: space-between; }
+        
+        .page { padding: 15px; min-height: 100vh; }
+        .mc { background: var(--card); border-radius: 15px; border: 1px solid var(--border); margin-bottom: 12px; padding: 15px; }
+        .match-row { display: flex; align-items: center; justify-content: space-between; text-align: center; }
+        .team { flex: 1; font-size: 13px; font-weight: 700; }
+        .score-box { flex: 1; font-family: 'Orbitron'; font-size: 20px; font-weight: 900; color: var(--p); }
+        
+        .bnav { position: fixed; bottom: 0; width: 100%; max-width: 480px; height: 70px; background: #0a0e14; border-top: 1px solid var(--border); display: flex; }
+        .nbi { flex: 1; display: flex; align-items: center; justify-content: center; font-family: 'Orbitron'; font-size: 10px; color: var(--t3); cursor: pointer; }
+        .nbi.active { color: var(--p); }
 
-        /* HEADER */
-        .hdr { height: 60px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; background: var(--bg); position: sticky; top: 0; z-index: 100; border-bottom: 1px solid var(--border); }
-        .hdr-logo { font-family: 'Orbitron'; font-weight: 900; font-size: 18px; color: var(--p); text-shadow: 0 0 10px rgba(0,255,135,0.3); }
-
-        /* PAGES */
-        .page { display: none; padding: 15px 15px 100px; min-height: 100vh; animation: fadeIn 0.3s ease; }
-        .page.on { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* CARDS */
-        .mc { background: var(--card); border-radius: 18px; border: 1px solid var(--border); margin-bottom: 15px; padding: 15px; }
-        .sec-ttl { font-family: 'Orbitron'; font-size: 11px; color: var(--p); margin: 10px 5px; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-        .sec-ttl::before { content:''; width:3px; height:12px; background:var(--p); border-radius:2px; }
-
-        /* NAV */
-        .bnav { position: fixed; bottom: 0; width: 100%; max-width: 480px; height: 75px; background: rgba(5, 7, 10, 0.95); backdrop-filter: blur(15px); border-top: 1px solid var(--border); display: flex; z-index: 1000; }
-        .nbi { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; color: var(--t3); gap: 4px; cursor: pointer; }
-        .nbi.on { color: var(--p); }
-        .nbi span { font-size: 8px; font-family: 'Orbitron'; font-weight: 700; }
-
-        /* TABLE */
-        .stt { width: 100%; border-collapse: collapse; font-size: 12px; }
-        .stt th { padding: 12px 8px; color: var(--t3); font-family: 'Orbitron'; font-size: 10px; border-bottom: 1px solid var(--border); }
-        .stt td { padding: 14px 8px; border-bottom: 1px solid var(--border); text-align: center; }
-
-        /* MODAL */
-        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 2000; display: none; align-items: center; padding: 20px; }
-        .modal.show { display: flex; }
-        .modal-in { background: var(--bg2); width: 100%; border-radius: 20px; border: 1px solid var(--p); padding: 25px; }
-        input { width: 100%; background: #161b22; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin: 15px 0; outline: none; }
-        .btn { width: 100%; background: var(--p); border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; }
+        /* 설정 모달 */
+        #set-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; padding: 20px; z-index: 1000; }
+        .modal-in { background: #161b22; width: 100%; border-radius: 20px; padding: 25px; border: 1px solid var(--p); }
+        input { width: 100%; background: #000; border: 1px solid var(--border); padding: 12px; border-radius: 10px; color: #fff; margin: 15px 0; outline: none; }
+        .btn { width: 100%; background: var(--p); border: none; padding: 12px; border-radius: 10px; font-weight: 900; cursor: pointer; }
     </style>
 </head>
 <body>
 
     <header class="hdr">
         <div class="hdr-logo">PITCH PRO</div>
-        <div onclick="openSettings()" style="cursor:pointer; font-size: 20px;">⚙️</div>
+        <div onclick="document.getElementById('set-modal').style.display='flex'" style="cursor:pointer;">⚙️</div>
     </header>
 
-    <div id="pg-live" class="page on">
-        <div class="sec-ttl">LIVE MOMENTUM</div>
+    <div class="status-bar">
+        <span id="conn-status">📡 API 연결 대기 중...</span>
+        <span id="api-indicator">OFFLINE</span>
+    </div>
+
+    <main class="page">
         <div id="live-list">
             <div class="mc">
-                <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--t3); margin-bottom:10px;">
-                    <span>Premier League · Live Simulation</span>
-                    <span style="color:var(--p);">● ACTIVE</span>
+                <div style="font-size:10px; color:var(--t3); margin-bottom:8px;">Premier League · Matchday 32</div>
+                <div class="match-row">
+                    <div class="team">Arsenal</div>
+                    <div class="score-box">VS</div>
+                    <div class="team">Liverpool</div>
                 </div>
-                <div style="display:flex; align-items:center; justify-content:space-between; text-align:center;">
-                    <div style="flex:1;"><img src="https://crests.football-data.org/61.png" style="width:35px;"><div style="font-size:12px; margin-top:5px;">Chelsea</div></div>
-                    <div style="flex:1; font-family:'Orbitron'; font-size:26px; font-weight:900;">2 : 1</div>
-                    <div style="flex:1;"><img src="https://crests.football-data.org/65.png" style="width:35px;"><div style="font-size:12px; margin-top:5px;">Man City</div></div>
-                </div>
+                <p style="text-align:center; font-size:10px; margin-top:10px; color:var(--t3);">API 키 입력 시 실시간 정보로 전환됩니다.</p>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div id="pg-rank" class="page">
-        <div class="sec-ttl">LEAGUE TABLE</div>
-        <div id="rank-container" class="mc" style="padding:0; overflow:hidden;">
-            <table class="stt" id="rank-table">
-                <thead>
-                    <tr><th>#</th><th style="text-align:left;">TEAM</th><th>P</th><th>PTS</th></tr>
-                </thead>
-                <tbody id="rank-body">
-                    <tr><td>1</td><td style="text-align:left;">Liverpool</td><td>28</td><td>64</td></tr>
-                    <tr><td>2</td><td style="text-align:left;">Man City</td><td>28</td><td>63</td></tr>
-                    <tr><td>3</td><td style="text-align:left;">Arsenal</td><td>28</td><td>61</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
-
-    <div id="pg-ai" class="page">
-        <div class="sec-ttl">AI ANALYSIS</div>
-        <div class="mc">
-            <h4 style="color:var(--p); font-family:'Orbitron'; margin-bottom:10px;">TACTICAL SUMMARY</h4>
-            <p style="font-size:13px; color:var(--t2); line-height:1.7;">
-                API 응답 대기 중에도 AI는 지난 데이터를 바탕으로 분석을 진행합니다. 현재 EPL 상위권의 승점 차는 3점 이내로, 다가오는 맞대결이 우승의 향방을 가를 것입니다.
-            </p>
-        </div>
-    </div>
-
-    <div id="set-modal" class="modal">
+    <div id="set-modal">
         <div class="modal-in">
-            <h3 style="color:var(--p); font-family:'Orbitron';">API CONFIG</h3>
-            <input type="password" id="api-key-input" placeholder="Football-Data.org Key">
-            <button class="btn" onclick="saveKey()">저장 후 새로고침</button>
-            <p style="font-size:10px; color:var(--t3); margin-top:10px; text-align:center;" onclick="cm('set-modal')">닫기</p>
+            <h2 style="font-family:'Orbitron'; color:var(--p); font-size:18px;">API KEY SETTING</h2>
+            <input type="password" id="api-key-input" placeholder="Football-Data.org API 토큰 입력">
+            <button class="btn" onclick="saveApiKey()">적용 및 동기화</button>
         </div>
     </div>
 
     <nav class="bnav">
-        <div class="nbi on" onclick="nav('live', this)"><span>LIVE</span></div>
-        <div class="nbi" onclick="nav('rank', this)"><span>RANK</span></div>
-        <div class="nbi" onclick="nav('ai', this)"><span>AI HUB</span></div>
+        <div class="nbi active">LIVE</div>
+        <div class="nbi" onclick="alert('API 연동 후 활성화됩니다.')">SCHED</div>
+        <div class="nbi" onclick="alert('API 연동 후 활성화됩니다.')">RANK</div>
     </nav>
 
     <script>
-        let API_KEY = localStorage.getItem('pitch_key') || '';
+        let API_KEY = localStorage.getItem('pitch_pro_token') || '';
 
-        function openSettings() { document.getElementById('api-key-input').value = API_KEY; document.getElementById('set-modal').classList.add('show'); }
-        function cm(id) { document.getElementById(id).classList.remove('show'); }
-        function nav(id, el) {
-            document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-            document.querySelectorAll('.nbi').forEach(n => n.classList.remove('on'));
-            document.getElementById('pg-' + id).classList.add('on');
-            el.classList.add('on');
-            if(id === 'rank') loadRankData();
-        }
+        // API 연동 최우선 로직
+        async function syncFootballData() {
+            if (!API_KEY) return;
 
-        function saveKey() {
-            const val = document.getElementById('api-key-input').value.trim();
-            if(val) { localStorage.setItem('pitch_key', val); location.reload(); }
-        }
-
-        // 새롭게 적용된 데이터 호출 로직
-        async function loadRankData() {
-            if(!API_KEY) return; // 키가 없으면 기본 더미 데이터 유지
-
-            const targetUrl = "https://api.football-data.org/v4/competitions/PL/standings";
-            // 프록시 서버를 우회하여 JSONP 형태가 아닌 직접 fetch 시도하되 타임아웃 설정
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5초 후 중단
+            const indicator = document.getElementById('api-indicator');
+            const statusText = document.getElementById('conn-status');
+            
+            // 브라우저 CORS 우회를 위한 프록시 서비스 활용 (allorigins)
+            const target = "https://api.football-data.org/v4/competitions/PL/matches?status=SCHEDULED&limit=5";
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(target)}`;
 
             try {
-                const res = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(targetUrl)}`, {
-                    headers: { 'X-Auth-Token': API_KEY },
-                    signal: controller.signal
+                statusText.innerText = "📡 데이터 동기화 중...";
+                const response = await fetch(proxyUrl, {
+                    headers: {
+                        // AllOrigins 사용 시 헤더 전달 방식 유의
+                    }
                 });
                 
-                if(res.ok) {
-                    const data = await res.json();
-                    renderRank(data.standings[0].table);
+                const wrappedData = await response.json();
+                // AllOrigins는 결과를 strings 형태로 감싸서 보낼 수 있으므로 파싱 확인
+                const data = JSON.parse(wrappedData.contents);
+
+                if (data && data.matches) {
+                    renderMatches(data.matches);
+                    indicator.innerText = "ONLINE";
+                    indicator.style.color = "var(--p)";
+                    statusText.innerText = "✅ 실시간 데이터 수신 중";
                 }
-            } catch (e) {
-                console.log("API 호출 지연으로 시뮬레이션 데이터를 유지합니다.");
+            } catch (err) {
+                console.error("API Error:", err);
+                statusText.innerText = "❌ 연결 실패 (키 또는 권한 확인)";
             }
         }
 
-        function renderRank(table) {
-            const body = document.getElementById('rank-body');
-            body.innerHTML = table.slice(0, 10).map(t => `
-                <tr>
-                    <td>${t.position}</td>
-                    <td style="text-align:left; display:flex; align-items:center; gap:8px;">
-                        <img src="${t.team.crest}" style="width:18px;"> ${t.team.shortName}
-                    </td>
-                    <td>${t.playedGames}</td>
-                    <td style="font-weight:700; color:var(--p);">${t.points}</td>
-                </tr>
+        function renderMatches(matches) {
+            const list = document.getElementById('live-list');
+            list.innerHTML = matches.map(m => `
+                <div class="mc">
+                    <div style="font-size:10px; color:var(--t3); margin-bottom:8px;">
+                        ${new Date(m.utcDate).toLocaleString('ko-KR')}
+                    </div>
+                    <div class="match-row">
+                        <div class="team">${m.homeTeam.shortName || m.homeTeam.name}</div>
+                        <div class="score-box">
+                            ${m.score.fullTime.home !== null ? m.score.fullTime.home + ' : ' + m.score.fullTime.away : 'VS'}
+                        </div>
+                        <div class="team">${m.awayTeam.shortName || m.awayTeam.name}</div>
+                    </div>
+                </div>
             `).join('');
+        }
+
+        function saveApiKey() {
+            const val = document.getElementById('api-key-input').value.trim();
+            if (val) {
+                localStorage.setItem('pitch_pro_token', val);
+                API_KEY = val;
+                document.getElementById('set-modal').style.display = 'none';
+                syncFootballData();
+            }
+        }
+
+        // 초기 실행
+        if (API_KEY) {
+            syncFootballData();
+        } else {
+            document.getElementById('set-modal').style.display = 'flex';
         }
     </script>
 </body>
