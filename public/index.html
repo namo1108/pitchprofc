@@ -988,8 +988,9 @@ body {
 
 <script>
 // ── CONFIG ───────────────────────────
-// Cloudflare Worker URL (배포 후 고정)
-const WORKER_URL = 'https://pitchprofc.skagh662.workers.dev';
+// ★ Cloudflare Worker URL (배포 후 여기 입력)
+const WORKER_URL = localStorage.getItem('pp_wurl') || '';
+const FD_KEY = 'b00e3059f51741b7add3fcaab7eaadf0';
 const cache = {};
 let MT = null;
 let fanData = JSON.parse(localStorage.getItem('pp_fan')||'{"checkins":[],"total":0}');
@@ -1054,17 +1055,40 @@ function kds(u){const k=new Date(new Date(u).getTime()+9*3600000);return`${k.get
 
 // API (Cloudflare Worker)
 async function fd(path) {
-  // WORKER_URL is hardcoded
-  if(cache[path]&&Date.now()-cache[path].ts<90000) return cache[path].data;
+  if(cache[path] && Date.now()-cache[path].ts < 90000) return cache[path].data;
+  if(!WORKER_URL) {
+    showNoWorker();
+    return null;
+  }
   try {
-    const url = `${WORKER_URL}?type=fd&path=${encodeURIComponent(path)}`;
-    const r = await fetch(url);
-    if(!r.ok) { console.warn('API error:', r.status, path); return null; }
+    const r = await fetch(`${WORKER_URL}?type=fd&path=${encodeURIComponent(path)}`);
+    if(!r.ok) return null;
     const d = await r.json();
-    if(d.error) { console.warn('API err:', d.error); return null; }
-    cache[path] = {data:d, ts:Date.now()};
+    if(d.error) return null;
+    cache[path] = { data: d, ts: Date.now() };
     return d;
-  } catch(e) { console.error('fetch:', e.message, path); return null; }
+  } catch(e) {
+    console.error('fd error:', path, e.message);
+    return null;
+  }
+}
+
+// Worker URL 미설정 시 안내
+let _noWorkerShown = false;
+function showNoWorker() {
+  if(_noWorkerShown) return;
+  _noWorkerShown = true;
+  const url = prompt(
+    '⚡ Cloudflare Worker URL을 입력해주세요\n\n' +
+    'deploy-worker.html 파일을 열어 Worker를 배포한 뒤\n' +
+    'Worker URL을 입력하세요:\n\n' +
+    '예: https://pitch-proxy.abc123.workers.dev',
+    ''
+  );
+  if(url && url.trim().startsWith('https://')) {
+    localStorage.setItem('pp_wurl', url.trim());
+    location.reload();
+  }
 }
 
 // 배당률 시드 계산
@@ -1421,7 +1445,7 @@ async function loadStd(code) {
       📡 데이터를 불러오지 못했어요<br>
       <span style="font-size:12px;color:var(--t3);margin-top:6px;display:block;">
         Worker URL이 올바른지 확인해주세요<br>
-        상단 PITCH PRO 탭하면 URL 변경 가능
+        상단 PITCH PRO 탭하면 팀 변경 가능
       </span>
     </div>`;
     return;
@@ -1553,7 +1577,7 @@ function showLvUp(lv) {
 // ── INIT ─────────────────────────────
 // ── 설정: 팀 변경 ─────────────────────
 function showSettings() {
-  if(confirm('팀을 변경하시겠어요?\n(온보딩 화면으로 돌아갑니다)')) {
+  if(confirm('팀을 변경할까요?')) {
     localStorage.removeItem('pp_team');
     location.reload();
   }
