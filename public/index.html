@@ -476,16 +476,7 @@ body {
     <div class="ob-logo">PITCH PRO</div>
     <div class="ob-sub">FOOTBALL TACTICAL HUB v1.0</div>
     <div class="ob-hint">응원하는 팀을 선택하면<br>팀 컬러로 앱 전체가 바뀌고 팬존이 활성화됩니다</div>
-    <!-- Worker URL 설정 -->
-    <div id="worker-setup" style="margin-top:14px;padding:12px;background:rgba(0,255,135,.06);border:1px solid rgba(0,255,135,.2);border-radius:12px;text-align:left;">
-      <div style="font-family:'Orbitron';font-size:9px;color:var(--p);letter-spacing:1px;margin-bottom:8px;">⚡ CLOUDFLARE WORKER URL</div>
-      <input id="worker-url-input" type="url"
-        placeholder="https://pitch-api.YOUR_ID.workers.dev"
-        value=""
-        style="width:100%;padding:10px 12px;background:rgba(0,0,0,.4);border:1px solid rgba(0,255,135,.25);border-radius:8px;color:#fff;font-size:13px;font-family:'Share Tech Mono';outline:none;margin-bottom:8px;"
-      >
-      <div style="font-size:11px;color:var(--t3);">Cloudflare Workers 대시보드에서 배포 후 URL 입력</div>
-    </div>
+
   </div>
   <div class="ob-section">
 
@@ -672,8 +663,8 @@ body {
 
 <script>
 // ── CONFIG ───────────────────────────
-// Cloudflare Worker URL (localStorage에서 불러오거나 초기화)
-let WORKER_URL = localStorage.getItem('pp_worker_url') || '';
+// Cloudflare Worker URL (배포 후 고정)
+const WORKER_URL = 'https://pitchprofc.skagh662.workers.dev';
 const cache = {};
 let MT = null;
 let fanData = JSON.parse(localStorage.getItem('pp_fan')||'{"checkins":[],"total":0}');
@@ -738,10 +729,7 @@ function kds(u){const k=new Date(new Date(u).getTime()+9*3600000);return`${k.get
 
 // API (Cloudflare Worker)
 async function fd(path) {
-  if(!WORKER_URL) {
-    console.warn('Worker URL not set');
-    return null;
-  }
+  // WORKER_URL is hardcoded
   if(cache[path]&&Date.now()-cache[path].ts<90000) return cache[path].data;
   try {
     const url = `${WORKER_URL}?type=fd&path=${encodeURIComponent(path)}`;
@@ -793,15 +781,6 @@ function op(el, id, lg, color, name) {
 }
 function startApp() {
   if(!obSel) return;
-  // Worker URL 저장
-  const wInput = document.getElementById('worker-url-input');
-  if(wInput && wInput.value.trim()) {
-    WORKER_URL = wInput.value.trim().replace(/\/+$/, '');
-    localStorage.setItem('pp_worker_url', WORKER_URL);
-  } else if(!WORKER_URL) {
-    alert('Cloudflare Worker URL을 입력해주세요!');
-    return;
-  }
   MT = obSel;
   localStorage.setItem('pp_team', JSON.stringify(MT));
   init();
@@ -1247,54 +1226,19 @@ function showLvUp(lv) {
 }
 
 // ── INIT ─────────────────────────────
-// ── 설정 / 초기화 ────────────────────
+// ── 설정: 팀 변경 ─────────────────────
 function showSettings() {
-  const cur = WORKER_URL || '미설정';
-  const newUrl = prompt(`Worker URL 변경\n현재: ${cur}\n\n새 URL 입력 (취소하면 유지):`, WORKER_URL);
-  if(newUrl !== null) {
-    if(newUrl.trim()) {
-      WORKER_URL = newUrl.trim().replace(/\/+$/,'');
-      localStorage.setItem('pp_worker_url', WORKER_URL);
-      Object.keys(cache).forEach(k=>delete cache[k]);
-      loadHome();
-      alert('URL 저장됨! 데이터를 다시 불러옵니다.');
-    } else {
-      if(confirm('Worker URL을 삭제하고 온보딩으로 돌아갈까요?')) {
-        localStorage.removeItem('pp_worker_url');
-        localStorage.removeItem('pp_team');
-        location.reload();
-      }
-    }
+  if(confirm('팀을 변경하시겠어요?\n(온보딩 화면으로 돌아갑니다)')) {
+    localStorage.removeItem('pp_team');
+    location.reload();
   }
 }
 
 const saved = localStorage.getItem('pp_team');
-if(saved && WORKER_URL) {
+if(saved) {
   MT = JSON.parse(saved);
   applyTheme(MT.color);
   init();
-} else if(saved && !WORKER_URL) {
-  // 팀은 있지만 Worker URL 없음 - 온보딩에서 URL 입력 요청
-  const t = JSON.parse(saved);
-  applyTheme(t.color);
-  // 온보딩 Worker URL 입력창에 안내
-  const wSetup = document.getElementById('worker-setup');
-  if(wSetup) {
-    wSetup.style.borderColor = 'rgba(255,59,92,.4)';
-    wSetup.style.background = 'rgba(255,59,92,.06)';
-    wSetup.querySelector('div').style.color = 'var(--red)';
-    wSetup.querySelector('div').textContent = '⚠ WORKER URL을 입력해야 데이터가 로드됩니다';
-  }
-  // 이전 팀 자동 선택
-  document.querySelectorAll('.ob-team').forEach(el => {
-    if(el.getAttribute('onclick')&&el.getAttribute('onclick').includes(String(t.id))) {
-      el.classList.add('sel');
-      obSel = t;
-      const btn = document.getElementById('ob-btn');
-      btn.classList.add('ready'); btn.disabled = false;
-      btn.textContent = t.name + ' 팀으로 시작 →';
-    }
-  });
 }
 </script>
 </body>
