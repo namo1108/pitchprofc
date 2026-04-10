@@ -988,9 +988,8 @@ body {
 
 <script>
 // ── CONFIG ───────────────────────────
-// ★ Cloudflare Worker URL (배포 후 여기 입력)
-const WORKER_URL = localStorage.getItem('pp_wurl') || '';
-const FD_KEY = 'b00e3059f51741b7add3fcaab7eaadf0';
+// Netlify Function 프록시
+const API = '/api/football';
 const cache = {};
 let MT = null;
 let fanData = JSON.parse(localStorage.getItem('pp_fan')||'{"checkins":[],"total":0}');
@@ -1056,38 +1055,16 @@ function kds(u){const k=new Date(new Date(u).getTime()+9*3600000);return`${k.get
 // API (Cloudflare Worker)
 async function fd(path) {
   if(cache[path] && Date.now()-cache[path].ts < 90000) return cache[path].data;
-  if(!WORKER_URL) {
-    showNoWorker();
-    return null;
-  }
   try {
-    const r = await fetch(`${WORKER_URL}?type=fd&path=${encodeURIComponent(path)}`);
-    if(!r.ok) return null;
+    const r = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`);
+    if(!r.ok) { console.warn('API', r.status, path); return null; }
     const d = await r.json();
-    if(d.error) return null;
+    if(d.error) { console.warn('API err:', d.error); return null; }
     cache[path] = { data: d, ts: Date.now() };
     return d;
   } catch(e) {
-    console.error('fd error:', path, e.message);
+    console.error('fd:', path, e.message);
     return null;
-  }
-}
-
-// Worker URL 미설정 시 안내
-let _noWorkerShown = false;
-function showNoWorker() {
-  if(_noWorkerShown) return;
-  _noWorkerShown = true;
-  const url = prompt(
-    '⚡ Cloudflare Worker URL을 입력해주세요\n\n' +
-    'deploy-worker.html 파일을 열어 Worker를 배포한 뒤\n' +
-    'Worker URL을 입력하세요:\n\n' +
-    '예: https://pitch-proxy.abc123.workers.dev',
-    ''
-  );
-  if(url && url.trim().startsWith('https://')) {
-    localStorage.setItem('pp_wurl', url.trim());
-    location.reload();
   }
 }
 
