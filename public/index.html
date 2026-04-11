@@ -58,7 +58,8 @@ html,body{height:100%;background:var(--bg);color:var(--t);font-family:'Noto Sans
 .hdr-logo{font-family:'Orbitron';font-size:18px;font-weight:900;letter-spacing:3px;color:var(--p);cursor:pointer;}
 /* PC용 상단 탭 */
 .hdr-tabs{display:none;gap:4px;}
-@media(min-width:768px){.hdr-tabs{display:flex;}}
+/* 768~1023px: 사이드바 없을 때만 상단 탭 표시 */
+@media(min-width:768px) and (max-width:1023px){.hdr-tabs{display:flex;}}
 .hdr-tab{padding:7px 16px;border-radius:8px;border:none;background:none;color:var(--t3);font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;}
 .hdr-tab.on{background:var(--ps);color:var(--p);}
 .hdr-right{display:flex;align-items:center;gap:10px;}
@@ -77,13 +78,13 @@ html,body{height:100%;background:var(--bg);color:var(--t);font-family:'Noto Sans
 
 /* PC: 사이드바 */
 .sidebar{
-  width:var(--sidebar);flex-shrink:0;
+  width:200px;flex-shrink:0;
   border-right:1px solid var(--b);
   overflow-y:auto;padding:16px 12px;
   display:none;
   background:var(--bg);
 }
-@media(min-width:1024px){.sidebar{display:block;}}
+@media(min-width:768px){.sidebar{display:block;width:200px;}} @media(min-width:1024px){.sidebar{width:240px;}}
 .sidebar-section{margin-bottom:20px;}
 .sidebar-title{font-size:11px;font-weight:700;color:var(--t3);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;padding:0 4px;}
 .sidebar-item{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;cursor:pointer;transition:all .15s;}
@@ -91,7 +92,7 @@ html,body{height:100%;background:var(--bg);color:var(--t);font-family:'Noto Sans
 .sidebar-item.on .si-label{color:var(--p);font-weight:700;}
 .si-icon{width:20px;height:20px;color:var(--t3);flex-shrink:0;}
 .sidebar-item.on .si-icon{color:var(--p);}
-.si-label{font-size:14px;color:var(--t2);}
+.si-label{font-size:13px;color:var(--t2);}
 
 /* 페이지 컨텐츠 */
 .pages{flex:1;position:relative;overflow:hidden;min-height:0;}
@@ -640,7 +641,7 @@ function ods(m){const hi=m.homeTeam?.id||0,ai=m.awayTeam?.id||0,mi=m.id||0;const
 async function fd(path){
   if(cache[path]&&Date.now()-cache[path].ts<90000)return cache[path].data;
   const ctrl=new AbortController();
-  const timer=setTimeout(()=>ctrl.abort(),10000);
+  const timer=setTimeout(()=>ctrl.abort(),6000); // 6초 타임아웃
   try{
     const r=await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`,{signal:ctrl.signal});
     clearTimeout(timer);
@@ -690,10 +691,16 @@ function boot(){
   loadHub();
   updateFan();
   // PC 우측 패널
-  setInterval(()=>{
-    if(document.getElementById('pg-home').classList.contains('on')) loadHome();
-    loadRightPanel();
-  },30000);
+  // 60초마다 자동 갱신 (탭이 로딩 중 표시되는 것 방지)
+  let _isLoading = false;
+  setInterval(async ()=>{
+    if(_isLoading) return;
+    _isLoading = true;
+    try {
+      if(document.getElementById('pg-home').classList.contains('on')) await loadHome();
+      await loadRightPanel();
+    } finally { _isLoading = false; }
+  }, 60000);
   loadRightPanel();
 }
 
@@ -766,6 +773,7 @@ async function loadHome(){
   if(sched.length){html+=`<div class="sec" style="margin-top:4px;"><span class="stl">오늘 예정 · ${sched.length}</span><span class="sbd">${today}</span></div>`;sched.slice(0,8).forEach(m=>{html+=mkMC(m,'sch');});}
   if(fin.length){html+=`<div class="sec" style="margin-top:4px;"><span class="stl">종료</span></div>`;fin.slice(0,6).forEach(m=>{html+=mkMC(m,'fin');});}
   c.innerHTML=html||`<div class="empty">📅 오늘 경기 없음</div>`;
+  document.title = 'PITCH Pro'; // 로딩 완료
 }
 
 function mkMC(m,type){
@@ -978,8 +986,12 @@ function swStd(code,btn){curStd=code;document.querySelectorAll('#std-pills .pill
 async function loadStd(code){
   const c=document.getElementById('std-bd');
   c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
-  const d=await fd(`/competitions/${code}/standings?season=2024`);
-  if(!d?.standings){c.innerHTML=`<div class="empty">📡 순위 데이터 없음<br><span style="font-size:12px;">잠시 후 다시 시도해주세요</span></div>`;return;}
+  const d=await fd(`/competitions/${code}/standings?season=2025`);
+  if(!d?.standings){
+    console.error('standings response:', JSON.stringify(d));
+    c.innerHTML=`<div class="empty">📡 순위 데이터 없음<br><span style="font-size:12px;display:block;margin-top:6px;">잠시 후 다시 시도해주세요</span></div>`;
+    return;
+  }
   const rows=d.standings[0].table,tot=rows.length;
   const fc={W:'var(--p)',D:'var(--amber)',L:'var(--red)'};
   c.innerHTML=`<div class="std-scroll"><table class="stt">
@@ -1012,8 +1024,12 @@ function swPt(type,btn){curPt=type;document.querySelectorAll('#pg-player>.pills+
 async function loadPlayers(lg,type){
   const c=document.getElementById('pl-bd');
   c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
-  const d=await fd(`/competitions/${lg}/scorers?limit=20&season=2024`);
-  if(!d?.scorers){c.innerHTML=`<div class="empty">선수 데이터 없음</div>`;return;}
+  const d=await fd(`/competitions/${lg}/scorers?limit=20&season=2025`);
+  if(!d?.scorers){
+    console.error('scorers response:', JSON.stringify(d));
+    c.innerHTML=`<div class="empty">선수 데이터 없음</div>`;
+    return;
+  }
   let sc=[...d.scorers];
   if(type==='assists')sc.sort((a,b)=>(b.assists||0)-(a.assists||0));
   c.innerHTML=sc.map((s,i)=>{
