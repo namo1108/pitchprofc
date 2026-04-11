@@ -645,9 +645,11 @@ async function fd(path){
   try{
     const r=await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`,{signal:ctrl.signal});
     clearTimeout(timer);
-    if(!r.ok)return null;
+    if(!r.ok){console.warn('API HTTP',r.status,path);return null;}
     const d=await r.json();
-    if(d.error)return null;
+    // API 에러 응답도 반환 (에러 메시지 표시용)
+    if(d.errorCode){console.warn('API error',d.errorCode,d.message,path);return d;}
+    if(d.error){console.warn('API error',d.error,path);return d;}
     cache[path]={data:d,ts:Date.now()};
     return d;
   }catch(e){clearTimeout(timer);return null;}
@@ -986,10 +988,14 @@ function swStd(code,btn){curStd=code;document.querySelectorAll('#std-pills .pill
 async function loadStd(code){
   const c=document.getElementById('std-bd');
   c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
-  const d=await fd(`/competitions/${code}/standings?season=2025`);
+  const d=await fd(`/competitions/${code}/standings`);
   if(!d?.standings){
-    console.error('standings response:', JSON.stringify(d));
-    c.innerHTML=`<div class="empty">📡 순위 데이터 없음<br><span style="font-size:12px;display:block;margin-top:6px;">잠시 후 다시 시도해주세요</span></div>`;
+    const msg = d?.message || d?.error || '응답 없음';
+    const errCode = d?.errorCode || '';
+    c.innerHTML=`<div class="empty">📡 순위 데이터 없음<br>
+      <span style="font-size:12px;display:block;margin-top:6px;color:var(--red);">${msg} ${errCode}</span>
+      <button onclick="loadStd(curStd)" style="margin-top:12px;padding:8px 16px;background:var(--ps);border:1px solid var(--b2);border-radius:8px;color:var(--p);cursor:pointer;font-size:13px;">다시 시도</button>
+    </div>`;
     return;
   }
   const rows=d.standings[0].table,tot=rows.length;
@@ -1024,10 +1030,13 @@ function swPt(type,btn){curPt=type;document.querySelectorAll('#pg-player>.pills+
 async function loadPlayers(lg,type){
   const c=document.getElementById('pl-bd');
   c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
-  const d=await fd(`/competitions/${lg}/scorers?limit=20&season=2025`);
+  const d=await fd(`/competitions/${lg}/scorers?limit=20`);
   if(!d?.scorers){
-    console.error('scorers response:', JSON.stringify(d));
-    c.innerHTML=`<div class="empty">선수 데이터 없음</div>`;
+    const msg2 = d?.message || d?.error || '응답 없음';
+    c.innerHTML=`<div class="empty">선수 데이터 없음<br>
+      <span style="font-size:12px;display:block;margin-top:6px;color:var(--red);">${msg2}</span>
+      <button onclick="loadPlayers(curPLg,curPt)" style="margin-top:12px;padding:8px 16px;background:var(--ps);border:1px solid var(--b2);border-radius:8px;color:var(--p);cursor:pointer;font-size:13px;">다시 시도</button>
+    </div>`;
     return;
   }
   let sc=[...d.scorers];
