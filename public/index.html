@@ -1,365 +1,2179 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>PITCH Pro</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%2305070a'/%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%2310b981' stroke-width='2.5'/%3E%3Ctext x='32' y='42' text-anchor='middle' font-family='Poppins,Arial Black' font-weight='900' font-size='26' fill='%2310b981'%3EP%3C/text%3E%3Ccircle cx='32' cy='32' r='26' fill='none' stroke='%2310b981' stroke-width='0.8' stroke-dasharray='4 6' opacity='0.4'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&family=Bebas+Neue&display=swap" rel="stylesheet">
 <style>
-/* --- 1. PREMIUM DESIGN SYSTEM --- */
+/* ═══════════════════════════════
+   PITCH PRO — DESIGN SYSTEM
+═══════════════════════════════ */
 :root {
-    --f-h: 'Poppins', sans-serif;
-    --bg: #05070a; --bg2: #0d1117; --cd: rgba(20, 24, 31, 0.9);
-    --p: #10b981; --ps: rgba(16, 185, 129, 0.15); --pb: rgba(16, 185, 129, 0.3);
-    --s: #3b82f6; --t: #ffffff; --t2: #a1a1aa; --t3: #3f3f46;
-    --red: #ef4444; --br: 24px; --sh: 0 20px 40px rgba(0,0,0,0.6);
+  --f: 'Poppins', sans-serif;
+  --f-h: 'Bebas Neue', sans-serif;
+  --bg: #05070a;
+  --bg2: #0d1117;
+  --bg3: #161b22;
+  --cd: rgba(20,24,31,0.95);
+  --p: #10b981;
+  --ps: rgba(16,185,129,0.12);
+  --pb: rgba(16,185,129,0.28);
+  --s: #3b82f6;
+  --t: #f0f6fc;
+  --t2: #8b949e;
+  --t3: #30363d;
+  --red: #ef4444;
+  --am: #f59e0b;
+  --br: 20px;
+  --sh: 0 16px 40px rgba(0,0,0,0.6);
+  --nav-w: 240px;
 }
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-body {
-    background: var(--bg); color: var(--t); font-family: var(--f-h);
-    overflow: hidden; height: 100vh; transition: background 0.5s ease;
-    background-image: radial-gradient(at 0% 0%, var(--ps) 0px, transparent 40%);
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent; }
+html,body { height:100%; background:var(--bg); color:var(--t); font-family:var(--f); overflow:hidden; -webkit-font-smoothing:antialiased; }
+body { background-image: radial-gradient(ellipse at 0% 0%, rgba(16,185,129,0.06) 0%, transparent 50%), radial-gradient(ellipse at 100% 100%, rgba(59,130,246,0.04) 0%, transparent 50%); }
+
+/* ═══ SCROLLBAR ═══ */
+::-webkit-scrollbar { width:4px; height:4px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:var(--t3); border-radius:2px; }
+
+/* ════════════════════════════════
+   ONBOARDING
+════════════════════════════════ */
+#ob { position:fixed; inset:0; background:var(--bg); z-index:9999; overflow-y:auto; -webkit-overflow-scrolling:touch; }
+.ob-wrap { max-width:1100px; margin:0 auto; padding:60px 24px 80px; }
+.ob-hero { text-align:center; margin-bottom:56px; }
+.ob-logo-icon {
+  width:72px; height:72px; border-radius:20px;
+  background: linear-gradient(135deg, #0d1117, #161b22);
+  border: 2px solid var(--pb);
+  display:inline-flex; align-items:center; justify-content:center;
+  margin-bottom:20px;
+  box-shadow: 0 0 40px rgba(16,185,129,0.2), inset 0 0 20px rgba(16,185,129,0.05);
+  position:relative;
+}
+.ob-logo-icon::before {
+  content:'';
+  position:absolute; inset:-1px;
+  border-radius:21px;
+  background: linear-gradient(135deg, var(--p), var(--s));
+  z-index:-1;
+  opacity:0.5;
+}
+.ob-logo-p {
+  font-family:var(--f-h);
+  font-size:42px;
+  background: linear-gradient(135deg, var(--p), #34d399);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.ob-title { font-family:var(--f-h); font-size:52px; letter-spacing:4px; color:var(--t); margin-bottom:10px; }
+.ob-sub { font-size:15px; color:var(--t2); }
+.ob-sub span { color:var(--p); font-weight:700; }
+
+/* 팀 선택 카운터 */
+.ob-counter {
+  display:inline-flex; align-items:center; gap:8px;
+  background:var(--bg2); border:1px solid var(--t3);
+  border-radius:100px; padding:8px 20px; margin-top:16px;
+  font-size:13px; color:var(--t2);
+}
+.ob-counter .cnt { color:var(--p); font-weight:800; font-size:16px; }
+
+/* 리그 섹션 */
+.ob-league { margin-bottom:40px; }
+.ob-league-hdr {
+  display:flex; align-items:center; gap:14px;
+  margin-bottom:16px; padding:14px 18px;
+  background:var(--bg2); border-radius:16px;
+  border:1px solid var(--t3);
+}
+.ob-league-hdr img { width:32px; height:32px; object-fit:contain; }
+.ob-league-hdr h3 { font-size:16px; font-weight:800; color:var(--t); }
+.ob-league-hdr small { font-size:11px; color:var(--t2); margin-left:auto; }
+
+.ob-grid { display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:12px; }
+@media(max-width:600px) { .ob-grid { grid-template-columns:repeat(3,1fr); } }
+
+.ob-team {
+  background:var(--bg2); border:1.5px solid var(--t3);
+  border-radius:16px; padding:18px 8px 14px;
+  text-align:center; cursor:pointer; transition:all .2s;
+  position:relative; overflow:hidden;
+}
+.ob-team::before {
+  content:''; position:absolute; inset:0;
+  background:linear-gradient(135deg, var(--p), var(--s));
+  opacity:0; transition:opacity .2s; z-index:0;
+}
+.ob-team:hover { transform:translateY(-3px); border-color:rgba(16,185,129,0.4); }
+.ob-team.sel { border-color:var(--p); background:var(--ps); transform:translateY(-4px); box-shadow:0 8px 24px rgba(16,185,129,0.2); }
+.ob-team.sel .ob-chk { opacity:1; transform:scale(1); }
+.ob-chk {
+  position:absolute; top:8px; right:8px;
+  width:20px; height:20px; border-radius:50%;
+  background:var(--p); display:flex; align-items:center; justify-content:center;
+  font-size:11px; font-weight:900; color:#000;
+  opacity:0; transform:scale(0); transition:all .2s; z-index:1;
+}
+.ob-team img { width:46px; height:46px; object-fit:contain; margin-bottom:10px; position:relative; z-index:1; }
+.ob-team span { font-size:12px; font-weight:700; color:var(--t); display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; position:relative; z-index:1; }
+.ob-team.sel span { color:var(--p); }
+
+/* 시작 버튼 */
+.ob-start-wrap { position:sticky; bottom:0; padding:20px 0; background:linear-gradient(to top, var(--bg) 60%, transparent); text-align:center; }
+.ob-start {
+  display:inline-flex; align-items:center; gap:12px;
+  padding:18px 48px; border-radius:100px; border:none;
+  background:linear-gradient(135deg, var(--p), #059669);
+  color:#000; font-family:var(--f); font-weight:900; font-size:17px;
+  cursor:pointer; transition:all .2s; letter-spacing:1px;
+  box-shadow:0 8px 32px rgba(16,185,129,0.4);
+}
+.ob-start:hover { transform:translateY(-2px); box-shadow:0 12px 40px rgba(16,185,129,0.5); }
+.ob-start:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
+
+/* ════════════════════════════════
+   APP LAYOUT
+════════════════════════════════ */
+#app { display:none; height:100vh; height:100dvh; flex-direction:column; }
+#app.show { display:flex; }
+
+/* HEADER */
+.hdr {
+  height:64px; flex-shrink:0;
+  display:flex; align-items:center; justify-content:space-between;
+  padding:0 24px;
+  background:rgba(13,17,23,0.96);
+  backdrop-filter:blur(24px);
+  border-bottom:1px solid var(--t3);
+  z-index:200;
+}
+.hdr-logo {
+  display:flex; align-items:center; gap:12px;
+  font-family:var(--f-h); font-size:26px; letter-spacing:3px;
+  background:linear-gradient(135deg, var(--p) 0%, #34d399 50%, var(--s) 100%);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent;
+  cursor:pointer;
+}
+.hdr-logo-icon {
+  width:36px; height:36px; border-radius:10px;
+  background:linear-gradient(135deg, var(--p), var(--s));
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--f-h); font-size:22px; color:#000; flex-shrink:0;
+}
+.hdr-r { display:flex; align-items:center; gap:10px; }
+.team-pill {
+  display:flex; align-items:center; gap:7px;
+  background:var(--ps); border:1px solid var(--pb);
+  border-radius:100px; padding:5px 12px 5px 5px;
+}
+.team-pill img { width:22px; height:22px; object-fit:contain; border-radius:50%; background:var(--bg3); }
+.team-pill span { font-size:12px; font-weight:700; color:var(--p); }
+.live-pill {
+  display:none; align-items:center; gap:6px;
+  background:rgba(239,68,68,0.12); border:1px solid rgba(239,68,68,0.3);
+  border-radius:100px; padding:5px 12px;
+}
+.live-pill.show { display:flex; }
+.live-dot { width:7px; height:7px; border-radius:50%; background:var(--red); animation:pulse 1.1s infinite; }
+.live-pill span { font-size:11px; font-weight:800; color:var(--red); }
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.3;transform:scale(.7)} }
+.lv-badge {
+  font-size:11px; font-weight:800; color:var(--p);
+  background:var(--ps); border:1px solid var(--pb);
+  border-radius:100px; padding:5px 14px;
 }
 
-/* --- 2. ONBOARDING (TEAM SELECTION) --- */
-#ob { position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 60px 20px; }
-.ob-container { max-width: 1100px; margin: 0 auto; }
-.ob-header { text-align: center; margin-bottom: 50px; }
-.ob-header h1 { font-size: 42px; font-weight: 900; letter-spacing: -1px; }
-.league-section { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 30px; }
-.league-title { font-size: 20px; font-weight: 800; color: var(--p); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
-.ob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
-.ob-team { background: #161b22; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
-.ob-team img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 12px; }
-.ob-team span { font-size: 13px; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ob-team.sel { border-color: var(--p); background: var(--ps); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
-.ob-team.sel::after { content: '✓'; position: absolute; top: 8px; right: 12px; color: var(--p); font-weight: 900; }
-.start-btn { display: block; width: 320px; margin: 40px auto; padding: 22px; border-radius: 100px; border: none; background: var(--p); color: #000; font-weight: 900; font-size: 20px; cursor: pointer; }
+/* MAIN BODY */
+.main-body { flex:1; display:flex; overflow:hidden; min-height:0; }
 
-/* --- 3. MAIN APP LAYOUT --- */
-#app { display: none; height: 100vh; flex-direction: column; }
-.hdr { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
-.hdr-logo { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, var(--p) 0%, var(--s) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.main-body { flex: 1; display: flex; overflow: hidden; }
-.sidebar { width: 260px; background: var(--bg2); padding: 25px 15px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
-.si { display: flex; align-items: center; gap: 15px; padding: 18px; border-radius: 18px; cursor: pointer; color: var(--t2); font-weight: 700; margin-bottom: 10px; transition: 0.3s; }
-.si.on { background: var(--ps); color: var(--p); border: 1px solid rgba(16, 185, 129, 0.1); }
-.pages { flex: 1; overflow-y: auto; padding: 40px; background: transparent; }
-.page { display: none; } .page.on { display: block; }
+/* SIDEBAR */
+.sidebar {
+  width:var(--nav-w); flex-shrink:0;
+  background:var(--bg2); border-right:1px solid var(--t3);
+  padding:20px 12px; display:none; flex-direction:column;
+  overflow-y:auto;
+}
+@media(min-width:768px) { .sidebar { display:flex; } }
+.si {
+  display:flex; align-items:center; gap:14px;
+  padding:14px 18px; border-radius:14px;
+  cursor:pointer; color:var(--t2); font-weight:700;
+  font-size:14px; margin-bottom:4px; transition:all .2s;
+  border:1px solid transparent;
+}
+.si:hover { background:var(--bg3); color:var(--t); }
+.si.on { background:var(--ps); color:var(--p); border-color:var(--pb); }
+.si-ico { font-size:18px; width:24px; text-align:center; flex-shrink:0; }
+.sidebar-div { height:1px; background:var(--t3); margin:10px 0; }
 
-/* --- 4. COMPONENT: MATCH, ACCORDION, AI --- */
-.mc { background: var(--cd); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--br); margin-bottom: 15px; overflow: hidden; box-shadow: var(--sh); transition: 0.3s; }
-.mc:hover { border-color: var(--p); transform: translateY(-3px); }
-.mc-top { padding: 12px 20px; background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--t2); }
-.mc-body { padding: 25px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
-.mc-tm { flex: 1; text-align: center; font-weight: 900; font-size: 18px; }
-.mc-sc-box { background: #000; padding: 12px 25px; border-radius: 15px; border: 1px solid var(--pb); font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; }
-.lg-hd { padding: 20px 25px; background: var(--bg2); border-radius: 20px; cursor: pointer; margin-top: 15px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; font-weight: 800; font-size: 16px; }
-.lg-ms { display: none; flex-direction: column; padding: 10px 0; }
-.lg-ms.open { display: flex; }
+/* PAGES */
+.pages { flex:1; overflow-y:auto; overflow-x:hidden; -webkit-overflow-scrolling:touch; }
+.page { display:none; padding:28px; animation:fadeUp .2s ease; }
+.page.on { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+@media(max-width:767px) { .page { padding:16px 14px 80px; } }
 
-.ai-card { background: linear-gradient(165deg, #0d1117 0%, #05070a 100%); border: 1px solid var(--pb); border-radius: 25px; padding: 25px; margin-bottom: 20px; }
-.prob-bar { height: 12px; background: rgba(255,255,255,0.05); border-radius: 100px; margin: 15px 0; overflow: hidden; display: flex; }
-.prob-h { background: var(--p); box-shadow: 0 0 15px var(--ps); }
-.prob-a { background: var(--red); box-shadow: 0 0 15px rgba(239,68,68,0.3); }
+/* MOBILE NAV */
+.bnav {
+  display:none; flex-shrink:0;
+  background:rgba(13,17,23,0.97); backdrop-filter:blur(20px);
+  border-top:1px solid var(--t3);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  height:calc(58px + env(safe-area-inset-bottom,0px));
+}
+@media(max-width:767px) { .bnav { display:flex; } }
+.nbi { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; cursor:pointer; border:none; background:none; font-family:var(--f); }
+.ni-ic { font-size:20px; line-height:1; transition:transform .15s; }
+.ni-lb { font-size:10px; font-weight:700; color:var(--t2); }
+.nbi.on .ni-lb { color:var(--p); }
+.nbi.on .ni-ic { transform:scale(1.1); }
 
-/* --- 5. DATA TABLES & STATS --- */
-.stt { width: 100%; border-collapse:separate; border-spacing:0 10px; }
-.stt th { padding: 12px; color: var(--t3); font-size: 11px; text-transform: uppercase; font-weight: 900; }
-.stt td { padding: 18px 12px; background: var(--bg2); text-align: center; font-weight: 600; border-top: 1px solid rgba(255,255,255,0.02); }
-.stt td:first-child { border-radius: 15px 0 0 15px; }
-.stt td:last-child { border-radius: 0 15px 15px 0; }
-.nm-cell { display: flex; align-items: center; gap: 15px; text-align: left; }
-.nm-cell img { width: 32px; height: 32px; object-fit: contain; }
+/* RIGHT PANEL */
+.rp {
+  width:260px; flex-shrink:0; border-left:1px solid var(--t3);
+  padding:20px; display:none; background:var(--bg2); overflow-y:auto;
+}
+@media(min-width:1200px) { .rp { display:block; } }
+.rp-title { font-family:var(--f-h); font-size:18px; letter-spacing:2px; color:var(--t2); margin-bottom:14px; }
 
-.pills { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 25px; padding-bottom: 10px; scrollbar-width: none; }
-.pill { padding: 12px 24px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05); background: var(--bg2); color: var(--t2); cursor: pointer; font-weight: 700; white-space: nowrap; transition: 0.3s; }
-.pill.on { background: var(--p); color: #000; box-shadow: 0 0 20px var(--ps); }
+/* ═══════════════════════════════
+   COMPONENTS
+═══════════════════════════════ */
 
-/* --- 6. GOAL ANIMATION --- */
-#gt { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); pointer-events: none; }
-.gt-box { text-align: center; animation: pop 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
-.gt-box h1 { font-size: 100px; font-weight: 900; color: var(--p); filter: drop-shadow(0 0 30px var(--p)); letter-spacing: 15px; }
-@keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+/* SECTION HEADER */
+.sec { display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.sec-t { font-family:var(--f-h); font-size:22px; letter-spacing:2px; color:var(--t); display:flex; align-items:center; gap:10px; }
+.sec-t::before { content:''; width:4px; height:22px; background:linear-gradient(to bottom, var(--p), var(--s)); border-radius:2px; }
+.sec-b { font-size:11px; color:var(--t2); background:var(--bg3); border:1px solid var(--t3); padding:4px 12px; border-radius:100px; font-weight:700; }
+
+/* MATCH CARD */
+.mc {
+  background:var(--cd); border:1px solid var(--t3);
+  border-radius:var(--br); margin-bottom:14px; overflow:hidden;
+  box-shadow:var(--sh); transition:all .2s; cursor:pointer;
+}
+.mc:hover { border-color:var(--pb); transform:translateY(-2px); box-shadow:0 20px 48px rgba(0,0,0,0.7); }
+.mc.live { border-color:rgba(239,68,68,0.3); }
+.mc.mymatch { border-color:var(--pb); border-width:2px; }
+.mc-top {
+  padding:10px 18px;
+  display:flex; align-items:center; justify-content:space-between;
+  background:rgba(255,255,255,0.02); border-bottom:1px solid var(--t3);
+}
+.mc-lg { font-size:11px; font-weight:800; color:var(--t2); letter-spacing:.5px; }
+.mc-top-r { display:flex; align-items:center; gap:8px; }
+.mc-badge {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:10px; font-weight:800; letter-spacing:.5px;
+  padding:4px 12px; border-radius:100px;
+}
+.mc-badge.live { background:rgba(239,68,68,0.12); color:var(--red); border:1px solid rgba(239,68,68,0.3); }
+.mc-badge.fin { background:var(--bg3); color:var(--t2); }
+.mc-badge.sch { background:var(--ps); color:var(--p); border:1px solid var(--pb); }
+.mc-dot { width:6px; height:6px; border-radius:50%; background:var(--red); animation:pulse .9s infinite; flex-shrink:0; }
+.mc-body { padding:20px 18px; }
+.mc-row { display:flex; align-items:center; gap:10px; }
+.mc-tm { flex:1; display:flex; align-items:center; gap:10px; min-width:0; }
+.mc-tm.aw { flex-direction:row-reverse; }
+.mc-cr { width:34px; height:34px; object-fit:contain; flex-shrink:0; }
+.mc-nm { font-size:15px; font-weight:800; color:var(--t); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.mc-tm.aw .mc-nm { text-align:right; }
+.mc-sc-box {
+  background:#000; padding:10px 20px; border-radius:12px;
+  border:1px solid var(--pb); flex-shrink:0;
+  font-family:var(--f-h); font-size:32px; letter-spacing:4px; color:var(--t);
+}
+.mc-sc-box.live { color:var(--p); border-color:var(--p); box-shadow:0 0 20px rgba(16,185,129,0.2); }
+.mc-vs { font-family:var(--f-h); font-size:28px; color:var(--t3); flex-shrink:0; }
+
+/* 골 기록 */
+.mc-goals { padding:8px 18px 12px; display:flex; justify-content:space-between; border-top:1px solid var(--t3); }
+.mc-gs { display:flex; flex-direction:column; gap:3px; flex:1; }
+.mc-gs.aw { align-items:flex-end; }
+.mc-gi { font-size:11px; color:var(--t2); display:flex; align-items:center; gap:5px; }
+.mc-gi .gm { font-size:10px; font-weight:800; color:var(--p); }
+
+/* 모멘텀 */
+.mom { padding:10px 18px 14px; border-top:1px solid var(--t3); }
+.mom-lbl { display:flex; justify-content:space-between; font-size:11px; color:var(--t2); margin-bottom:6px; }
+.mom-bar { height:5px; background:var(--t3); border-radius:3px; display:flex; overflow:hidden; gap:1px; }
+.ms { height:100%; flex:1; border-radius:2px; }
+.ms.h { background:var(--p); } .ms.a { background:var(--red); } .ms.n { background:var(--bg3); }
+
+/* 배당 */
+.odds-row { display:flex; gap:8px; padding:10px 18px; border-top:1px solid var(--t3); }
+.obtn { flex:1; background:var(--bg3); border:1px solid var(--t3); border-radius:10px; padding:9px 4px; text-align:center; }
+.olbl { font-size:10px; color:var(--t2); margin-bottom:3px; font-weight:700; }
+.oval { font-size:15px; font-weight:900; color:var(--t); }
+.oval.fav { color:var(--p); }
+
+/* 알림 버튼 */
+.nb-btn { padding:3px 9px; border-radius:8px; border:1px solid var(--t3); background:transparent; font-size:10px; color:var(--t2); cursor:pointer; font-family:var(--f); transition:all .15s; }
+.nb-btn.on { background:var(--ps); border-color:var(--pb); color:var(--p); }
+
+/* PILLS */
+.pills { display:flex; gap:8px; overflow-x:auto; scrollbar-width:none; padding-bottom:4px; margin-bottom:22px; }
+.pills::-webkit-scrollbar { display:none; }
+.pill {
+  padding:10px 20px; border-radius:100px;
+  border:1px solid var(--t3); background:var(--bg2);
+  color:var(--t2); cursor:pointer; font-weight:700; font-size:13px;
+  white-space:nowrap; transition:all .2s; display:flex; align-items:center; gap:8px; font-family:var(--f);
+}
+.pill img { width:16px; height:16px; object-fit:contain; }
+.pill.on { background:var(--p); color:#000; border-color:var(--p); box-shadow:0 0 20px rgba(16,185,129,0.25); }
+
+/* STANDINGS */
+.std-hdr {
+  display:flex; align-items:center; gap:14px;
+  padding:16px 18px; background:var(--bg2);
+  border-radius:16px; margin-bottom:16px; border:1px solid var(--t3);
+}
+.std-hdr img { width:32px; height:32px; object-fit:contain; }
+.std-hdr h3 { font-size:16px; font-weight:800; color:var(--t); }
+.std-hdr small { color:var(--t2); font-size:12px; margin-left:auto; }
+.stt { width:100%; border-collapse:separate; border-spacing:0 6px; }
+.stt th { padding:10px 10px; color:var(--t2); font-size:10px; letter-spacing:1px; font-weight:800; text-transform:uppercase; }
+.stt th:nth-child(2) { text-align:left; }
+.stt td { padding:14px 10px; background:var(--bg2); text-align:center; font-weight:700; font-size:13px; border-top:1px solid rgba(255,255,255,0.03); }
+.stt td:first-child { border-radius:12px 0 0 12px; }
+.stt td:last-child { border-radius:0 12px 12px 0; }
+.stt td:nth-child(2) { text-align:left; }
+.nm-cell { display:flex; align-items:center; gap:10px; }
+.nm-cell img { width:24px; height:24px; object-fit:contain; flex-shrink:0; }
+.pts { color:var(--p); font-weight:900; font-size:15px; }
+.stt tr.my td { background:rgba(16,185,129,0.06); }
+.stt tr.my .pts { color:var(--p); }
+.sp { font-weight:900; font-size:14px; }
+.sp.top { color:var(--p); }
+.sp.rel { color:var(--am); }
+.sp.bot { color:var(--red); }
+.cl-row td:first-child { border-left:3px solid var(--p); }
+.el-row td:first-child { border-left:3px solid var(--am); }
+.rg-row td:first-child { border-left:3px solid var(--red); }
+.sform { display:flex; gap:3px; }
+.sfd { width:9px; height:9px; border-radius:50%; }
+
+/* SCHEDULE DATE NAV */
+.date-nav { display:flex; align-items:center; gap:6px; margin-bottom:20px; }
+.date-arr { background:var(--bg2); border:1px solid var(--t3); border-radius:10px; width:34px; height:34px; display:flex; align-items:center; justify-content:center; cursor:pointer; color:var(--t2); font-size:16px; flex-shrink:0; transition:all .15s; }
+.date-arr:hover { border-color:var(--pb); color:var(--p); }
+.date-strip { display:flex; gap:6px; overflow-x:auto; scrollbar-width:none; flex:1; }
+.date-strip::-webkit-scrollbar { display:none; }
+.date-btn { flex-shrink:0; background:var(--bg2); border:1px solid var(--t3); border-radius:10px; padding:6px 12px; cursor:pointer; font-family:var(--f); font-size:11px; font-weight:700; color:var(--t2); line-height:1.4; text-align:center; transition:all .15s; }
+.date-btn span { display:block; font-size:12px; font-weight:800; color:var(--t); }
+.date-btn.sel { background:var(--ps); border-color:var(--pb); color:var(--p); }
+.date-btn.sel span { color:var(--p); }
+.date-btn.today { font-weight:900; }
+
+/* SCHEDULE CARD */
+.lg-grp { margin-bottom:12px; }
+.lg-hd {
+  display:flex; align-items:center; gap:12px;
+  padding:12px 18px; background:var(--bg2);
+  border-radius:14px; cursor:pointer; margin-bottom:6px;
+  border:1px solid var(--t3); transition:all .15s;
+}
+.lg-hd:hover { border-color:var(--pb); }
+.lg-hd img { width:20px; height:20px; object-fit:contain; }
+.lg-nm { font-size:14px; font-weight:800; color:var(--t); flex:1; }
+.lg-cnt { font-size:11px; color:var(--t2); background:var(--bg3); padding:3px 10px; border-radius:100px; font-weight:700; }
+.lg-arr { font-size:12px; color:var(--t2); transition:transform .2s; }
+.lg-arr.cl { transform:rotate(-90deg); }
+.lg-ms { display:flex; flex-direction:column; border-radius:14px; border:1px solid var(--t3); overflow:hidden; }
+.sm { background:var(--bg2); padding:12px 18px; display:flex; align-items:center; gap:10px; cursor:pointer; border-bottom:1px solid var(--t3); transition:background .15s; }
+.sm:last-child { border-bottom:none; }
+.sm:hover { background:var(--bg3); }
+.sm-time { font-size:13px; font-weight:800; width:42px; text-align:center; flex-shrink:0; font-family:var(--f-h); letter-spacing:1px; }
+.sm-teams { flex:1; display:flex; flex-direction:column; gap:5px; min-width:0; }
+.sm-team { display:flex; align-items:center; gap:8px; }
+.sm-cr { width:16px; height:16px; object-fit:contain; }
+.sm-nm { font-size:13px; font-weight:700; color:var(--t2); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1; }
+.sm-nm.win { color:var(--t); font-weight:900; }
+.sm-sc { font-size:14px; font-weight:900; width:18px; text-align:right; }
+
+/* PLAYERS */
+.pc { background:var(--bg2); border:1px solid var(--t3); border-radius:16px; padding:16px 18px; margin-bottom:10px; display:flex; align-items:center; gap:14px; transition:all .2s; }
+.pc:hover { border-color:var(--pb); }
+.pc.me { border-color:var(--pb); background:var(--ps); }
+.pc-rk { font-family:var(--f-h); font-size:22px; color:var(--t2); width:32px; text-align:center; flex-shrink:0; }
+.pc-rk.top { color:var(--p); }
+.pc-info { flex:1; min-width:0; }
+.pc-name { font-size:15px; font-weight:800; color:var(--t); }
+.pc-team { font-size:12px; color:var(--t2); margin-top:2px; }
+.pc-val { font-family:var(--f-h); font-size:28px; color:var(--p); }
+.pc-lbl { font-size:10px; color:var(--t2); font-weight:700; }
+
+/* FANZONE */
+.fz-hero {
+  background:linear-gradient(135deg, var(--bg2), var(--bg3));
+  border:1px solid var(--pb); border-radius:24px; padding:28px;
+  text-align:center; margin-bottom:20px;
+  box-shadow:0 0 40px rgba(16,185,129,0.1);
+}
+.fz-em { font-size:52px; margin-bottom:8px; }
+.fz-lvname { font-family:var(--f-h); font-size:28px; letter-spacing:2px; color:var(--p); margin-bottom:4px; }
+.fz-sub { font-size:13px; color:var(--t2); margin-bottom:18px; }
+.fz-pw { height:8px; background:var(--t3); border-radius:4px; overflow:hidden; margin-bottom:6px; }
+.fz-pb { height:100%; border-radius:4px; background:linear-gradient(90deg, var(--p), #34d399); transition:width .8s; }
+.fz-pl { display:flex; justify-content:space-between; font-size:11px; color:var(--t2); margin-bottom:20px; }
+.fz-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; }
+.fzs { background:var(--bg3); border:1px solid var(--t3); border-radius:14px; padding:14px; text-align:center; }
+.fzs-v { font-family:var(--f-h); font-size:24px; color:var(--t); }
+.fzs-l { font-size:11px; color:var(--t2); margin-top:3px; font-weight:700; }
+.fz-match { background:var(--bg2); border:1px solid var(--t3); border-radius:14px; padding:16px 18px; margin-bottom:8px; display:flex; align-items:center; gap:12px; }
+.fz-info { flex:1; }
+.fz-teams { font-size:14px; font-weight:800; color:var(--t); margin-bottom:3px; }
+.fz-time { font-size:12px; color:var(--t2); }
+.fz-btn { padding:10px 16px; border-radius:10px; border:1px solid var(--pb); background:var(--ps); color:var(--p); font-size:12px; font-weight:800; cursor:pointer; font-family:var(--f); transition:all .15s; white-space:nowrap; }
+.fz-btn:hover { background:var(--p); color:#000; }
+.fz-btn:disabled { opacity:.4; cursor:not-allowed; border-color:var(--t3); background:var(--bg3); color:var(--t2); }
+.fz-btn:disabled:hover { background:var(--bg3); color:var(--t2); }
+.ci { background:var(--bg2); border:1px solid var(--t3); border-radius:12px; padding:12px 16px; margin-bottom:6px; display:flex; align-items:center; justify-content:space-between; }
+.ci-badge { font-size:11px; font-weight:800; color:var(--p); background:var(--ps); border:1px solid var(--pb); padding:3px 10px; border-radius:100px; }
+
+/* HUB NEWS */
+.nc { background:var(--bg2); border:1px solid var(--t3); border-radius:18px; padding:18px; margin-bottom:12px; cursor:pointer; transition:all .2s; }
+.nc:hover { border-color:var(--pb); transform:translateY(-2px); }
+.nc-src { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+.nc-av { width:32px; height:32px; border-radius:50%; background:var(--bg3); display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; }
+.nc-author { font-size:13px; font-weight:800; color:var(--p); }
+.nc-time { font-size:11px; color:var(--t2); margin-left:auto; }
+.nc-title { font-size:15px; font-weight:800; color:var(--t); line-height:1.5; margin-bottom:8px; }
+.nc-body { font-size:13px; color:var(--t2); line-height:1.7; }
+.nc-tags { display:flex; gap:6px; margin-top:10px; flex-wrap:wrap; }
+.nc-tag { font-size:10px; background:var(--bg3); border:1px solid var(--t3); color:var(--t2); padding:3px 10px; border-radius:100px; font-weight:700; }
+.tr-b { font-size:10px; font-weight:800; padding:3px 10px; border-radius:100px; margin-bottom:8px; display:inline-flex; align-items:center; gap:4px; }
+.tr-b.done { background:rgba(16,185,129,.12); border:1px solid var(--pb); color:var(--p); }
+.tr-b.rumor { background:rgba(245,158,11,.1); border:1px solid rgba(245,158,11,.3); color:var(--am); }
+
+/* MODAL */
+.modal { position:fixed; inset:0; background:rgba(0,0,0,.8); z-index:500; overflow-y:auto; padding:20px; display:none; backdrop-filter:blur(8px); }
+.modal.show { display:block; }
+.modal-in { background:var(--bg2); border-radius:24px; max-width:520px; margin:0 auto; border:1px solid var(--t3); overflow:hidden; box-shadow:0 40px 80px rgba(0,0,0,.8); }
+.modal-hd { padding:18px 22px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--t3); }
+.modal-ttl { font-family:var(--f-h); font-size:20px; letter-spacing:2px; color:var(--t); }
+.modal-x { background:none; border:none; color:var(--t2); font-size:26px; cursor:pointer; line-height:1; padding:0; }
+.modal-body { padding:22px; }
+
+/* ═══ GOAL OVERLAY ═══ */
+#gt {
+  position:fixed; inset:0; z-index:9999;
+  display:none; align-items:center; justify-content:center;
+  background:rgba(0,0,0,.88); backdrop-filter:blur(20px);
+  pointer-events:none;
+}
+#gt.show { display:flex; }
+.gt-box { text-align:center; animation:gtPop 4.5s ease forwards; }
+@keyframes gtPop {
+  0%{opacity:0;transform:scale(.3) rotate(-10deg)}
+  12%{opacity:1;transform:scale(1.06) rotate(2deg)}
+  18%{transform:scale(1) rotate(0)}
+  80%{opacity:1}
+  100%{opacity:0;transform:scale(.85)}
+}
+.gt-net { display:block; margin:0 auto 16px; animation:netShake .5s ease .3s 4; }
+@keyframes netShake {
+  0%,100%{transform:scaleY(1)}
+  25%{transform:scaleY(1.1)}
+  75%{transform:scaleY(0.95)}
+}
+.gt-ball { font-size:72px; display:block; animation:ballFly .7s cubic-bezier(.2,1.6,.5,1); }
+@keyframes ballFly { 0%{transform:scale(0) rotate(-720deg)} 100%{transform:scale(1) rotate(0)} }
+.gt-word {
+  font-family:var(--f-h); font-size:80px; letter-spacing:10px;
+  color:var(--t); display:block; line-height:1;
+  text-shadow:0 0 40px var(--p), 0 0 80px rgba(16,185,129,.5);
+  animation:glow 1s ease infinite alternate;
+}
+@keyframes glow { from{text-shadow:0 0 30px var(--p)} to{text-shadow:0 0 60px var(--p),0 0 100px rgba(16,185,129,.6)} }
+.gt-scorer { font-size:22px; font-weight:800; color:var(--p); display:block; margin-top:10px; }
+.gt-details { font-size:14px; color:rgba(255,255,255,.6); display:block; margin-top:6px; }
+
+/* LOADERS */
+.ldr { display:flex; flex-direction:column; align-items:center; justify-content:center; padding:60px 20px; gap:14px; }
+.spin { width:30px; height:30px; border:2.5px solid var(--t3); border-top-color:var(--p); border-radius:50%; animation:spin .7s linear infinite; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.spin-t { font-size:13px; color:var(--t2); font-weight:700; }
+.empty { text-align:center; padding:60px 20px; font-size:14px; color:var(--t2); line-height:2; }
+.retry-btn { display:inline-block; margin-top:12px; padding:10px 20px; border-radius:100px; border:1px solid var(--pb); background:var(--ps); color:var(--p); font-size:13px; font-weight:800; cursor:pointer; font-family:var(--f); }
+
+/* TOAST */
+#toast { position:fixed; top:74px; left:50%; transform:translateX(-50%); background:var(--bg2); border:1px solid var(--pb); border-radius:100px; padding:10px 22px; font-size:13px; font-weight:700; color:var(--t); z-index:8000; display:none; box-shadow:var(--sh); white-space:nowrap; }
+
+/* LEVEL UP */
+#lvup { position:fixed; inset:0; background:rgba(0,0,0,.95); z-index:9998; display:none; align-items:center; justify-content:center; flex-direction:column; gap:14px; }
+#lvup.show { display:flex; animation:gtPop .5s ease; }
+.lu-em { font-size:90px; }
+.lu-txt { font-family:var(--f-h); font-size:40px; letter-spacing:4px; color:var(--p); }
+.lu-sub { font-size:16px; color:var(--t2); }
 </style>
 </head>
 <body>
 
+<!-- ONBOARDING -->
 <div id="ob">
-    <div class="ob-container">
-        <div class="ob-header">
-            <h1>CHOOSE YOUR CLUBS</h1>
-            <p>Select up to 2 teams. Global data & theme will adapt to your choice.</p>
+  <div class="ob-wrap">
+    <div class="ob-hero">
+      <div class="ob-logo-icon"><span class="ob-logo-p">P</span></div>
+      <h1 class="ob-title">PITCH PRO</h1>
+      <p class="ob-sub">응원하는 팀을 선택하세요 <span>최대 2개</span></p>
+      <div class="ob-counter">선택됨: <span class="cnt" id="sel-cnt">0</span> / 2</div>
+    </div>
+
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://crests.football-data.org/PL.png" onerror="this.style.opacity='.3'">
+        <h3>Premier League</h3>
+        <small>2025-26</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,57,'PL','#EF0107','Arsenal','https://crests.football-data.org/57.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/57.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Arsenal</span>
         </div>
-        <div id="ob-list"></div>
-        <button class="start-btn" onclick="startApp()">SYNC & START PITCH PRO</button>
+        <div class="ob-team" onclick="toggleTeam(this,65,'PL','#6CABDD','Man City','https://crests.football-data.org/65.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/65.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Man City</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,64,'PL','#C8102E','Liverpool','https://crests.football-data.org/64.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/64.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Liverpool</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,66,'PL','#DA291C','Man United','https://crests.football-data.org/66.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/66.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Man United</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,61,'PL','#034694','Chelsea','https://crests.football-data.org/61.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/61.png" onerror="this.src='https://ui-avatars.com/api/?name=C&background=161b22&color=10b981&size=46'">
+          <span>Chelsea</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,73,'PL','#132257','Tottenham','https://crests.football-data.org/73.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/73.png" onerror="this.src='https://ui-avatars.com/api/?name=T&background=161b22&color=10b981&size=46'">
+          <span>Tottenham</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,67,'PL','#241F20','Newcastle','https://crests.football-data.org/67.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/67.png" onerror="this.src='https://ui-avatars.com/api/?name=N&background=161b22&color=10b981&size=46'">
+          <span>Newcastle</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,58,'PL','#670E36','Aston Villa','https://crests.football-data.org/58.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/58.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Aston Villa</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,563,'PL','#7A263A','West Ham','https://crests.football-data.org/563.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/563.png" onerror="this.src='https://ui-avatars.com/api/?name=W&background=161b22&color=10b981&size=46'">
+          <span>West Ham</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,354,'PL','#1B458F','Crystal Palace','https://crests.football-data.org/354.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/354.png" onerror="this.src='https://ui-avatars.com/api/?name=C&background=161b22&color=10b981&size=46'">
+          <span>Crystal Palace</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,397,'PL','#0057B8','Brighton','https://crests.football-data.org/397.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/397.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Brighton</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,402,'PL','#E30613','Brentford','https://crests.football-data.org/402.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/402.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Brentford</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,76,'PL','#FDB913','Wolves','https://crests.football-data.org/76.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/76.png" onerror="this.src='https://ui-avatars.com/api/?name=W&background=161b22&color=10b981&size=46'">
+          <span>Wolves</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,74,'PL','#003399','Everton','https://crests.football-data.org/74.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/74.png" onerror="this.src='https://ui-avatars.com/api/?name=E&background=161b22&color=10b981&size=46'">
+          <span>Everton</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,1044,'PL','#CC0000','Nottm Forest','https://crests.football-data.org/1044.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/1044.png" onerror="this.src='https://ui-avatars.com/api/?name=N&background=161b22&color=10b981&size=46'">
+          <span>Nottm Forest</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,72,'PL','#CC0000','Fulham','https://crests.football-data.org/72.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/72.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>Fulham</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,715,'PL','#DA291C','Bournemouth','https://crests.football-data.org/715.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/715.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Bournemouth</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,341,'PL','#FFCD00','Leeds Utd','https://crests.football-data.org/341.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/341.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Leeds Utd</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,394,'PL','#CC0000','Sunderland','https://crests.football-data.org/394.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/394.png" onerror="this.src='https://ui-avatars.com/api/?name=S&background=161b22&color=10b981&size=46'">
+          <span>Sunderland</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,328,'PL','#6B2C91','Burnley','https://crests.football-data.org/328.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/328.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Burnley</span>
+        </div>
+      </div>
     </div>
+
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://crests.football-data.org/PD.png" onerror="this.style.opacity='.3'">
+        <h3>La Liga</h3>
+        <small>2025-26</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,86,'PD','#FEBE10','Real Madrid','https://crests.football-data.org/86.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/86.png" onerror="this.src='https://ui-avatars.com/api/?name=R&background=161b22&color=10b981&size=46'">
+          <span>Real Madrid</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,81,'PD','#A50044','Barcelona','https://crests.football-data.org/81.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/81.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Barcelona</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,78,'PD','#CC0000','Atletico','https://crests.football-data.org/78.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/78.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Atletico</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,94,'PD','#FFD700','Villarreal','https://crests.football-data.org/94.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/94.png" onerror="this.src='https://ui-avatars.com/api/?name=V&background=161b22&color=10b981&size=46'">
+          <span>Villarreal</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,82,'PD','#D40511','Sevilla','https://crests.football-data.org/82.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/82.png" onerror="this.src='https://ui-avatars.com/api/?name=S&background=161b22&color=10b981&size=46'">
+          <span>Sevilla</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,90,'PD','#00954C','Real Betis','https://crests.football-data.org/90.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/90.png" onerror="this.src='https://ui-avatars.com/api/?name=R&background=161b22&color=10b981&size=46'">
+          <span>Real Betis</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,92,'PD','#0067B1','R.Sociedad','https://crests.football-data.org/92.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/92.png" onerror="this.src='https://ui-avatars.com/api/?name=R&background=161b22&color=10b981&size=46'">
+          <span>R.Sociedad</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,87,'PD','#EE2523','Athletic','https://crests.football-data.org/87.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/87.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Athletic</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,95,'PD','#FF7F00','Valencia','https://crests.football-data.org/95.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/95.png" onerror="this.src='https://ui-avatars.com/api/?name=V&background=161b22&color=10b981&size=46'">
+          <span>Valencia</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,558,'PD','#CC0000','Girona','https://crests.football-data.org/558.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/558.png" onerror="this.src='https://ui-avatars.com/api/?name=G&background=161b22&color=10b981&size=46'">
+          <span>Girona</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,279,'PD','#CC0000','Mallorca','https://crests.football-data.org/279.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/279.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Mallorca</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,80,'PD','#6BB5E0','Celta Vigo','https://crests.football-data.org/80.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/80.png" onerror="this.src='https://ui-avatars.com/api/?name=C&background=161b22&color=10b981&size=46'">
+          <span>Celta Vigo</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,264,'PD','#0064C8','Alaves','https://crests.football-data.org/264.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/264.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Alaves</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,263,'PD','#003DA5','Espanyol','https://crests.football-data.org/263.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/263.png" onerror="this.src='https://ui-avatars.com/api/?name=E&background=161b22&color=10b981&size=46'">
+          <span>Espanyol</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,559,'PD','#0066CC','Getafe','https://crests.football-data.org/559.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/559.png" onerror="this.src='https://ui-avatars.com/api/?name=G&background=161b22&color=10b981&size=46'">
+          <span>Getafe</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,289,'PD','#CC0000','Osasuna','https://crests.football-data.org/289.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/289.png" onerror="this.src='https://ui-avatars.com/api/?name=O&background=161b22&color=10b981&size=46'">
+          <span>Osasuna</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,745,'PD','#063EA5','Levante','https://crests.football-data.org/745.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/745.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Levante</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,277,'PD','#007800','Elche','https://crests.football-data.org/277.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/277.png" onerror="this.src='https://ui-avatars.com/api/?name=E&background=161b22&color=10b981&size=46'">
+          <span>Elche</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,726,'PD','#FFDD00','Rayo Vallecano','https://crests.football-data.org/726.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/726.png" onerror="this.src='https://ui-avatars.com/api/?name=R&background=161b22&color=10b981&size=46'">
+          <span>Rayo Vallecano</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://crests.football-data.org/BL1.png" onerror="this.style.opacity='.3'">
+        <h3>Bundesliga</h3>
+        <small>2025-26</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,5,'BL1','#DC052D','Bayern','https://crests.football-data.org/5.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/5.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Bayern</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,4,'BL1','#FDE100','Dortmund','https://crests.football-data.org/4.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/4.png" onerror="this.src='https://ui-avatars.com/api/?name=D&background=161b22&color=10b981&size=46'">
+          <span>Dortmund</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,3,'BL1','#E32221','Leverkusen','https://crests.football-data.org/3.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/3.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Leverkusen</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,721,'BL1','#CC0000','Leipzig','https://crests.football-data.org/721.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/721.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Leipzig</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,13,'BL1','#E2001A','Frankfurt','https://crests.football-data.org/13.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/13.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>Frankfurt</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,18,'BL1','#65B32E','Wolfsburg','https://crests.football-data.org/18.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/18.png" onerror="this.src='https://ui-avatars.com/api/?name=W&background=161b22&color=10b981&size=46'">
+          <span>Wolfsburg</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,11,'BL1','#CC0000','Stuttgart','https://crests.football-data.org/11.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/11.png" onerror="this.src='https://ui-avatars.com/api/?name=S&background=161b22&color=10b981&size=46'">
+          <span>Stuttgart</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,10,'BL1','#CC0000','Freiburg','https://crests.football-data.org/10.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/10.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>Freiburg</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,6,'BL1','#1873B8','Hoffenheim','https://crests.football-data.org/6.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/6.png" onerror="this.src='https://ui-avatars.com/api/?name=H&background=161b22&color=10b981&size=46'">
+          <span>Hoffenheim</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,9,'BL1','#CC0000','Augsburg','https://crests.football-data.org/9.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/9.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Augsburg</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,39,'BL1','#CC0000','Mainz','https://crests.football-data.org/39.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/39.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Mainz</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,43,'BL1','#1D9B43','Werder','https://crests.football-data.org/43.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/43.png" onerror="this.src='https://ui-avatars.com/api/?name=W&background=161b22&color=10b981&size=46'">
+          <span>Werder</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,38,'BL1','#000000','Gladbach','https://crests.football-data.org/38.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/38.png" onerror="this.src='https://ui-avatars.com/api/?name=G&background=161b22&color=10b981&size=46'">
+          <span>Gladbach</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,28,'BL1','#C8102E','St Pauli','https://crests.football-data.org/28.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/28.png" onerror="this.src='https://ui-avatars.com/api/?name=S&background=161b22&color=10b981&size=46'">
+          <span>St Pauli</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,7,'BL1','#CC0000','Heidenheim','https://crests.football-data.org/7.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/7.png" onerror="this.src='https://ui-avatars.com/api/?name=H&background=161b22&color=10b981&size=46'">
+          <span>Heidenheim</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,756,'BL1','#CC0000','Union Berlin','https://crests.football-data.org/756.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/756.png" onerror="this.src='https://ui-avatars.com/api/?name=U&background=161b22&color=10b981&size=46'">
+          <span>Union Berlin</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,16,'BL1','#FC4444','FC Köln','https://crests.football-data.org/16.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/16.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>FC Köln</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,735,'BL1','#003DA5','Hamburg','https://crests.football-data.org/735.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/735.png" onerror="this.src='https://ui-avatars.com/api/?name=H&background=161b22&color=10b981&size=46'">
+          <span>Hamburg</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://crests.football-data.org/SA.png" onerror="this.style.opacity='.3'">
+        <h3>Serie A</h3>
+        <small>2025-26</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,108,'SA','#0068A8','Inter','https://crests.football-data.org/108.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/108.png" onerror="this.src='https://ui-avatars.com/api/?name=I&background=161b22&color=10b981&size=46'">
+          <span>Inter</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,98,'SA','#FB090B','AC Milan','https://crests.football-data.org/98.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/98.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>AC Milan</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,113,'SA','#12A0D7','Napoli','https://crests.football-data.org/113.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/113.png" onerror="this.src='https://ui-avatars.com/api/?name=N&background=161b22&color=10b981&size=46'">
+          <span>Napoli</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,109,'SA','#000000','Juventus','https://crests.football-data.org/109.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/109.png" onerror="this.src='https://ui-avatars.com/api/?name=J&background=161b22&color=10b981&size=46'">
+          <span>Juventus</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,100,'SA','#8E1F2F','AS Roma','https://crests.football-data.org/100.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/100.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>AS Roma</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,102,'SA','#87D8F7','Lazio','https://crests.football-data.org/102.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/102.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Lazio</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,107,'SA','#4C2D8C','Fiorentina','https://crests.football-data.org/107.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/107.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>Fiorentina</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,110,'SA','#1E3F6D','Atalanta','https://crests.football-data.org/110.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/110.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Atalanta</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,103,'SA','#CC0000','Bologna','https://crests.football-data.org/103.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/103.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Bologna</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,114,'SA','#8B1A1A','Torino','https://crests.football-data.org/114.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/114.png" onerror="this.src='https://ui-avatars.com/api/?name=T&background=161b22&color=10b981&size=46'">
+          <span>Torino</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,104,'SA','#CC0000','Genoa','https://crests.football-data.org/104.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/104.png" onerror="this.src='https://ui-avatars.com/api/?name=G&background=161b22&color=10b981&size=46'">
+          <span>Genoa</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,115,'SA','#CC0000','Cagliari','https://crests.football-data.org/115.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/115.png" onerror="this.src='https://ui-avatars.com/api/?name=C&background=161b22&color=10b981&size=46'">
+          <span>Cagliari</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,105,'SA','#FFD700','Verona','https://crests.football-data.org/105.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/105.png" onerror="this.src='https://ui-avatars.com/api/?name=V&background=161b22&color=10b981&size=46'">
+          <span>Verona</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,586,'SA','#FFD700','Lecce','https://crests.football-data.org/586.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/586.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Lecce</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,118,'SA','#000000','Udinese','https://crests.football-data.org/118.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/118.png" onerror="this.src='https://ui-avatars.com/api/?name=U&background=161b22&color=10b981&size=46'">
+          <span>Udinese</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,470,'SA','#003DA5','Como','https://crests.football-data.org/470.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/470.png" onerror="this.src='https://ui-avatars.com/api/?name=C&background=161b22&color=10b981&size=46'">
+          <span>Como</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,106,'SA','#FFD700','Parma','https://crests.football-data.org/106.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/106.png" onerror="this.src='https://ui-avatars.com/api/?name=P&background=161b22&color=10b981&size=46'">
+          <span>Parma</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,1185,'SA','#00A551','Sassuolo','https://crests.football-data.org/1185.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/1185.png" onerror="this.src='https://ui-avatars.com/api/?name=S&background=161b22&color=10b981&size=46'">
+          <span>Sassuolo</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,1107,'SA','#004B8D','Pisa','https://crests.football-data.org/1107.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/1107.png" onerror="this.src='https://ui-avatars.com/api/?name=P&background=161b22&color=10b981&size=46'">
+          <span>Pisa</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,1197,'SA','#CC0000','Cremonese','https://crests.football-data.org/1197.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/1197.png" onerror="this.src='https://ui-avatars.com/api/?name=C&background=161b22&color=10b981&size=46'">
+          <span>Cremonese</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://crests.football-data.org/FL1.png" onerror="this.style.opacity='.3'">
+        <h3>Ligue 1</h3>
+        <small>2025-26</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,524,'FL1','#003F8B','PSG','https://crests.football-data.org/524.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/524.png" onerror="this.src='https://ui-avatars.com/api/?name=P&background=161b22&color=10b981&size=46'">
+          <span>PSG</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,548,'FL1','#DA291C','Monaco','https://crests.football-data.org/548.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/548.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Monaco</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,516,'FL1','#009AC7','Marseille','https://crests.football-data.org/516.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/516.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Marseille</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,518,'FL1','#0055A4','Lyon','https://crests.football-data.org/518.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/518.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Lyon</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,512,'FL1','#BE2127','Lille','https://crests.football-data.org/512.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/512.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Lille</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,511,'FL1','#FFD700','Lens','https://crests.football-data.org/511.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/511.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Lens</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,546,'FL1','#CC0000','Rennes','https://crests.football-data.org/546.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/546.png" onerror="this.src='https://ui-avatars.com/api/?name=R&background=161b22&color=10b981&size=46'">
+          <span>Rennes</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,514,'FL1','#CC0000','Nice','https://crests.football-data.org/514.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/514.png" onerror="this.src='https://ui-avatars.com/api/?name=N&background=161b22&color=10b981&size=46'">
+          <span>Nice</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,543,'FL1','#7B2C8B','Toulouse','https://crests.football-data.org/543.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/543.png" onerror="this.src='https://ui-avatars.com/api/?name=T&background=161b22&color=10b981&size=46'">
+          <span>Toulouse</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,549,'FL1','#FFD700','Nantes','https://crests.football-data.org/549.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/549.png" onerror="this.src='https://ui-avatars.com/api/?name=N&background=161b22&color=10b981&size=46'">
+          <span>Nantes</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,547,'FL1','#003DA5','Strasbourg','https://crests.football-data.org/547.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/547.png" onerror="this.src='https://ui-avatars.com/api/?name=S&background=161b22&color=10b981&size=46'">
+          <span>Strasbourg</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,541,'FL1','#003DA5','Brest','https://crests.football-data.org/541.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/541.png" onerror="this.src='https://ui-avatars.com/api/?name=B&background=161b22&color=10b981&size=46'">
+          <span>Brest</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,544,'FL1','#0055A4','Le Havre','https://crests.football-data.org/544.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/544.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Le Havre</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,522,'FL1','#000000','Angers','https://crests.football-data.org/522.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/522.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Angers</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,52,'FL1','#003DA5','Auxerre','https://crests.football-data.org/52.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/52.png" onerror="this.src='https://ui-avatars.com/api/?name=A&background=161b22&color=10b981&size=46'">
+          <span>Auxerre</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,553,'FL1','#CC0000','Lorient','https://crests.football-data.org/553.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/553.png" onerror="this.src='https://ui-avatars.com/api/?name=L&background=161b22&color=10b981&size=46'">
+          <span>Lorient</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,593,'FL1','#003DA5','Paris FC','https://crests.football-data.org/593.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/593.png" onerror="this.src='https://ui-avatars.com/api/?name=P&background=161b22&color=10b981&size=46'">
+          <span>Paris FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,542,'FL1','#881B29','Metz','https://crests.football-data.org/542.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://crests.football-data.org/542.png" onerror="this.src='https://ui-avatars.com/api/?name=M&background=161b22&color=10b981&size=46'">
+          <span>Metz</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://media.api-sports.io/football/leagues/292.png" onerror="this.style.opacity='.3'">
+        <h3>K리그 1</h3>
+        <small>2026 시즌</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,2762,'KL1','#006738','전북현대','https://media.api-sports.io/football/teams/2762.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2762.png" onerror="this.src='https://ui-avatars.com/api/?name=전&background=161b22&color=10b981&size=46'">
+          <span>전북현대</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2759,'KL1','#1E4799','울산HD','https://media.api-sports.io/football/teams/2759.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2759.png" onerror="this.src='https://ui-avatars.com/api/?name=울&background=161b22&color=10b981&size=46'">
+          <span>울산HD</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2763,'KL1','#E2002D','FC서울','https://media.api-sports.io/football/teams/2763.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2763.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>FC서울</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2764,'KL1','#C8102E','포항스틸러스','https://media.api-sports.io/football/teams/2764.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2764.png" onerror="this.src='https://ui-avatars.com/api/?name=포&background=161b22&color=10b981&size=46'">
+          <span>포항스틸러스</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2766,'KL1','#003DA5','강원FC','https://media.api-sports.io/football/teams/2766.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2766.png" onerror="this.src='https://ui-avatars.com/api/?name=강&background=161b22&color=10b981&size=46'">
+          <span>강원FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2760,'KL1','#FF6600','제주유나이티드','https://media.api-sports.io/football/teams/2760.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2760.png" onerror="this.src='https://ui-avatars.com/api/?name=제&background=161b22&color=10b981&size=46'">
+          <span>제주유나이티드</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2765,'KL1','#E5061A','광주FC','https://media.api-sports.io/football/teams/2765.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2765.png" onerror="this.src='https://ui-avatars.com/api/?name=광&background=161b22&color=10b981&size=46'">
+          <span>광주FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2769,'KL1','#1D3461','김천상무','https://media.api-sports.io/football/teams/2769.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2769.png" onerror="this.src='https://ui-avatars.com/api/?name=김&background=161b22&color=10b981&size=46'">
+          <span>김천상무</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2767,'KL1','#004EA2','대전하나','https://media.api-sports.io/football/teams/2767.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2767.png" onerror="this.src='https://ui-avatars.com/api/?name=대&background=161b22&color=10b981&size=46'">
+          <span>대전하나</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2770,'KL1','#003DA5','FC안양','https://media.api-sports.io/football/teams/2770.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2770.png" onerror="this.src='https://ui-avatars.com/api/?name=F&background=161b22&color=10b981&size=46'">
+          <span>FC안양</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2757,'KL1','#1A3172','인천유나이티드','https://media.api-sports.io/football/teams/2757.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2757.png" onerror="this.src='https://ui-avatars.com/api/?name=인&background=161b22&color=10b981&size=46'">
+          <span>인천유나이티드</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2771,'KL1','#CC0000','부천FC','https://media.api-sports.io/football/teams/2771.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2771.png" onerror="this.src='https://ui-avatars.com/api/?name=부&background=161b22&color=10b981&size=46'">
+          <span>부천FC</span>
+        </div>
+      </div>
+    </div>
+    <div class="ob-league">
+      <div class="ob-league-hdr">
+        <img src="https://media.api-sports.io/football/leagues/293.png" onerror="this.style.opacity='.3'">
+        <h3>K리그 2</h3>
+        <small>2026 시즌</small>
+      </div>
+      <div class="ob-grid">
+        <div class="ob-team" onclick="toggleTeam(this,2772,'KL2','#004B8D','수원FC','https://media.api-sports.io/football/teams/2772.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2772.png" onerror="this.src='https://ui-avatars.com/api/?name=수&background=161b22&color=10b981&size=46'">
+          <span>수원FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2761,'KL2','#6ABDD8','대구FC','https://media.api-sports.io/football/teams/2761.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2761.png" onerror="this.src='https://ui-avatars.com/api/?name=대&background=161b22&color=10b981&size=46'">
+          <span>대구FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2756,'KL2','#003DA5','수원삼성','https://media.api-sports.io/football/teams/2756.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2756.png" onerror="this.src='https://ui-avatars.com/api/?name=수&background=161b22&color=10b981&size=46'">
+          <span>수원삼성</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2773,'KL2','#00204E','서울이랜드','https://media.api-sports.io/football/teams/2773.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2773.png" onerror="this.src='https://ui-avatars.com/api/?name=서&background=161b22&color=10b981&size=46'">
+          <span>서울이랜드</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2768,'KL2','#231F20','성남FC','https://media.api-sports.io/football/teams/2768.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2768.png" onerror="this.src='https://ui-avatars.com/api/?name=성&background=161b22&color=10b981&size=46'">
+          <span>성남FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2774,'KL2','#006A38','전남드래곤즈','https://media.api-sports.io/football/teams/2774.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2774.png" onerror="this.src='https://ui-avatars.com/api/?name=전&background=161b22&color=10b981&size=46'">
+          <span>전남드래곤즈</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2775,'KL2','#FFD700','김포FC','https://media.api-sports.io/football/teams/2775.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2775.png" onerror="this.src='https://ui-avatars.com/api/?name=김&background=161b22&color=10b981&size=46'">
+          <span>김포FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2776,'KL2','#003399','부산아이파크','https://media.api-sports.io/football/teams/2776.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2776.png" onerror="this.src='https://ui-avatars.com/api/?name=부&background=161b22&color=10b981&size=46'">
+          <span>부산아이파크</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2777,'KL2','#1D3461','충남아산','https://media.api-sports.io/football/teams/2777.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2777.png" onerror="this.src='https://ui-avatars.com/api/?name=충&background=161b22&color=10b981&size=46'">
+          <span>충남아산</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2778,'KL2','#FF6600','화성FC','https://media.api-sports.io/football/teams/2778.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2778.png" onerror="this.src='https://ui-avatars.com/api/?name=화&background=161b22&color=10b981&size=46'">
+          <span>화성FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2779,'KL2','#003DA5','충북청주','https://media.api-sports.io/football/teams/2779.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2779.png" onerror="this.src='https://ui-avatars.com/api/?name=충&background=161b22&color=10b981&size=46'">
+          <span>충북청주</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2780,'KL2','#003DA5','천안시티','https://media.api-sports.io/football/teams/2780.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2780.png" onerror="this.src='https://ui-avatars.com/api/?name=천&background=161b22&color=10b981&size=46'">
+          <span>천안시티</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2781,'KL2','#009900','안산그리너스','https://media.api-sports.io/football/teams/2781.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2781.png" onerror="this.src='https://ui-avatars.com/api/?name=안&background=161b22&color=10b981&size=46'">
+          <span>안산그리너스</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2782,'KL2','#CC0000','김해FC','https://media.api-sports.io/football/teams/2782.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2782.png" onerror="this.src='https://ui-avatars.com/api/?name=김&background=161b22&color=10b981&size=46'">
+          <span>김해FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2783,'KL2','#004B8D','파주프런티어','https://media.api-sports.io/football/teams/2783.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2783.png" onerror="this.src='https://ui-avatars.com/api/?name=파&background=161b22&color=10b981&size=46'">
+          <span>파주프런티어</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2784,'KL2','#8B0000','용인FC','https://media.api-sports.io/football/teams/2784.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2784.png" onerror="this.src='https://ui-avatars.com/api/?name=용&background=161b22&color=10b981&size=46'">
+          <span>용인FC</span>
+        </div>
+        <div class="ob-team" onclick="toggleTeam(this,2785,'KL2','#CC0000','경남FC','https://media.api-sports.io/football/teams/2785.png')">
+          <div class="ob-chk">✓</div>
+          <img src="https://media.api-sports.io/football/teams/2785.png" onerror="this.src='https://ui-avatars.com/api/?name=경&background=161b22&color=10b981&size=46'">
+          <span>경남FC</span>
+        </div>
+      </div>
+    </div>
+        <div class="ob-start-wrap">
+      <button class="ob-start" id="ob-btn" onclick="startApp()" disabled>팀을 선택해주세요</button>
+    </div>
+  </div>
 </div>
 
+<!-- APP -->
 <div id="app">
-    <header class="hdr">
-        <div class="hdr-logo">PITCH PRO</div>
-        <div id="selected-team-display" style="display:flex; gap:10px;"></div>
-    </header>
-
-    <div class="main-body">
-        <aside class="sidebar">
-            <div class="si on" onclick="swP('home',this)">⚡ LIVE ACTION</div>
-            <div class="si" onclick="swP('sched',this)">📅 SCHEDULE</div>
-            <div class="si" onclick="swP('ai',this)">🤖 AI PITCH</div>
-            <div class="si" onclick="swP('std',this)">📊 STANDINGS</div>
-            <div class="si" onclick="swP('player',this)">👟 PLAYER STATS</div>
-            <div class="si" onclick="swP('fan',this)">⭐ FAN ZONE</div>
-        </aside>
-
-        <main class="pages">
-            <div class="page on" id="pg-home"><div id="home-bd"></div></div>
-            <div class="page" id="pg-sched">
-                <div id="date-nav" class="pills"></div>
-                <div id="sched-bd"></div>
-            </div>
-            <div class="page" id="pg-ai"><div id="ai-bd"></div></div>
-            <div class="page" id="pg-std">
-                <div id="std-pills" class="pills"></div>
-                <div id="std-bd"></div>
-            </div>
-            <div class="page" id="pg-player">
-                <div id="pl-pills" class="pills"></div>
-                <div id="pl-bd"></div>
-            </div>
-            <div class="page" id="pg-fan">
-                <h1 style="margin-bottom:20px;">MY FAN ZONE</h1>
-                <div id="fan-bd" class="ai-card" style="text-align:center;">
-                    <h2 id="fan-team">Sync required</h2>
-                    <p style="margin:20px 0; color:var(--t2);">Match notifications will appear here during live games.</p>
-                    <button class="pill on" onclick="alert('Notification Enabled!')">Enable Alert</button>
-                </div>
-            </div>
-        </main>
+  <header class="hdr">
+    <div class="hdr-logo" onclick="showSettings()">
+      <div class="hdr-logo-icon">P</div>
+      PITCH PRO
     </div>
+    <div class="hdr-r">
+      <div class="live-pill" id="lpill"><div class="live-dot"></div><span>LIVE</span></div>
+      <div id="team-display"></div>
+      <div class="lv-badge" id="lv-badge">Lv.1</div>
+    </div>
+  </header>
+
+  <div class="main-body">
+    <!-- 사이드바 -->
+    <aside class="sidebar">
+      <div class="si on" onclick="swP('home',this)"><span class="si-ico">⚡</span> LIVE</div>
+      <div class="si" onclick="swP('sched',this)"><span class="si-ico">📅</span> 일정</div>
+      <div class="si" onclick="swP('std',this)"><span class="si-ico">📊</span> 순위</div>
+      <div class="si" onclick="swP('player',this)"><span class="si-ico">👟</span> 선수</div>
+      <div class="sidebar-div"></div>
+      <div class="si" onclick="swP('hub',this)"><span class="si-ico">📰</span> 허브</div>
+      <div class="si" onclick="swP('fan',this)"><span class="si-ico">⭐</span> 팬존</div>
+    </aside>
+
+    <!-- 페이지 -->
+    <main class="pages">
+      <div class="page on" id="pg-home"><div id="home-bd"><div class="ldr"><div class="spin"></div><div class="spin-t">라이브 확인 중...</div></div></div></div>
+
+      <div class="page" id="pg-sched">
+        <div id="sched-nav"></div>
+        <div id="sched-bd"><div class="ldr"><div class="spin"></div></div></div>
+      </div>
+
+      <div class="page" id="pg-std">
+        <div class="pills" id="std-pills"></div>
+        <div id="std-bd"><div class="ldr"><div class="spin"></div></div></div>
+      </div>
+
+      <div class="page" id="pg-player">
+        <div class="pills" id="pl-pills"></div>
+        <div style="display:flex;gap:8px;margin-bottom:22px;">
+          <button class="pill on" onclick="swPt('scorers',this)">⚽ 득점</button>
+          <button class="pill" onclick="swPt('assists',this)">🎯 도움</button>
+        </div>
+        <div id="pl-bd"><div class="ldr"><div class="spin"></div></div></div>
+      </div>
+
+      <div class="page" id="pg-hub">
+        <div style="display:flex;gap:8px;margin-bottom:22px;" id="hub-tabs">
+          <button class="pill on" onclick="swHub('transfer',this)">🔄 이적</button>
+          <button class="pill" onclick="swHub('myteam',this)">⭐ 내 팀</button>
+          <button class="pill" onclick="swHub('europe',this)">🌍 유럽</button>
+        </div>
+        <div id="hub-bd"></div>
+      </div>
+
+      <div class="page" id="pg-fan"><div id="fan-bd"></div></div>
+    </main>
+
+    <!-- 우측 패널 -->
+    <aside class="rp">
+      <div class="rp-title">TODAY</div>
+      <div id="rp-bd"><div class="ldr" style="padding:20px;"><div class="spin"></div></div></div>
+    </aside>
+  </div>
+
+  <!-- 모바일 하단 네비 -->
+  <nav class="bnav">
+    <button class="nbi on" onclick="swP('home',this)"><div class="ni-ic">⚡</div><span class="ni-lb">홈</span></button>
+    <button class="nbi" onclick="swP('sched',this)"><div class="ni-ic">📅</div><span class="ni-lb">일정</span></button>
+    <button class="nbi" onclick="swP('std',this)"><div class="ni-ic">📊</div><span class="ni-lb">순위</span></button>
+    <button class="nbi" onclick="swP('hub',this)"><div class="ni-ic">📰</div><span class="ni-lb">허브</span></button>
+    <button class="nbi" onclick="swP('fan',this)"><div class="ni-ic">⭐</div><span class="ni-lb">팬존</span></button>
+  </nav>
 </div>
 
-<div id="gt"><div class="gt-box"><h1>GOAL!</h1><div id="gt-team" style="font-size:32px; font-weight:800;"></div></div></div>
+<!-- 경기 상세 모달 -->
+<div class="modal" id="dtl-modal">
+  <div class="modal-in">
+    <div class="modal-hd">
+      <span class="modal-ttl" id="dtl-ttl">MATCH DETAIL</span>
+      <button class="modal-x" onclick="cm('dtl-modal')">×</button>
+    </div>
+    <div class="modal-body" id="dtl-body"></div>
+  </div>
+</div>
+
+<!-- 골 오버레이 -->
+<div id="gt">
+  <div class="gt-box">
+    <svg class="gt-net" width="240" height="100" viewBox="0 0 240 100">
+      <defs><filter id="gf"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <line x1="16" y1="12" x2="16" y2="88" stroke="#10b981" stroke-width="4" stroke-linecap="round" filter="url(#gf)"/>
+      <line x1="224" y1="12" x2="224" y2="88" stroke="#10b981" stroke-width="4" stroke-linecap="round" filter="url(#gf)"/>
+      <line x1="16" y1="12" x2="224" y2="12" stroke="#10b981" stroke-width="4" stroke-linecap="round" filter="url(#gf)"/>
+      <g opacity=".45" stroke="#10b981" stroke-width=".8">
+        <line x1="16" y1="88" x2="224" y2="88"/>
+        <line x1="55" y1="12" x2="58" y2="88"/><line x1="94" y1="12" x2="97" y2="88"/>
+        <line x1="133" y1="12" x2="130" y2="88"/><line x1="172" y1="12" x2="169" y2="88"/>
+        <line x1="211" y1="12" x2="208" y2="88"/>
+        <line x1="16" y1="35" x2="224" y2="35"/><line x1="16" y1="58" x2="224" y2="58"/>
+        <line x1="16" y1="76" x2="224" y2="76"/>
+      </g>
+      <circle cx="120" cy="50" r="16" fill="#fff" opacity=".92"/>
+      <path d="M120 34l4 8 9 1-7 6 3 9-9-5-9 5 3-9-7-6 9-1z" fill="#10b981" opacity=".8"/>
+    </svg>
+    <span class="gt-ball">⚽</span>
+    <span class="gt-word">GOAL!</span>
+    <span class="gt-scorer" id="gt-scorer"></span>
+    <span class="gt-details" id="gt-details"></span>
+  </div>
+</div>
+
+<div id="lvup"><div class="lu-em" id="lu-em">🏆</div><div class="lu-txt">LEVEL UP!</div><div class="lu-sub" id="lu-sub"></div></div>
+<div id="toast"></div>
 
 <script>
-// --- 1. CORE DATA & API CONFIG ---
+// ═══════════════════════════════
+// PITCH PRO — CORE ENGINE
+// ═══════════════════════════════
 const API = '/api/football';
-const LEAGUES = [
-    { n: 'Premier League', c: 'PL', teams: [{id:57, n:'Arsenal', col:'#EF0107'}, {id:65, n:'Man City', col:'#6CABDD'}, {id:64, n:'Liverpool', col:'#C8102E'}, {id:66, n:'Man Utd', col:'#DA291C'}, {id:61, n:'Chelsea', col:'#034694'}, {id:73, n:'Tottenham', col:'#132257'}, {id:58, n:'Aston Villa', col:'#95BFE5'}] },
-    { n: 'La Liga', c: 'LA', teams: [{id:86, n:'Real Madrid', col:'#FEBE10'}, {id:81, n:'Barcelona', col:'#A50044'}, {id:78, n:'Atletico', col:'#CB3524'}, {id:558, n:'Girona', col:'#E23221'}, {id:82, n:'Sevilla', col:'#D40511'}, {id:95, n:'Valencia', col:'#000000'}] },
-    { n: 'K League 1', c: 'KL1', teams: [{id:2759, n:'Ulsan HD', col:'#003DA5'}, {id:2762, n:'Jeonbuk', col:'#006738'}, {id:2763, n:'FC Seoul', col:'#E2002D'}, {id:2764, n:'Pohang', col:'#C8102E'}, {id:2761, n:'Daegu FC', col:'#6ABDD8'}] },
-    { n: 'K League 2', c: 'KL2', teams: [{id:764, n:'Hwaseong FC', col:'#FF5E00'}, {id:2756, n:'Suwon Samsung', col:'#003DA5'}, {id:2758, n:'Seongnam FC', col:'#000000'}, {id:1101, n:'Seoul E-Land', col:'#00204E'}] },
-    { n: 'Bundesliga', c: 'BL1', teams: [{id:5, n:'Bayern', col:'#DC052D'}, {id:4, n:'Dortmund', col:'#FDE100'}, {id:3, n:'Leverkusen', col:'#E32221'}, {id:721, n:'Leipzig', col:'#DD013F'}] },
-    { n: 'Serie A', c: 'SA', teams: [{id:108, n:'Inter', col:'#0068A8'}, {id:98, n:'AC Milan', col:'#FB090B'}, {id:109, n:'Juventus', col:'#000000'}, {id:113, n:'Napoli', col:'#00BFFF'}] },
-    { n: 'Ligue 1', c: 'FL1', teams: [{id:524, n:'PSG', col:'#004170'}, {id:548, n:'Monaco', col:'#E31B23'}, {id:516, n:'Marseille', col:'#00ABFF'}] }
+const KL_LEAGUE = 292, KL_SEASON = 2026;
+
+const LEAGUES_STD = [
+  {code:'PL', name:'프리미어리그', flag:'🏴󠁧󠁢󠁥󠁮󠁧󠁿', logo:'https://crests.football-data.org/PL.png'},
+  {code:'PD', name:'라리가',       flag:'🇪🇸', logo:'https://crests.football-data.org/PD.png'},
+  {code:'BL1',name:'분데스리가',   flag:'🇩🇪', logo:'https://crests.football-data.org/BL1.png'},
+  {code:'SA', name:'세리에A',      flag:'🇮🇹', logo:'https://crests.football-data.org/SA.png'},
+  {code:'FL1',name:'리그앙',       flag:'🇫🇷', logo:'https://crests.football-data.org/FL1.png'},
+  {code:'KL1',name:'K리그 1',      flag:'🇰🇷', logo:'https://media.api-sports.io/football/leagues/292.png', kl:true},
 ];
 
-let SELECTED_TEAMS = [];
-let prevScores = {};
-const cache = {};
+const LEVELS = [
+  {lv:1,em:'⚽',name:'축알못 입문자',min:0,max:4},
+  {lv:2,em:'🍺',name:'라이트 팬',min:5,max:9},
+  {lv:3,em:'📺',name:'집관러',min:10,max:19},
+  {lv:4,em:'🧠',name:'전술충',min:20,max:39},
+  {lv:5,em:'🗣️',name:'방구석 퍼거슨',min:40,max:79},
+  {lv:6,em:'🔥',name:'찐팬 인증',min:80,max:149},
+  {lv:7,em:'👑',name:'구단주급',min:150,max:Infinity},
+];
 
-// --- 2. DATA FETCH ENGINE ---
-async function fetchData(path, isStatic = false) {
-    const ttl = isStatic ? 3600000 : 90000; 
-    if(cache[path] && (Date.now() - cache[path].ts < ttl)) return cache[path].data;
-    try {
-        const r = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`);
-        const d = await r.json();
-        if(d.errorCode === 429) return cache[path]?.data || d;
-        cache[path] = { data: d, ts: Date.now() };
-        return d;
-    } catch(e) { return null; }
+// ── 상태 ──
+let TEAMS = []; // 선택된 팀 (최대 2개)
+let curStd = 'PL', curPLg = 'PL', curPt = 'scorers', curHub = 'transfer', curSchedDate = null;
+let fanData = JSON.parse(localStorage.getItem('pp_fan') || '{"checkins":[],"total":0}');
+let watchList = JSON.parse(localStorage.getItem('pp_watch') || '[]');
+let prevSc = {};
+let liveTimer = null;
+
+// ── 캐시 ──
+const _cache = {};
+const getCached = (k, ttl=90000) => { const c=_cache[k]; return c&&Date.now()-c.ts<ttl?c.data:null; };
+const setCached = (k, d) => { _cache[k]={data:d,ts:Date.now()}; };
+
+// ── 유틸 ──
+const kn = () => new Date(Date.now()+9*3600000);
+const ds = d => `${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
+const kt = u => { if(!u)return'--:--'; const k=new Date(new Date(u).getTime()+9*3600000); return`${String(k.getUTCHours()).padStart(2,'0')}:${String(k.getUTCMinutes()).padStart(2,'0')}`; };
+const kd = u => { if(!u)return''; const k=new Date(new Date(u).getTime()+9*3600000); return`${k.getUTCMonth()+1}/${k.getUTCDate()}(${['일','월','화','수','목','금','토'][k.getUTCDay()]})`; };
+const isKstDate = (u,dateStr) => { if(!u||!dateStr)return false; const k=new Date(new Date(u).getTime()+9*3600000); return`${k.getUTCFullYear()}-${String(k.getUTCMonth()+1).padStart(2,'0')}-${String(k.getUTCDate()).padStart(2,'0')}`===dateStr; };
+const isKstToday = u => isKstDate(u, ds(kn()));
+const isLive = m => ['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status);
+const isFin  = m => ['FINISHED','AWARDED'].includes(m.status);
+const isSch  = m => ['SCHEDULED','TIMED'].includes(m.status);
+const isKL   = t => t?.league==='KL1';
+const elv    = t => (t||'').replace(/['"<>]/g,'');
+const addDays = (dateStr,n) => { const d=new Date(dateStr+'T12:00:00Z'); d.setUTCDate(d.getUTCDate()+n); return ds(d); };
+const mapKLSt = s => ({'NS':'SCHEDULED','TBD':'SCHEDULED','1H':'IN_PLAY','HT':'HALFTIME','2H':'IN_PLAY','ET':'EXTRA_TIME','P':'PENALTY_SHOOTOUT','FT':'FINISHED','AET':'FINISHED','PEN':'FINISHED','PST':'POSTPONED','CANC':'CANCELLED','SUSP':'SUSPENDED','INT':'PAUSED'}[s]||'SCHEDULED');
+const ha = (h,a) => { if(!h||h.length<4)return`rgba(16,185,129,${a})`; return`rgba(${parseInt(h.slice(1,3),16)},${parseInt(h.slice(3,5),16)},${parseInt(h.slice(5,7),16)},${a})`; };
+const ods = m => { const s=(x,n)=>{const v=Math.sin(x+n)*43758.5453;return v-Math.floor(v);}; const seed=(m.homeTeam?.id||0)*31+(m.awayTeam?.id||0)*17+(m.id||0); return{hw:Math.max(1.2,Math.min(9,1.7+s(seed,1)*.4)).toFixed(2),dr:Math.max(2.8,Math.min(4.6,3.1+s(seed,3)*.6)).toFixed(2),aw:Math.max(1.2,Math.min(9,1.7+s(seed,2)*.4)).toFixed(2)}; };
+
+function showToast(msg) {
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.style.display='block';
+  setTimeout(()=>el.style.display='none', 2800);
 }
 
-// --- 3. CORE FUNCTIONS ---
-async function loadHome() {
-    const bd = document.getElementById('home-bd');
-    bd.innerHTML = '<div style="text-align:center; padding:50px;">ANALYZING LIVE...</div>';
-    const d = await fetchData('/matches');
-    if(!d?.matches) return;
+// ═══════════════════════════════
+// API
+// ═══════════════════════════════
+async function fd(path, ttl=90000) {
+  const c = getCached(path, ttl);
+  if (c) return c;
+  try {
+    const r = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`, { signal: AbortSignal.timeout(10000) });
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (d.errorCode || (d.message && d.message.toLowerCase().includes('limit'))) return d;
+    setCached(path, d);
+    return d;
+  } catch(e) { return null; }
+}
 
-    const live = d.matches.filter(m => ['IN_PLAY','PAUSED','HALFTIME'].includes(m.status));
-    
-    // GOAL DETECTION
-    live.forEach(m => {
-        const sc = `${m.score.fullTime.home}-${m.score.fullTime.away}`;
-        if(prevScores[m.id] && prevScores[m.id] !== sc) triggerGoal(m.homeTeam.shortName || m.homeTeam.name);
-        prevScores[m.id] = sc;
+async function kl(path, params={}) {
+  const qs = new URLSearchParams(params).toString();
+  const key = path + '?' + qs;
+  const c = getCached(key, 120000);
+  if (c) return c;
+  try {
+    const r = await fetch(`${API}?type=kl&path=${encodeURIComponent(path)}&${qs}`, { signal: AbortSignal.timeout(10000) });
+    if (!r.ok) return null;
+    const d = await r.json();
+    if (d.errors && Object.keys(d.errors).length) return null;
+    setCached(key, d);
+    return d;
+  } catch(e) { return null; }
+}
+
+// ═══════════════════════════════
+// PUSH / NOTIF
+// ═══════════════════════════════
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(()=>{});
+
+async function reqNotif() {
+  if (!('Notification' in window)) return false;
+  if (Notification.permission === 'granted') return true;
+  if (Notification.permission === 'denied') return false;
+  return (await Notification.requestPermission()) === 'granted';
+}
+function pushNotif(title, body, tag='pitch') {
+  if (Notification.permission !== 'granted') return;
+  try { new Notification(title, { body, icon:'/favicon.ico', tag }); } catch(e) {}
+}
+function toggleWatch(matchId, hn, an, btn) {
+  const id = String(matchId);
+  const idx = watchList.indexOf(id);
+  if (idx === -1) {
+    reqNotif().then(ok => {
+      if (!ok) { showToast('🔔 알림 권한을 허용해주세요'); return; }
+      watchList.push(id); localStorage.setItem('pp_watch', JSON.stringify(watchList));
+      btn.classList.add('on'); btn.textContent='🔔'; showToast(`🔔 ${hn} vs ${an} 알림 ON`);
     });
-
-    bd.innerHTML = live.map(m => `
-        <div class="mc">
-            <div class="mc-top"><span>${m.competition.name}</span><span style="color:var(--red)">● LIVE</span></div>
-            <div class="mc-body">
-                <div class="mc-tm"><img src="${m.homeTeam.crest}" style="width:40px;"><br>${m.homeTeam.shortName || m.homeTeam.name}</div>
-                <div class="mc-sc-box">${m.score.fullTime.home} : ${m.score.fullTime.away}</div>
-                <div class="mc-tm"><img src="${m.awayTeam.crest}" style="width:40px;"><br>${m.awayTeam.shortName || m.awayTeam.name}</div>
-            </div>
-        </div>
-    `).join('') || '<div style="text-align:center; padding:100px; color:var(--t2);">No matches currently live.</div>';
+  } else {
+    watchList.splice(idx,1); localStorage.setItem('pp_watch', JSON.stringify(watchList));
+    btn.classList.remove('on'); btn.textContent='🔕'; showToast('알림 해제됨');
+  }
 }
 
-async function loadSched(date = new Date().toISOString().split('T')[0]) {
-    const bd = document.getElementById('sched-bd');
-    bd.innerHTML = '<div style="text-align:center; padding:50px;">SYNCING SCHEDULE...</div>';
-    const d = await fetchData(`/matches?dateFrom=${date}&dateTo=${date}`);
-    if(!d?.matches?.length) { bd.innerHTML = '<div style="text-align:center; padding:50px;">No games scheduled.</div>'; return; }
-
-    const groups = d.matches.reduce((acc, m) => {
-        const lg = m.competition.name;
-        acc[lg] = acc[lg] || []; acc[lg].push(m);
-        return acc;
-    }, {});
-
-    bd.innerHTML = Object.entries(groups).map(([lg, matches], i) => `
-        <div class="lg-hd" onclick="this.nextElementSibling.classList.toggle('open')">
-            <span>${lg.toUpperCase()}</span><span>${matches.length} ▾</span>
-        </div>
-        <div class="lg-ms">
-            ${matches.map(m => `
-                <div class="mc" style="margin-top:10px; padding:20px; display:flex; justify-content:space-between; align-items:center;">
-                    <span style="font-size:12px; color:var(--t2);">${m.utcDate.slice(11,16)}</span>
-                    <span style="font-weight:700; flex:1; text-align:center;">${m.homeTeam.shortName || m.homeTeam.name} vs ${m.awayTeam.shortName || m.awayTeam.name}</span>
-                    <span style="font-weight:900; color:var(--p);">${m.score.fullTime.home??'-'} : ${m.score.fullTime.away??'-'}</span>
-                </div>
-            `).join('')}
-        </div>
-    `).join('');
-}
-
-async function loadAI() {
-    const bd = document.getElementById('ai-bd');
-    const d = await fetchData('/matches');
-    bd.innerHTML = d.matches?.slice(0, 8).map(m => {
-        const h = 40 + (m.id % 25); const a = 100 - h - 10;
-        return `
-            <div class="ai-card">
-                <div style="font-size:11px; font-weight:800; color:var(--s); margin-bottom:15px;">AI MATCH PREDICTION</div>
-                <div style="display:flex; justify-content:space-between; font-weight:900; font-size:18px;">
-                    <span>${m.homeTeam.shortName}</span><span>${m.awayTeam.shortName}</span>
-                </div>
-                <div class="prob-bar"><div class="prob-h" style="width:${h}%"></div><div class="prob-a" style="width:${a}%"></div></div>
-                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--t2);">
-                    <span>WIN ${h}%</span><span>WIN ${a}%</span>
-                </div>
-            </div>`;
-    }).join('') || "No predictions available.";
-}
-
-async function loadStd(code) {
-    const bd = document.getElementById('std-bd');
-    bd.innerHTML = 'SYNCING STANDINGS...';
-    const d = await fetchData(`/competitions/${code}/standings`, true);
-    if(!d?.standings) return;
-    const rows = d.standings[0].table;
-    bd.innerHTML = `<table class="stt"><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>PTS</th></tr>` + 
-        rows.map(r => `<tr><td>${r.position}</td><td class="nm-cell"><img src="${r.team.crest}">${r.team.shortName}</td><td>${r.playedGames}</td><td>${r.won}</td><td>${r.draw}</td><td>${r.lost}</td><td style="color:var(--p); font-weight:900;">${r.points}</td></tr>`).join('') + `</table>`;
-}
-
-async function loadPlayers(lg) {
-    const bd = document.getElementById('pl-bd');
-    bd.innerHTML = 'SYNCING PLAYER RECORDS...';
-    const d = await fetchData(`/competitions/${lg}/scorers`, true);
-    if(!d?.scorers) return;
-    bd.innerHTML = d.scorers.slice(0,10).map((s,i) => `
-        <div style="display:flex; justify-content:space-between; align-items:center; padding:20px; background:var(--bg2); border-radius:15px; margin-bottom:10px;">
-            <span><b style="color:var(--p); margin-right:15px;">${i+1}</b> ${s.player.name} (${s.team.shortName})</span>
-            <span style="font-weight:900;">${s.goals} Goals</span>
-        </div>`).join('');
-}
-
-// --- 4. INTERFACE LOGIC ---
-function initOb() {
-    const list = document.getElementById('ob-list');
-    list.innerHTML = LEAGUES.map(lg => `
-        <div class="league-section">
-            <div class="league-title">${lg.n}</div>
-            <div class="ob-grid">
-                ${lg.teams.map(t => `
-                    <div class="ob-team" onclick="toggleTeam(this, ${JSON.stringify(t).replace(/"/g, '&quot;')})">
-                        <img src="https://crests.football-data.org/${t.id}.png" onerror="this.src='https://via.placeholder.com/50?text=${t.n.charAt(0)}'">
-                        <span>${t.n}</span>
-                    </div>
-                `).join('')}
-            </div>
-        </div>
-    `).join('');
-}
-
-function toggleTeam(el, team) {
-    const idx = SELECTED_TEAMS.findIndex(t => t.id === team.id);
-    if(idx > -1) {
-        SELECTED_TEAMS.splice(idx, 1); el.classList.remove('sel');
-    } else {
-        if(SELECTED_TEAMS.length >= 2) return alert("Select up to 2 teams.");
-        SELECTED_TEAMS.push(team); el.classList.add('sel');
-    }
-    if(SELECTED_TEAMS.length > 0) applyTheme(SELECTED_TEAMS[0].color);
-}
-
+// ═══════════════════════════════
+// ONBOARDING
+// ═══════════════════════════════
 function applyTheme(color) {
-    const root = document.documentElement.style;
-    root.setProperty('--p', color);
-    root.setProperty('--ps', color + '26');
-    root.setProperty('--pb', color + '4d');
+  const col = (!color||color==='#000000') ? '#10b981' : color==='#FFFFFF' ? '#94a3b8' : color;
+  document.documentElement.style.setProperty('--p', col);
+  document.documentElement.style.setProperty('--ps', ha(col,.12));
+  document.documentElement.style.setProperty('--pb', ha(col,.28));
+}
+
+function toggleTeam(el, id, league, color, name, crest) {
+  const idx = TEAMS.findIndex(t => t.id===id);
+  if (idx > -1) {
+    TEAMS.splice(idx,1); el.classList.remove('sel');
+  } else {
+    if (TEAMS.length >= 2) { showToast('⚠ 최대 2팀만 선택 가능합니다'); return; }
+    TEAMS.push({id, league, color, name, crest});
+    el.classList.add('sel');
+  }
+  document.getElementById('sel-cnt').textContent = TEAMS.length;
+  if (TEAMS.length > 0) applyTheme(TEAMS[0].color);
+  const btn = document.getElementById('ob-btn');
+  if (TEAMS.length > 0) { btn.disabled=false; btn.textContent=TEAMS.length===2?`${TEAMS[0].name} & ${TEAMS[1].name} → 시작`:`${TEAMS[0].name} 팬으로 시작 →`; }
+  else { btn.disabled=true; btn.textContent='팀을 선택해주세요'; }
 }
 
 function startApp() {
-    if(SELECTED_TEAMS.length === 0) return alert("Please select at least 1 club.");
-    localStorage.setItem('pp_teams', JSON.stringify(SELECTED_TEAMS));
-    document.getElementById('ob').style.display = 'none';
-    document.getElementById('app').style.display = 'flex';
-    document.getElementById('selected-team-display').innerHTML = SELECTED_TEAMS.map(t => `<div style="background:var(--ps); color:var(--p); padding:4px 12px; border-radius:100px; font-size:11px; font-weight:800; border:1px solid var(--pb);">${t.n}</div>`).join('');
-    document.getElementById('fan-team').textContent = SELECTED_TEAMS[0].n + " FAN HUB";
-    swP('home');
+  if (!TEAMS.length) return;
+  localStorage.setItem('pp_teams', JSON.stringify(TEAMS));
+  boot();
 }
 
-function triggerGoal(team) {
-    const gt = document.getElementById('gt');
-    document.getElementById('gt-team').textContent = team.toUpperCase() + " SCORE!";
-    gt.style.display = 'flex';
-    setTimeout(() => { gt.style.display = 'none'; }, 4000);
+// ═══════════════════════════════
+// BOOT
+// ═══════════════════════════════
+function boot() {
+  document.getElementById('ob').style.display = 'none';
+  document.getElementById('app').classList.add('show');
+  applyTheme(TEAMS[0]?.color);
+  // 헤더 팀 표시
+  document.getElementById('team-display').innerHTML = TEAMS.map(t =>
+    `<div class="team-pill"><img src="${t.crest}" onerror="this.style.display='none'"><span>${t.name}</span></div>`
+  ).join('');
+  buildPills();
+  curSchedDate = ds(kn());
+  loadHome();
+  setTimeout(()=>loadSched(), 600);
+  setTimeout(()=>loadRightPanel(), 1200);
+  setTimeout(()=>updateFan(), 1800);
+  // 라이브 타이머
+  liveTimer = setInterval(()=>{
+    if (document.getElementById('pg-home')?.classList.contains('on')) loadHome();
+  }, 60000);
 }
 
+// ═══════════════════════════════
+// GOAL — 감지 + 애니메이션 + 사운드
+// ═══════════════════════════════
+function playGoalSfx() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // 팡파레 멜로디
+    const melody = [[523,.12],[659,.12],[784,.12],[1047,.24],[784,.08],[1047,.4]];
+    let t = ctx.currentTime + .05;
+    melody.forEach(([freq,dur])=>{
+      const o=ctx.createOscillator(), g=ctx.createGain();
+      o.connect(g); g.connect(ctx.destination);
+      o.frequency.value=freq; o.type='triangle';
+      g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(.35,t+.03); g.gain.linearRampToValueAtTime(0,t+dur-.02);
+      o.start(t); o.stop(t+dur);
+      t+=dur;
+    });
+    // 환호 노이즈
+    const buf=ctx.createBuffer(1,ctx.sampleRate*.6,ctx.sampleRate);
+    const data=buf.getChannelData(0);
+    for(let i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*.06;
+    const ns=ctx.createBufferSource(); ns.buffer=buf;
+    const ng=ctx.createGain(); ns.connect(ng); ng.connect(ctx.destination);
+    ng.gain.setValueAtTime(.2,ctx.currentTime+.5); ng.gain.linearRampToValueAtTime(0,ctx.currentTime+1.3);
+    ns.start(ctx.currentTime+.5);
+  } catch(e) {}
+}
+
+function showGoal(scorer, teamName, min, hn, an, hg, ag) {
+  document.getElementById('gt-scorer').textContent = scorer ? `⚽ ${scorer}` : '';
+  document.getElementById('gt-details').textContent = (hn&&an) ? `${hn}  ${hg} : ${ag}  ${an}${min?'  •  '+min+"'":''} KST` : '';
+  const el = document.getElementById('gt');
+  el.classList.add('show');
+  playGoalSfx();
+  setTimeout(()=>el.classList.remove('show'), 4800);
+}
+
+function chkGoal(m) {
+  const id = m.id;
+  const hg = m.score?.fullTime?.home ?? m.score?.halfTime?.home ?? 0;
+  const ag = m.score?.fullTime?.away ?? m.score?.halfTime?.away ?? 0;
+  const sc = `${hg}:${ag}`;
+  if (prevSc[id] !== undefined && prevSc[id] !== sc) {
+    const isH = parseInt(hg) > parseInt((prevSc[id]||'0').split(':')[0]);
+    const team = isH ? (m.homeTeam?.shortName||m.homeTeam?.name) : (m.awayTeam?.shortName||m.awayTeam?.name);
+    const goals = m.goals || [];
+    const last = goals[goals.length-1];
+    const scorer = last?.scorer?.name||last?.player?.name||'';
+    showGoal(scorer, team, last?.minute, m.homeTeam?.shortName, m.awayTeam?.shortName, hg, ag);
+    if (watchList.includes(String(id))) {
+      pushNotif(`⚽ GOAL! ${team}`, `${m.homeTeam?.shortName} ${hg}:${ag} ${m.awayTeam?.shortName}${scorer?' | '+scorer:''}`, 'goal-'+id);
+    }
+  }
+  prevSc[id] = sc;
+}
+
+// ═══════════════════════════════
+// NAV
+// ═══════════════════════════════
 function swP(name, el) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-    document.getElementById('pg-' + name).classList.add('on');
-    document.querySelectorAll('.si').forEach(s => s.classList.remove('on'));
-    if(el) el.classList.add('on');
-    
-    if(name === 'home') loadHome();
-    if(name === 'sched') {
-        const dnav = document.getElementById('date-nav');
-        if(!dnav.innerHTML) {
-            for(let i=0; i<7; i++) {
-                const d = new Date(); d.setDate(d.getDate() + i);
-                const ds = d.toISOString().split('T')[0];
-                const btn = document.createElement('button');
-                btn.className = 'pill' + (i===0?' on':'');
-                btn.textContent = i===0 ? 'TODAY' : `${d.getMonth()+1}/${d.getDate()}`;
-                btn.onclick = () => { document.querySelectorAll('#date-nav .pill').forEach(p => p.classList.remove('on')); btn.classList.add('on'); loadSched(ds); };
-                dnav.appendChild(btn);
-            }
-        }
-        loadSched();
-    }
-    if(name === 'ai') loadAI();
-    if(name === 'std') {
-        const sp = document.getElementById('std-pills');
-        if(!sp.innerHTML) sp.innerHTML = LEAGUES.map(l => `<button class="pill" onclick="loadStd('${l.c}')">${l.n}</button>`).join('');
-        loadStd('PL');
-    }
-    if(name === 'player') {
-        const pp = document.getElementById('pl-pills');
-        if(!pp.innerHTML) pp.innerHTML = LEAGUES.map(l => `<button class="pill" onclick="loadPlayers('${l.c}')">${l.n}</button>`).join('');
-        loadPlayers('PL');
-    }
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.querySelectorAll('.si,.nbi').forEach(b=>b.classList.remove('on'));
+  document.getElementById('pg-'+name)?.classList.add('on');
+  if(el) el.classList.add('on');
+  const pcMap={home:0,sched:1,std:2,player:3,hub:4,fan:5};
+  const mbMap={home:0,sched:1,std:2,hub:3,fan:4};
+  document.querySelectorAll('.si')[pcMap[name]]?.classList.add('on');
+  if(mbMap[name]!==undefined) document.querySelectorAll('.nbi')[mbMap[name]]?.classList.add('on');
+  if(name==='home') loadHome();
+  else if(name==='sched') loadSched();
+  else if(name==='std') { buildPills(); loadStd(curStd); }
+  else if(name==='player') { buildPills(); loadPlayers(curPLg,curPt); }
+  else if(name==='hub') { swHub(curHub, document.querySelector('#hub-tabs .pill.on')||document.querySelector('#hub-tabs .pill')); }
+  else if(name==='fan') updateFan();
 }
 
-window.onload = () => {
-    const saved = localStorage.getItem('pp_teams');
-    if(saved) { SELECTED_TEAMS = JSON.parse(saved); applyTheme(SELECTED_TEAMS[0].color); startApp(); } else { initOb(); }
-};
+function buildPills() {
+  const sp=document.getElementById('std-pills');
+  const pp=document.getElementById('pl-pills');
+  if(sp&&!sp.children.length) sp.innerHTML=LEAGUES_STD.map((l,i)=>`<button class="pill ${i===0?'on':''}" onclick="swStd('${l.code}',this)"><img src="${l.logo}" onerror="this.style.display='none'">${l.name}</button>`).join('');
+  if(pp&&!pp.children.length) pp.innerHTML=LEAGUES_STD.map((l,i)=>`<button class="pill ${i===0?'on':''}" onclick="swPLg('${l.code}',this)"><img src="${l.logo}" onerror="this.style.display='none'">${l.name}</button>`).join('');
+}
+
+// ═══════════════════════════════
+// HOME
+// ═══════════════════════════════
+async function loadHome() {
+  const c = document.getElementById('home-bd');
+  if(!c) return;
+  c.innerHTML = `<div class="ldr"><div class="spin"></div><div class="spin-t">라이브 확인 중...</div></div>`;
+  const today = ds(kn());
+  const ks = new Date(today+'T00:00:00+09:00');
+  const uf = new Date(ks.getTime()-9*3600000).toISOString().slice(0,10);
+  const ut = new Date(ks.getTime()-9*3600000+86399000).toISOString().slice(0,10);
+
+  const res = await Promise.allSettled(LEAGUES_STD.slice(0,5).map(l=>fd(`/competitions/${l.code}/matches?dateFrom=${uf}&dateTo=${ut}`)));
+  let all = [];
+  res.forEach(r=>{ if(r.status==='fulfilled'&&r.value?.matches) all.push(...r.value.matches); });
+
+  // K리그 팀 선택시
+  if (TEAMS.some(t=>isKL(t))) {
+    const klD = await kl('/fixtures',{league:KL_LEAGUE,season:KL_SEASON,date:uf});
+    (klD?.response||[]).forEach(f=>all.push(toFDFmt(f)));
+  }
+
+  all.forEach(m=>{ if(isLive(m)) chkGoal(m); });
+
+  const live  = all.filter(m=>isLive(m)&&isKstToday(m.utcDate));
+  const sched = all.filter(m=>isSch(m)&&isKstToday(m.utcDate));
+  const fin   = all.filter(m=>isFin(m)&&isKstToday(m.utcDate));
+
+  document.getElementById('lpill').classList.toggle('show', live.length>0);
+
+  let html = '';
+  if (live.length) {
+    html += `<div class="sec"><span class="sec-t" style="color:var(--red)">LIVE · ${live.length}</span></div>`;
+    live.forEach(m=>html+=mkMC(m,'live'));
+  }
+  if (sched.length) {
+    html += `<div class="sec" style="margin-top:${live.length?'20px':'0'}"><span class="sec-t">오늘 예정</span><span class="sec-b">${today} KST</span></div>`;
+    sched.slice(0,12).forEach(m=>html+=mkMC(m,'sch'));
+  }
+  if (fin.length) {
+    html += `<div class="sec" style="margin-top:20px"><span class="sec-t">종료</span></div>`;
+    fin.slice(0,8).forEach(m=>html+=mkMC(m,'fin'));
+  }
+  c.innerHTML = html || `<div class="empty">📅 오늘 경기 없음<br>일정 탭에서 전체 일정을 확인하세요</div>`;
+}
+
+function toFDFmt(f) {
+  return { _kl:true, id:f.fixture.id, status:mapKLSt(f.fixture.status.short), utcDate:f.fixture.date,
+    competition:{name:'K리그 1'}, matchday:f.league.round?.replace('Regular Season - ',''),
+    homeTeam:{id:f.teams.home.id,name:f.teams.home.name,shortName:f.teams.home.name,crest:f.teams.home.logo},
+    awayTeam:{id:f.teams.away.id,name:f.teams.away.name,shortName:f.teams.away.name,crest:f.teams.away.logo},
+    score:{fullTime:{home:f.goals.home,away:f.goals.away}},
+    goals:(f.events||[]).filter(e=>e.type==='Goal').map(e=>({minute:e.time.elapsed,team:{id:e.team.id},scorer:{name:e.player.name},player:{name:e.player.name}}))
+  };
+}
+
+// ═══════════════════════════════
+// MATCH CARD
+// ═══════════════════════════════
+function mkMC(m, type) {
+  const h=m.homeTeam, a=m.awayTeam;
+  const isL=type==='live', isF=type==='fin';
+  const hg=m.score?.fullTime?.home??m.score?.halfTime?.home;
+  const ag=m.score?.fullTime?.away??m.score?.halfTime?.away;
+  const hW=isF&&hg!=null&&ag!=null&&hg>ag, aW=isF&&hg!=null&&ag!=null&&ag>hg;
+  let tl=kt(m.utcDate);
+  if(isL){if(m.status==='HALFTIME')tl='HT';else{const e=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);tl=e>0&&e<=95?`${Math.min(e,90)}'`:'진행';}}
+  const goals=m.goals||[], hG=goals.filter(g=>g.team?.id===h?.id), aG=goals.filter(g=>g.team?.id===a?.id);
+  const isMe=TEAMS.some(t=>h?.id===t.id||a?.id===t.id);
+  const isW=watchList.includes(String(m.id));
+  const mom=[...Array(7)].map((_,i)=>{const v=Math.sin((h?.id||0)*31+(a?.id||0)*17+(m.id||0)+i)*43758.5453,rv=v-Math.floor(v);return rv<.3?'a':rv>.7?'h':'n';});
+  const od=ods(m);
+  const hn=elv(h?.shortName||h?.name), an=elv(a?.shortName||a?.name);
+  const isKLMatch=!!m._kl;
+  return `<div class="mc ${isL?'live':''} ${isMe?'mymatch':''}" data-mid="${m.id}">
+    <div class="mc-top">
+      <span class="mc-lg">${m.competition?.name||''}${m.matchday?' · '+m.matchday+'R':''}</span>
+      <div class="mc-top-r">
+        <button class="nb-btn ${isW?'on':''}" onclick="event.stopPropagation();toggleWatch(${m.id},'${hn}','${an}',this)">${isW?'🔔':'🔕'}</button>
+        <div class="mc-badge ${type}">${isL?'<div class="mc-dot"></div>LIVE':isF?'FT':tl}</div>
+      </div>
+    </div>
+    <div class="mc-body" onclick="opnDtl(${m.id},'${hn}','${an}',${isKLMatch})">
+      <div class="mc-row">
+        <div class="mc-tm"><img class="mc-cr" src="${h?.crest||''}" onerror="this.style.opacity='.2'"><span class="mc-nm" style="${hW?'color:var(--p)':''}">${h?.shortName||h?.name||''}</span></div>
+        <div class="${isL?'mc-sc-box live':'mc-sc-box'}">${hg??'–'} : ${ag??'–'}</div>
+        <div class="mc-tm aw"><img class="mc-cr" src="${a?.crest||''}" onerror="this.style.opacity='.2'"><span class="mc-nm" style="${aW?'color:var(--p)':''}">${a?.shortName||a?.name||''}</span></div>
+      </div>
+    </div>
+    ${(isL||isF)&&goals.length?`<div class="mc-goals"><div class="mc-gs">${hG.map(g=>`<span class="mc-gi"><span class="gm">${g.minute||''}'</span>${(g.scorer?.name||'').split(' ').pop()}</span>`).join('')}</div><div class="mc-gs aw">${aG.map(g=>`<span class="mc-gi">${(g.scorer?.name||'').split(' ').pop()}<span class="gm">${g.minute||''}'</span></span>`).join('')}</div></div>`:''}
+    ${isL?`<div class="mom"><div class="mom-lbl"><span>${hn}</span><span>모멘텀</span><span>${an}</span></div><div class="mom-bar">${mom.map(s=>`<div class="ms ${s}"></div>`).join('')}</div></div>`:''}
+    ${!isF?`<div class="odds-row"><div class="obtn"><div class="olbl">${hn}</div><div class="oval ${parseFloat(od.hw)<2.5?'fav':''}">${od.hw}</div></div><div class="obtn"><div class="olbl">무승부</div><div class="oval">${od.dr}</div></div><div class="obtn"><div class="olbl">${an}</div><div class="oval ${parseFloat(od.aw)<2.5?'fav':''}">${od.aw}</div></div></div>`:''}
+  </div>`;
+}
+
+// ═══════════════════════════════
+// RIGHT PANEL
+// ═══════════════════════════════
+async function loadRightPanel() {
+  const c=document.getElementById('rp-bd'); if(!c)return;
+  const today=ds(kn()), ks=new Date(today+'T00:00:00+09:00');
+  const uf=new Date(ks.getTime()-9*3600000).toISOString().slice(0,10);
+  const ut=new Date(ks.getTime()-9*3600000+86399000).toISOString().slice(0,10);
+  const d=await fd(`/competitions/PL/matches?dateFrom=${uf}&dateTo=${ut}`);
+  const ms=(d?.matches||[]).filter(m=>isKstToday(m.utcDate));
+  if(!ms.length){c.innerHTML=`<div style="color:var(--t2);font-size:12px;padding:10px;">오늘 EPL 경기 없음</div>`;return;}
+  c.innerHTML=ms.map(m=>{
+    const h=m.homeTeam,a=m.awayTeam,live=isLive(m),fin=isFin(m);
+    const hg=m.score?.fullTime?.home??m.score?.halfTime?.home;
+    const ag=m.score?.fullTime?.away??m.score?.halfTime?.away;
+    const hn=elv(h?.shortName||h?.name), an=elv(a?.shortName||a?.name);
+    return`<div style="padding:9px 0;border-bottom:1px solid var(--t3);cursor:pointer;" onclick="opnDtl(${m.id},'${hn}','${an}',false)">
+      <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+        <span style="font-size:10px;color:var(--t2);">EPL</span>
+        <span style="font-size:11px;font-weight:800;color:${live?'var(--red)':fin?'var(--t2)':'var(--p)'};">${live?'LIVE':fin?'FT':kt(m.utcDate)}</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:5px;">
+        <img src="${h?.crest||''}" style="width:14px;height:14px;object-fit:contain;" onerror="this.style.opacity='.2'">
+        <span style="font-size:12px;font-weight:700;color:var(--t);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${h?.shortName||h?.name||''}</span>
+        <span style="font-size:13px;font-weight:900;color:var(--t);flex-shrink:0;">${hg??''}${hg!=null?':':'vs'}${ag??''}</span>
+        <span style="font-size:12px;font-weight:700;color:var(--t);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;text-align:right;">${a?.shortName||a?.name||''}</span>
+        <img src="${a?.crest||''}" style="width:14px;height:14px;object-fit:contain;" onerror="this.style.opacity='.2'">
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════
+// SCHEDULE
+// ═══════════════════════════════
+async function loadSched() {
+  const c=document.getElementById('sched-bd'); if(!c)return;
+  if(!curSchedDate) curSchedDate=ds(kn());
+  renderSchedNav();
+  c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
+  const dateStr=curSchedDate;
+  const ks=new Date(dateStr+'T00:00:00+09:00');
+  const uf=new Date(ks.getTime()-9*3600000).toISOString().slice(0,10);
+  const ut=new Date(ks.getTime()-9*3600000+86399000).toISOString().slice(0,10);
+  const res=await Promise.allSettled(LEAGUES_STD.slice(0,5).map(l=>fd(`/competitions/${l.code}/matches?dateFrom=${uf}&dateTo=${ut}`)));
+  let html='', any=false;
+  res.forEach((r,i)=>{
+    if(r.status!=='fulfilled'||!r.value?.matches)return;
+    const ms=r.value.matches.filter(m=>isKstDate(m.utcDate,dateStr));
+    if(!ms.length)return; any=true;
+    const lg=LEAGUES_STD[i], gid=`lg-${lg.code}`;
+    const lvC=ms.filter(m=>isLive(m)).length;
+    html+=`<div class="lg-grp"><div class="lg-hd" onclick="tlg('${gid}')">
+      <img src="${lg.logo}" onerror="this.style.opacity='.2'">
+      <span class="lg-nm">${lg.name}</span>
+      ${lvC?`<span style="font-size:11px;color:var(--red);font-weight:800;">● ${lvC}</span>`:''}
+      <span class="lg-cnt">${ms.length}</span>
+      <span class="lg-arr" id="arr-${gid}">▾</span>
+    </div>
+    <div class="lg-ms" id="${gid}">${ms.map(m=>mkSm(m,false)).join('')}</div></div>`;
+  });
+  // K리그
+  const klD=await kl('/fixtures',{league:KL_LEAGUE,season:KL_SEASON,date:uf});
+  if(klD?.response?.length){any=true;html+=`<div class="lg-grp"><div class="lg-hd" onclick="tlg('lg-KL1')">
+    <img src="https://media.api-sports.io/football/leagues/292.png" onerror="this.style.opacity='.2'">
+    <span class="lg-nm">K리그 1</span><span class="lg-cnt">${klD.response.length}</span>
+    <span class="lg-arr" id="arr-lg-KL1">▾</span></div>
+    <div class="lg-ms" id="lg-KL1">${klD.response.map(f=>mkSmKL(f)).join('')}</div></div>`;}
+  c.innerHTML=html||`<div class="empty">이 날 경기 없음</div>`;
+}
+
+function mkSm(m, isKLMatch) {
+  const h=m.homeTeam,a=m.awayTeam,live=isLive(m),fin=isFin(m);
+  const hg=fin||live?m.score?.fullTime?.home??m.score?.halfTime?.home:null;
+  const ag=fin||live?m.score?.fullTime?.away??m.score?.halfTime?.away:null;
+  const hW=fin&&hg>ag,aW=fin&&ag>hg;
+  let mt=kt(m.utcDate);
+  if(live){const e=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);mt=m.status==='HALFTIME'?'HT':e>0&&e<=90?`${e}'`:'진행';}
+  const hn=elv(h?.shortName||h?.name), an=elv(a?.shortName||a?.name);
+  return`<div class="sm" onclick="opnDtl(${m.id},'${hn}','${an}',${!!isKLMatch})">
+    <span class="sm-time" style="color:${live?'var(--red)':fin?'var(--t2)':'var(--p)'};">${live?mt:fin?'FT':mt}</span>
+    <div class="sm-teams">
+      <div class="sm-team"><img class="sm-cr" src="${h?.crest||''}" onerror="this.style.opacity='.2'"><span class="sm-nm ${hW?'win':''}">${h?.shortName||h?.name||''}</span>${hg!=null?`<span class="sm-sc" style="color:${hW?'var(--p)':'var(--t2)'};">${hg}</span>`:''}</div>
+      <div class="sm-team"><img class="sm-cr" src="${a?.crest||''}" onerror="this.style.opacity='.2'"><span class="sm-nm ${aW?'win':''}">${a?.shortName||a?.name||''}</span>${ag!=null?`<span class="sm-sc" style="color:${aW?'var(--p)':'var(--t2)'};">${ag}</span>`:''}</div>
+    </div>
+  </div>`;
+}
+
+function mkSmKL(f) {
+  const h=f.teams.home,a=f.teams.away;
+  const fin=['FT','AET','PEN'].includes(f.fixture.status.short);
+  const live=['1H','HT','2H','ET','P'].includes(f.fixture.status.short);
+  const hg=fin||live?f.goals.home:null, ag=fin||live?f.goals.away:null;
+  const hW=fin&&hg>ag, aW=fin&&ag>hg;
+  const hn=elv(h.name), an=elv(a.name);
+  return`<div class="sm" onclick="opnDtlKL(${f.fixture.id},'${hn}','${an}')">
+    <span class="sm-time" style="color:${live?'var(--red)':fin?'var(--t2)':'var(--p)'};">${live?'LIVE':fin?'FT':kt(f.fixture.date)}</span>
+    <div class="sm-teams">
+      <div class="sm-team"><img class="sm-cr" src="${h.logo||''}" onerror="this.style.opacity='.2'"><span class="sm-nm ${hW?'win':''}">${h.name}</span>${hg!=null?`<span class="sm-sc" style="color:${hW?'var(--p)':'var(--t2)'};">${hg}</span>`:''}</div>
+      <div class="sm-team"><img class="sm-cr" src="${a.logo||''}" onerror="this.style.opacity='.2'"><span class="sm-nm ${aW?'win':''}">${a.name}</span>${ag!=null?`<span class="sm-sc" style="color:${aW?'var(--p)':'var(--t2)'};">${ag}</span>`:''}</div>
+    </div>
+  </div>`;
+}
+
+function renderSchedNav() {
+  const nav=document.getElementById('sched-nav'); if(!nav)return;
+  const today=ds(kn());
+  const dates=Array.from({length:11},(_,i)=>addDays(today,i-3));
+  nav.innerHTML=`<div class="date-nav">
+    <button class="date-arr" onclick="schedGo(-7)">‹</button>
+    <div class="date-strip">${dates.map(d=>{
+      const isT=d===today, isSel=d===curSchedDate;
+      const dt=new Date(d+'T12:00:00Z');
+      const dow=['일','월','화','수','목','금','토'][dt.getUTCDay()];
+      return`<button class="date-btn ${isSel?'sel':''} ${isT?'today':''}" onclick="schedDate('${d}')">${isT?'오늘':dow}<span>${dt.getUTCMonth()+1}/${dt.getUTCDate()}</span></button>`;
+    }).join('')}</div>
+    <button class="date-arr" onclick="schedGo(7)">›</button>
+  </div>`;
+}
+function schedDate(d){curSchedDate=d;loadSched();}
+function schedGo(n){curSchedDate=addDays(curSchedDate||ds(kn()),n);loadSched();}
+function tlg(id){const el=document.getElementById(id),arr=document.getElementById('arr-'+id);if(!el)return;const o=el.style.display!=='none';el.style.display=o?'none':'flex';arr?.classList.toggle('cl',o);}
+
+// ═══════════════════════════════
+// STANDINGS
+// ═══════════════════════════════
+function swStd(code,btn){curStd=code;document.querySelectorAll('#std-pills .pill').forEach(p=>p.classList.remove('on'));btn.classList.add('on');loadStd(code);}
+async function loadStd(code) {
+  const c=document.getElementById('std-bd'); if(!c)return;
+  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">순위 불러오는 중...</div></div>`;
+  if(code==='KL1'){await loadKLStd(c);return;}
+  const lg=LEAGUES_STD.find(l=>l.code===code);
+  const d=await fd(`/competitions/${code}/standings`,300000);
+  if(!d?.standings){
+    const msg=d?.message||d?.error||'데이터 없음';
+    const isRL=msg.toLowerCase().includes('limit')||String(d?.errorCode)==='429';
+    c.innerHTML=`<div class="empty">${isRL?'⏳ 잠시 후 다시 시도해주세요':'📡 '+msg}<br><button class="retry-btn" onclick="loadStd('${code}')">다시 시도</button></div>`;
+    if(isRL){let n=12;const t=setInterval(()=>{n--;const b=c.querySelector('.retry-btn');if(b)b.textContent=`자동 재시도 ${n}초`;if(n<=0){clearInterval(t);loadStd(code);}},1000);}
+    return;
+  }
+  const rows=d.standings[0].table, tot=rows.length;
+  const fc={W:'var(--p)',D:'var(--am)',L:'var(--red)'};
+  c.innerHTML=`
+    ${lg?`<div class="std-hdr"><img src="${lg.logo}" onerror="this.style.opacity='.3'"><h3>${lg.name}</h3><small>2025-26 시즌</small></div>`:''}
+    <table class="stt">
+      <tr><th>#</th><th>팀</th><th>경</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th><th>폼</th></tr>
+      ${rows.map(t=>{
+        const isMe=TEAMS.some(tm=>tm.id===t.team.id);
+        const gd=t.goalsDiff>=0?'+'+t.goalsDiff:t.goalsDiff;
+        const rc=t.position<=4?'cl-row':t.position===5?'el-row':t.position>=tot-2?'rg-row':'';
+        const pc=t.position<=4?'top':t.position>=tot-2?'bot':t.position===5?'rel':'';
+        const fm=(t.form||'').split('').slice(-5);
+        return`<tr class="${isMe?'my':''} ${rc}">
+          <td><span class="sp ${pc}">${t.position}</span></td>
+          <td><div class="nm-cell"><img src="${t.team.crest||''}" onerror="this.style.opacity='.2'">${t.team.shortName||t.team.name}</div></td>
+          <td>${t.all.played}</td><td>${t.all.win}</td><td>${t.all.draw}</td><td>${t.all.lose}</td>
+          <td>${gd}</td><td class="pts">${t.points}</td>
+          <td><div class="sform">${fm.map(f=>`<div class="sfd" style="background:${fc[f]||'var(--t3)'}"></div>`).join('')}</div></td>
+        </tr>`;
+      }).join('')}
+    </table>
+    <div style="display:flex;gap:14px;margin-top:14px;flex-wrap:wrap;">
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);"><div style="width:3px;height:16px;background:var(--p);border-radius:2px;"></div>UCL</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);"><div style="width:3px;height:16px;background:var(--am);border-radius:2px;"></div>유로파</div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:11px;color:var(--t2);"><div style="width:3px;height:16px;background:var(--red);border-radius:2px;"></div>강등</div>
+    </div>`;
+}
+
+async function loadKLStd(c) {
+  const d=await kl('/standings',{league:KL_LEAGUE,season:KL_SEASON});
+  if(!d?.response?.length){c.innerHTML=`<div class="empty">K리그 순위 없음<br><button class="retry-btn" onclick="loadStd('KL1')">다시 시도</button></div>`;return;}
+  const rows=d.response[0].league.standings[0],tot=rows.length;
+  c.innerHTML=`
+    <div class="std-hdr"><img src="https://media.api-sports.io/football/leagues/292.png"><h3>K리그 1</h3><small>2025 시즌</small></div>
+    <table class="stt">
+      <tr><th>#</th><th>팀</th><th>경</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th></tr>
+      ${rows.map(t=>{
+        const isMe=TEAMS.some(tm=>tm.id===t.team.id);
+        const gd=t.goalsDiff>=0?'+'+t.goalsDiff:t.goalsDiff;
+        const rc=t.rank<=2?'cl-row':t.rank>=tot-1?'rg-row':'';
+        const pc=t.rank<=2?'top':t.rank>=tot-1?'bot':'';
+        return`<tr class="${isMe?'my':''} ${rc}">
+          <td><span class="sp ${pc}">${t.rank}</span></td>
+          <td><div class="nm-cell"><img src="${t.team.logo||''}" onerror="this.style.opacity='.2'">${t.team.name}</div></td>
+          <td>${t.all.played}</td><td>${t.all.win}</td><td>${t.all.draw}</td><td>${t.all.lose}</td>
+          <td>${gd}</td><td class="pts">${t.points}</td>
+        </tr>`;
+      }).join('')}
+    </table>`;
+}
+
+// ═══════════════════════════════
+// PLAYERS
+// ═══════════════════════════════
+function swPLg(code,btn){curPLg=code;document.querySelectorAll('#pl-pills .pill').forEach(p=>p.classList.remove('on'));btn.classList.add('on');loadPlayers(code,curPt);}
+function swPt(type,btn){curPt=type;document.querySelectorAll('#pg-player .pills+div .pill').forEach(p=>p.classList.remove('on'));btn.classList.add('on');loadPlayers(curPLg,type);}
+async function loadPlayers(lg,type) {
+  const c=document.getElementById('pl-bd'); if(!c)return;
+  c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
+  if(lg==='KL1'){await loadKLPlayers(c,type);return;}
+  const lgObj=LEAGUES_STD.find(l=>l.code===lg);
+  const d=await fd(`/competitions/${lg}/scorers?limit=20`,300000);
+  if(!d?.scorers){const msg=d?.message||d?.error||'데이터 없음';c.innerHTML=`<div class="empty">📡 ${msg}<br><button class="retry-btn" onclick="loadPlayers('${lg}','${type}')">다시 시도</button></div>`;return;}
+  let sc=[...d.scorers];
+  if(type==='assists') sc.sort((a,b)=>(b.assists||0)-(a.assists||0));
+  c.innerHTML=`${lgObj?`<div class="std-hdr"><img src="${lgObj.logo}" onerror="this.style.opacity='.3'"><h3>${lgObj.name}</h3><small>${type==='scorers'?'득점왕':'도움왕'}</small></div>`:''}`+sc.map((s,i)=>{
+    const val=type==='scorers'?(s.goals||0):(s.assists||0);
+    const isMe=TEAMS.some(t=>t.id===s.team?.id);
+    return`<div class="pc ${isMe?'me':''}">
+      <div class="pc-rk ${i<3?'top':''}">${i+1}</div>
+      <img src="${s.team?.crest||''}" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" onerror="this.style.opacity='.2'">
+      <div class="pc-info"><div class="pc-name">${s.player?.name||''}</div><div class="pc-team">${s.team?.shortName||s.team?.name||''}</div></div>
+      <div style="text-align:right;"><div class="pc-val">${val}</div><div class="pc-lbl">${type==='scorers'?'골':'도움'}</div></div>
+    </div>`;
+  }).join('');
+}
+
+async function loadKLPlayers(c,type) {
+  const path=type==='assists'?'/players/topassists':'/players/topscorers';
+  const d=await kl(path,{league:KL_LEAGUE,season:KL_SEASON});
+  if(!d?.response?.length){c.innerHTML=`<div class="empty">K리그 선수 데이터 없음</div>`;return;}
+  c.innerHTML=`<div class="std-hdr"><img src="https://media.api-sports.io/football/leagues/292.png"><h3>K리그 1</h3><small>${type==='scorers'?'득점왕':'도움왕'}</small></div>`+d.response.slice(0,20).map((p,i)=>{
+    const val=type==='assists'?(p.statistics[0]?.goals?.assists||0):(p.statistics[0]?.goals?.total||0);
+    const isMe=TEAMS.some(t=>t.id===p.statistics[0]?.team?.id);
+    return`<div class="pc ${isMe?'me':''}">
+      <div class="pc-rk ${i<3?'top':''}">${i+1}</div>
+      <img src="${p.statistics[0]?.team?.logo||''}" style="width:36px;height:36px;object-fit:contain;border-radius:8px;" onerror="this.style.opacity='.2'">
+      <div class="pc-info"><div class="pc-name">${p.player?.name||''}</div><div class="pc-team">${p.statistics[0]?.team?.name||''}</div></div>
+      <div style="text-align:right;"><div class="pc-val">${val}</div><div class="pc-lbl">${type==='assists'?'도움':'골'}</div></div>
+    </div>`;
+  }).join('');
+}
+
+// ═══════════════════════════════
+// MATCH DETAIL
+// ═══════════════════════════════
+async function opnDtl(id,hn,an,isKLMatch) {
+  document.getElementById('dtl-ttl').textContent=`${hn} vs ${an}`;
+  document.getElementById('dtl-body').innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
+  document.getElementById('dtl-modal').classList.add('show');
+  if(isKLMatch){await opnDtlKL(id,hn,an);return;}
+  const m=await fd(`/matches/${id}`,60000);
+  if(!m||m.error){document.getElementById('dtl-body').innerHTML=`<div class="empty">데이터 없음</div>`;return;}
+  const h=m.homeTeam,a=m.awayTeam;
+  const hg=m.score?.fullTime?.home??m.score?.halfTime?.home??'–';
+  const ag=m.score?.fullTime?.away??m.score?.halfTime?.away??'–';
+  const goals=m.goals||[], hG=goals.filter(g=>g.team?.id===h?.id), aG=goals.filter(g=>g.team?.id===a?.id);
+  const od=ods(m);
+  document.getElementById('dtl-body').innerHTML=`
+    <div style="text-align:center;padding:16px 0;border-bottom:1px solid var(--t3);margin-bottom:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="flex:1;text-align:center;"><img src="${h?.crest||''}" style="width:48px;height:48px;object-fit:contain;" onerror="this.style.opacity='.2'"><br><span style="font-size:13px;font-weight:800;color:var(--t);">${h?.name||''}</span></div>
+        <div style="font-family:var(--f-h);font-size:42px;letter-spacing:4px;color:var(--t);">${hg} : ${ag}</div>
+        <div style="flex:1;text-align:center;"><img src="${a?.crest||''}" style="width:48px;height:48px;object-fit:contain;" onerror="this.style.opacity='.2'"><br><span style="font-size:13px;font-weight:800;color:var(--t);">${a?.name||''}</span></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+        ${m.utcDate?`<span style="font-size:11px;background:var(--bg3);border:1px solid var(--t3);padding:4px 12px;border-radius:100px;color:var(--t2);">📅 ${kd(m.utcDate)} ${kt(m.utcDate)} KST</span>`:''}
+        ${m.venue?`<span style="font-size:11px;background:var(--bg3);border:1px solid var(--t3);padding:4px 12px;border-radius:100px;color:var(--t2);">🏟️ ${m.venue}</span>`:''}
+        ${m.referees?.[0]?`<span style="font-size:11px;background:var(--bg3);border:1px solid var(--t3);padding:4px 12px;border-radius:100px;color:var(--t2);">👔 ${m.referees[0].name}</span>`:''}
+      </div>
+    </div>
+    ${goals.length?`<div style="margin-bottom:18px;"><div style="font-size:11px;font-weight:800;color:var(--t2);letter-spacing:1px;margin-bottom:10px;">⚽ 골 기록</div>
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;">${hG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;"><span style="font-weight:800;color:var(--p);">${g.minute}'</span> ${(g.scorer?.name||g.player?.name||'').split(' ').pop()}</div>`).join('')}</div>
+        <div style="flex:1;text-align:right;">${aG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;">${(g.scorer?.name||g.player?.name||'').split(' ').pop()} <span style="font-weight:800;color:var(--p);">${g.minute}'</span></div>`).join('')}</div>
+      </div></div>`:''}
+    <div><div style="font-size:11px;font-weight:800;color:var(--t2);letter-spacing:1px;margin-bottom:10px;">📊 배당률</div>
+      <div class="odds-row" style="padding:0;border:none;">
+        <div class="obtn"><div class="olbl">${hn}</div><div class="oval ${parseFloat(od.hw)<2.5?'fav':''}">${od.hw}</div></div>
+        <div class="obtn"><div class="olbl">무승부</div><div class="oval">${od.dr}</div></div>
+        <div class="obtn"><div class="olbl">${an}</div><div class="oval ${parseFloat(od.aw)<2.5?'fav':''}">${od.aw}</div></div>
+      </div>
+    </div>`;
+}
+
+async function opnDtlKL(id,hn,an) {
+  const d=await kl('/fixtures',{id});
+  const f=d?.response?.[0];
+  if(!f){document.getElementById('dtl-body').innerHTML=`<div class="empty">데이터 없음</div>`;return;}
+  const h=f.teams.home,a=f.teams.away,hg=f.goals.home??'–',ag=f.goals.away??'–';
+  const goals=(f.events||[]).filter(e=>e.type==='Goal');
+  const hG=goals.filter(g=>g.team.id===h.id), aG=goals.filter(g=>g.team.id===a.id);
+  const stats=f.statistics||[], hS=stats[0]?.statistics||[], aS=stats[1]?.statistics||[];
+  const statKeys=[['Shots on Goal','유효슈팅'],['Ball Possession','점유율'],['Total passes','패스'],['Fouls','파울'],['Yellow Cards','경고']];
+  document.getElementById('dtl-body').innerHTML=`
+    <div style="text-align:center;padding:16px 0;border-bottom:1px solid var(--t3);margin-bottom:18px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+        <div style="flex:1;text-align:center;"><img src="${h.logo||''}" style="width:48px;height:48px;object-fit:contain;" onerror="this.style.opacity='.2'"><br><span style="font-size:13px;font-weight:800;color:var(--t);">${h.name}</span></div>
+        <div style="font-family:var(--f-h);font-size:42px;letter-spacing:4px;color:var(--t);">${hg} : ${ag}</div>
+        <div style="flex:1;text-align:center;"><img src="${a.logo||''}" style="width:48px;height:48px;object-fit:contain;" onerror="this.style.opacity='.2'"><br><span style="font-size:13px;font-weight:800;color:var(--t);">${a.name}</span></div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+        ${f.fixture.venue?.name?`<span style="font-size:11px;background:var(--bg3);border:1px solid var(--t3);padding:4px 12px;border-radius:100px;color:var(--t2);">🏟️ ${f.fixture.venue.name}</span>`:''}
+        ${f.fixture.referee?`<span style="font-size:11px;background:var(--bg3);border:1px solid var(--t3);padding:4px 12px;border-radius:100px;color:var(--t2);">👔 ${f.fixture.referee}</span>`:''}
+        <span style="font-size:11px;background:var(--bg3);border:1px solid var(--t3);padding:4px 12px;border-radius:100px;color:var(--t2);">⏰ ${kt(f.fixture.date)} KST</span>
+      </div>
+    </div>
+    ${goals.length?`<div style="margin-bottom:18px;"><div style="font-size:11px;font-weight:800;color:var(--t2);letter-spacing:1px;margin-bottom:10px;">⚽ 골 기록</div>
+      <div style="display:flex;gap:10px;">
+        <div style="flex:1;">${hG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;"><span style="font-weight:800;color:var(--p);">${g.time.elapsed}'</span> ${g.player.name.split(' ').pop()}</div>`).join('')}</div>
+        <div style="flex:1;text-align:right;">${aG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;">${g.player.name.split(' ').pop()} <span style="font-weight:800;color:var(--p);">${g.time.elapsed}'</span></div>`).join('')}</div>
+      </div></div>`:''}
+    ${hS.length?`<div><div style="font-size:11px;font-weight:800;color:var(--t2);letter-spacing:1px;margin-bottom:12px;">📊 경기 스탯</div>
+      ${statKeys.map(([key,label])=>{const hv=hS.find(s=>s.type===key)?.value??0,av=aS.find(s=>s.type===key)?.value??0;const tot=(typeof hv==='number'&&typeof av==='number')?hv+av||100:100;const hp=Math.round((typeof hv==='string'?parseInt(hv):hv)/tot*100);return`<div style="margin-bottom:10px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:5px;"><span style="font-weight:800;color:var(--t);">${hv}</span><span style="color:var(--t2);">${label}</span><span style="font-weight:800;color:var(--t);">${av}</span></div><div style="height:5px;background:var(--t3);border-radius:3px;display:flex;overflow:hidden;"><div style="width:${hp}%;background:var(--p);"></div><div style="width:${100-hp}%;background:var(--red);"></div></div></div>`;}).join('')}
+    </div>`:''}`;
+}
+
+function cm(id){document.getElementById(id).classList.remove('show');}
+
+// ═══════════════════════════════
+// HUB
+// ═══════════════════════════════
+function swHub(type,btn) {
+  curHub=type;
+  document.querySelectorAll('#hub-tabs .pill').forEach(t=>t.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  renderHub(type);
+}
+function mkNews(em,author,time,badge,title,body,tags) {
+  const bdg=badge?`<span class="tr-b ${badge==='done'?'done':'rumor'}">${badge==='done'?'✅ 확정':'💬 루머'}</span>`:'';
+  return`<div class="nc" onclick="openNewsModal('${title.replace(/'/g,'`')}','${author}','${body.replace(/'/g,'`')}')">
+    <div class="nc-src"><div class="nc-av">${em}</div><div><div class="nc-author">${author}</div><div style="font-size:11px;color:var(--t2);">${time}</div></div>${bdg}</div>
+    <div class="nc-title">${title}</div>
+    <div class="nc-body">${body}</div>
+    ${tags.length?`<div class="nc-tags">${tags.map(t=>`<span class="nc-tag">#${t}</span>`).join('')}</div>`:''}
+  </div>`;
+}
+function openNewsModal(title,author,body) {
+  document.getElementById('dtl-ttl').textContent=author;
+  document.getElementById('dtl-body').innerHTML=`<div><div style="font-size:15px;font-weight:800;color:var(--t);line-height:1.5;margin-bottom:14px;">${title}</div><div style="font-size:14px;color:var(--t2);line-height:1.8;">${body}</div></div>`;
+  document.getElementById('dtl-modal').classList.add('show');
+}
+async function renderHub(type) {
+  const c=document.getElementById('hub-bd'); if(!c)return;
+  if(type==='transfer') {
+    c.innerHTML=[
+      mkNews('🎙️','Fabrizio Romano ✓','2h','done','공식: 빅클럽 이적 완료','의료 검사 통과 및 계약서 서명. 곧 공식 발표 예정.',['이적','공식']),
+      mkNews('🎙️','Fabrizio Romano ✓','5h','rumor','탑클럽, 여름 영입 협상','에이전트 첫 접촉 완료. 이번 주 조건 합의 예상.',['협상']),
+      mkNews('📰','David Ornstein ✓','3h','','감독 거취 내부 회의','전술 방향 재검토 관련 보드 미팅 예정.',['감독']),
+      mkNews('📺','Sky Sports','1h','done','UCL 8강 대진 확정','레알 vs 맨시티 포함 역대급 라인업.',['UCL']),
+      mkNews('📺','Sky Sports','6h','','주말 빅매치 프리뷰','EPL 1위 결정전 + 강등권 6포인터 분석.',['EPL']),
+    ].join('');
+  } else if(type==='myteam') {
+    if(!TEAMS.length){c.innerHTML=`<div class="empty">팀을 선택하면 팀 뉴스를 볼 수 있어요</div>`;return;}
+    c.innerHTML=`<div class="ldr"><div class="spin"></div></div>`;
+    let html='';
+    for(const team of TEAMS) {
+      const [rec,up]=await Promise.all([
+        isKL(team)?kl('/fixtures',{team:team.id,league:KL_LEAGUE,season:KL_SEASON,last:5}):fd(`/teams/${team.id}/matches?status=FINISHED&limit=5`),
+        isKL(team)?kl('/fixtures',{team:team.id,league:KL_LEAGUE,season:KL_SEASON,next:3}):fd(`/teams/${team.id}/matches?status=SCHEDULED&limit=3`),
+      ]);
+      const recMs=isKL(team)?(rec?.response||[]):(rec?.matches||[]);
+      const upMs=isKL(team)?(up?.response||[]):(up?.matches||[]);
+      html+=`<div style="background:var(--bg2);border:1px solid var(--t3);border-radius:18px;padding:18px;margin-bottom:14px;">
+        <div style="font-size:13px;font-weight:800;color:var(--p);margin-bottom:12px;">⚽ ${team.name}</div>`;
+      recMs.slice(0,4).forEach(m=>{
+        const kl2=isKL(team);
+        const h=kl2?m.teams.home:m.homeTeam,a=kl2?m.teams.away:m.awayTeam;
+        const hg=kl2?(m.goals?.home??0):(m.score?.fullTime?.home??0);
+        const ag=kl2?(m.goals?.away??0):(m.score?.fullTime?.away??0);
+        const isH=h.id===team.id, myG=isH?hg:ag, oppG=isH?ag:hg;
+        const opp=isH?a:h;
+        const rc=myG>oppG?'var(--p)':myG===oppG?'var(--am)':'var(--red)';
+        const res=myG>oppG?'승':myG===oppG?'무':'패';
+        const date=kl2?m.fixture?.date:m.utcDate;
+        html+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--t3);">
+          <div style="width:24px;height:24px;border-radius:50%;background:${rc};display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:900;color:#000;flex-shrink:0;">${res}</div>
+          <img src="${kl2?opp.logo:opp.crest||''}" style="width:16px;height:16px;object-fit:contain;" onerror="this.style.opacity='.2'">
+          <span style="font-size:13px;color:var(--t);flex:1;">${kl2?opp.name:(opp.shortName||opp.name)}</span>
+          <span style="font-size:14px;font-weight:900;color:var(--t);">${myG}:${oppG}</span>
+          <span style="font-size:11px;color:var(--t2);">${kd(date)}</span>
+        </div>`;
+      });
+      upMs.forEach(m=>{
+        const kl2=isKL(team);
+        const h=kl2?m.teams.home:m.homeTeam,a=kl2?m.teams.away:m.awayTeam;
+        const opp=h.id===team.id?a:h, isHome=h.id===team.id;
+        const date=kl2?m.fixture?.date:m.utcDate;
+        html+=`<div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--t3);">
+          <span style="font-size:10px;font-weight:800;background:var(--ps);border:1px solid var(--pb);color:var(--p);padding:2px 8px;border-radius:100px;">${isHome?'홈':'원정'}</span>
+          <img src="${kl2?opp.logo:opp.crest||''}" style="width:16px;height:16px;object-fit:contain;" onerror="this.style.opacity='.2'">
+          <span style="font-size:13px;color:var(--t);flex:1;">vs ${kl2?opp.name:(opp.shortName||opp.name)}</span>
+          <span style="font-size:11px;color:var(--t2);">${kd(date)} ${kt(date)}</span>
+        </div>`;
+      });
+      html+='</div>';
+    }
+    c.innerHTML=html||`<div class="empty">데이터 없음</div>`;
+  } else {
+    c.innerHTML=[
+      mkNews('🏆','UEFA','최신','','UCL 8강 분석','레알 마드리드의 압도적 폼. 맨시티와의 빅매치 주목.',['UCL']),
+      mkNews('⚽','Euro Football','8h','','5대 리그 주간 리뷰','EPL TOP4, 라리가 우승 레이스, 분데스 강등권.',['유럽축구']),
+      mkNews('📊','Opta Stats','12h','','xG 분석 2025-26','기대득점 기반 이번 시즌 최강자 분석.',['통계']),
+    ].join('');
+  }
+}
+
+// ═══════════════════════════════
+// FANZONE — 집관 인증
+// ═══════════════════════════════
+const getLv=n=>LEVELS.find(l=>n>=l.min&&n<=l.max)||LEVELS[0];
+const saveFan=()=>localStorage.setItem('pp_fan',JSON.stringify(fanData));
+const isMatchTime=m=>{if(!m.utcDate)return false;const s=new Date(m.utcDate).getTime(),n=Date.now();return n>=s-30*60000&&n<=s+120*60000;};
+const isMatchLv=m=>['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status);
+
+function updateFan() {
+  const lv=getLv(fanData.total), nxt=LEVELS.find(l=>l.lv===lv.lv+1);
+  const prog=nxt?Math.round((fanData.total-lv.min)/(nxt.min-lv.min)*100):100;
+  document.getElementById('lv-badge').textContent=`Lv.${lv.lv}`;
+  document.getElementById('fan-bd').innerHTML=`
+    <div class="fz-hero">
+      <div class="fz-em">${lv.em}</div>
+      <div class="fz-lvname">${lv.name}</div>
+      <div class="fz-sub">Lv.${lv.lv} · 집관 ${fanData.total}경기${TEAMS.length?' · '+TEAMS.map(t=>t.name).join(' & '):''}</div>
+      <div class="fz-pw"><div class="fz-pb" style="width:${prog}%"></div></div>
+      <div class="fz-pl"><span>${lv.min}경기</span><span>${prog}%</span><span>${nxt?nxt.min+'경기':'MAX'}</span></div>
+      <div class="fz-stats">
+        <div class="fzs"><div class="fzs-v">${fanData.total}</div><div class="fzs-l">총 집관</div></div>
+        <div class="fzs"><div class="fzs-v">${lv.lv}</div><div class="fzs-l">레벨</div></div>
+        <div class="fzs"><div class="fzs-v">${fanData.checkins.length}</div><div class="fzs-l">인증수</div></div>
+      </div>
+    </div>
+    <div class="sec"><span class="sec-t">집관 인증</span><span class="sec-b">경기 시간에만 가능</span></div>
+    <div id="fz-ms"><div class="ldr" style="padding:16px;"><div class="spin"></div></div></div>
+    <div class="sec" style="margin-top:20px;"><span class="sec-t">인증 기록</span></div>
+    ${fanData.checkins.length?fanData.checkins.slice(0,10).map(ci=>`
+      <div class="ci"><div><div style="font-size:13px;font-weight:800;color:var(--t);">${ci.teams}</div><div style="font-size:12px;color:var(--t2);margin-top:2px;">${ci.date}</div></div><div class="ci-badge">✓ 인증</div></div>`).join(''):`<div class="empty" style="padding:20px;">인증 기록 없음</div>`}`;
+  loadFzMs();
+}
+
+async function loadFzMs() {
+  const c=document.getElementById('fz-ms'); if(!c||!TEAMS.length)return;
+  const mainTeam=TEAMS[0];
+  const d=isKL(mainTeam)?await kl('/fixtures',{team:mainTeam.id,league:KL_LEAGUE,season:KL_SEASON,next:5}):await fd(`/teams/${mainTeam.id}/matches?status=SCHEDULED&limit=5`);
+  const matches=isKL(mainTeam)?(d?.response||[]):(d?.matches||[]);
+  if(!matches.length){c.innerHTML=`<div class="empty" style="padding:12px;">예정 경기 없음</div>`;return;}
+  c.innerHTML=matches.map(m=>{
+    const kl2=isKL(mainTeam);
+    const h=kl2?m.teams.home:m.homeTeam,a=kl2?m.teams.away:m.awayTeam;
+    const date=kl2?m.fixture?.date:m.utcDate;
+    const mid=String(kl2?m.fixture.id:m.id);
+    const teams=`${elv(h.shortName||h.name||h.name)} vs ${elv(a.shortName||a.name||a.name)}`;
+    const done=fanData.checkins.find(c=>c.matchId===mid);
+    // 경기 시간 ±30분 또는 라이브 상태이면 인증 가능
+    const fakeM={utcDate:date,status:kl2?mapKLSt(m.fixture?.status?.short||'NS'):'SCHEDULED'};
+    const canCheck=isMatchTime(fakeM)||isMatchLv(fakeM);
+    return`<div class="fz-match">
+      <div class="fz-info"><div class="fz-teams">${teams}</div><div class="fz-time">📅 ${kd(date)} ${kt(date)} KST</div></div>
+      <button class="fz-btn" ${done||!canCheck?'disabled':''} onclick="doCI(this,'${teams}','${kd(date)} ${kt(date)}','${mid}')">${done?'✓ 완료':canCheck?'집관 인증':'⏰ 경기 시간에만'}</button>
+    </div>`;
+  }).join('');
+}
+
+function doCI(btn,teams,ts,mid) {
+  if(fanData.checkins.find(c=>c.matchId===mid))return;
+  btn.disabled=true;btn.textContent='✓ 완료';
+  const pLv=getLv(fanData.total).lv;
+  fanData.total++;fanData.checkins.unshift({teams,date:ts,matchId:mid});saveFan();
+  const nLv=getLv(fanData.total);
+  if(nLv.lv>pLv){
+    document.getElementById('lu-em').textContent=nLv.em;
+    document.getElementById('lu-sub').textContent=`Lv.${nLv.lv} · ${nLv.name}`;
+    const el=document.getElementById('lvup');el.classList.add('show');setTimeout(()=>el.classList.remove('show'),4000);
+  }
+  updateFan();
+}
+
+// ═══════════════════════════════
+// SETTINGS / INIT
+// ═══════════════════════════════
+function showSettings(){if(confirm('팀을 변경하시겠어요?')){localStorage.removeItem('pp_teams');location.reload();}}
+
+// 저장된 팀 확인
+const savedTeams=localStorage.getItem('pp_teams');
+if(savedTeams){
+  TEAMS=JSON.parse(savedTeams);
+  applyTheme(TEAMS[0]?.color);
+  boot();
+}
 </script>
 </body>
 </html>
