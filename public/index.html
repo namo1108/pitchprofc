@@ -3,106 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>PITCH Pro: Master</title>
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%2310b981'/%3E%3Cstop offset='100%25' stop-color='%233b82f6'/%3E%3C/linearGradient%3E%3C/defs%3E%3Cpath d='M20 10h16a12 12 0 0 1 0 24H20v18h-6V10zm6 6v12h10a6 6 0 1 0 0-12H26z' fill='url(%23g)'/%3E%3C/svg%3E">
+<title>PITCH Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700;900&family=Noto+Sans+KR:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-/* ── [1. 시네마틱 디자인 시스템 & 다이내믹 테마] ── */
+/* ── [1. 디자인 시스템 & 테마] ── */
 :root{
   --f-h:'Poppins', sans-serif; --f-b:'Noto Sans KR', sans-serif;
   --bg:#05070a; --bg2:#0d1117; --cd:rgba(20, 24, 31, 0.9);
   --p:#10b981; --ps:rgba(16, 185, 129, 0.15); --pb:rgba(16, 185, 129, 0.3);
-  --s:#3b82f6; --ss:rgba(59, 130, 246, 0.15);
-  --t:#ffffff; --t2:#a1a1aa; --t3:#3f3f46;
-  --red:#ef4444; --br:24px; --sh:0 20px 40px rgba(0,0,0,0.6);
+  --s:#3b82f6; --t:#ffffff; --t2:#a1a1aa; --t3:#3f3f46;
+  --red:#ef4444; --br:24px;
 }
 *,*::before,*::after{box-sizing:border-box; margin:0; padding:0; -webkit-tap-highlight-color:transparent;}
-body{
-  background:var(--bg); color:var(--t); font-family:var(--f-b); 
-  background-image: radial-gradient(at 0% 0%, var(--ps) 0px, transparent 40%),
-                    radial-gradient(at 100% 100%, var(--ss) 0px, transparent 40%);
-  overflow:hidden; height:100vh; transition: background 0.8s ease;
-}
+body{background:var(--bg); color:var(--t); font-family:var(--f-b); overflow:hidden; height:100vh;}
 
 /* ── [2. 레이아웃] ── */
 #app{display:none; height:100vh; flex-direction:column;}
 #app.show{display:flex;}
 .hdr{height:72px; display:flex; align-items:center; justify-content:space-between; padding:0 32px; background:rgba(13, 17, 23, 0.85); backdrop-filter:blur(25px); border-bottom:1px solid rgba(255,255,255,0.04); z-index:1000;}
-.hdr-logo{font-family:var(--f-h); font-size:22px; font-weight:900; background: linear-gradient(135deg, var(--p) 0%, var(--s) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
 .main-body{flex:1; display:flex; overflow:hidden;}
 .sidebar{width:260px; background:var(--bg2); padding:30px 16px; border-right:1px solid rgba(255,255,255,0.03); display:flex; flex-direction:column;}
 .si{display:flex; align-items:center; gap:14px; padding:16px 20px; border-radius:16px; cursor:pointer; color:var(--t2); font-weight:700; transition:0.3s; margin-bottom:8px;}
 .si.on{background:var(--ps); color:var(--p); border:1px solid rgba(16, 185, 129, 0.1);}
-.pages{flex:1; overflow-y:auto; padding:40px; scroll-behavior: smooth;}
+.pages{flex:1; overflow-y:auto; padding:40px;}
 .page{display:none;} .page.on{display:block;}
 
-/* ── [3. 온보딩: 팀 선택 & 테마 연동] ── */
+/* ── [3. 온보딩: 전체 리그 & 팀 선택] ── */
 #ob{position:fixed; inset:0; background:var(--bg); z-index:9999; overflow-y:auto; padding:60px 20px;}
-.ob-title{font-family:var(--f-h); font-size:36px; font-weight:900; text-align:center; margin-bottom:10px; background:linear-gradient(to right, #fff, #666); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
-.ob-grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:15px; max-width:900px; margin:40px auto;}
-.ob-team{background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:20px; padding:20px 10px; text-align:center; cursor:pointer; transition:0.3s;}
-.ob-team img{width:45px; height:45px; object-fit:contain; margin-bottom:10px;}
-.ob-team span{font-size:12px; font-weight:800; display:block; color:var(--t2);}
-.ob-team:hover{background:rgba(255,255,255,0.08);}
-.ob-team.sel{border-color:var(--p); background:var(--ps); transform:translateY(-5px); box-shadow:0 10px 20px rgba(0,0,0,0.3);}
-.ob-team.sel span{color:var(--p);}
+.ob-section{max-width:900px; margin:0 auto 40px;}
+.ob-lg-title{font-family:var(--f-h); color:var(--p); margin-bottom:15px; border-left:4px solid var(--p); padding-left:15px;}
+.ob-grid{display:grid; grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); gap:12px;}
+.ob-team{background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05); border-radius:16px; padding:15px 5px; text-align:center; cursor:pointer; transition:0.2s;}
+.ob-team img{width:40px; height:40px; object-fit:contain; margin-bottom:8px;}
+.ob-team span{font-size:11px; display:block; font-weight:700;}
+.ob-team.sel{border-color:var(--p); background:var(--ps); transform: scale(1.05);}
 
 /* ── [4. 매치 카드 & 아코디언] ── */
-.mc{background:var(--cd); border:1px solid rgba(255,255,255,0.05); border-radius:var(--br); margin-bottom:20px; overflow:hidden; transition:0.3s; box-shadow:var(--sh); cursor:pointer;}
-.mc:hover{border-color:var(--p); transform:translateY(-4px);}
-.mc-top{padding:12px 20px; background:rgba(255,255,255,0.02); display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:var(--t3); letter-spacing:1px;}
+.mc{background:var(--cd); border:1px solid rgba(255,255,255,0.05); border-radius:var(--br); margin-bottom:15px; overflow:hidden; box-shadow:0 10px 30px rgba(0,0,0,0.4);}
+.mc-top{padding:12px 20px; background:rgba(255,255,255,0.02); display:flex; justify-content:space-between; font-size:11px; font-weight:800; color:var(--t3);}
 .mc-body{padding:25px 20px; display:flex; align-items:center; justify-content:center; gap:15px;}
-.mc-sc-box{background:rgba(0,0,0,0.6); padding:8px 20px; border-radius:14px; border:1px solid var(--pb); font-family:var(--f-h); font-size:32px; font-weight:900;}
+.mc-tm{flex:1; text-align:center; font-family:var(--f-h); font-weight:900; font-size:18px;}
+.mc-sc-box{background:rgba(0,0,0,0.6); padding:8px 16px; border-radius:12px; border:1px solid var(--pb); font-family:var(--f-h); font-size:28px; font-weight:900;}
 
-.lg-hd{display:flex; align-items:center; gap:12px; padding:20px 24px; background:var(--bg2); border-radius:20px; cursor:pointer; margin-top:15px; border:1px solid rgba(255,255,255,0.03); font-weight:800;}
+.lg-hd{display:flex; align-items:center; gap:12px; padding:18px 24px; background:var(--bg2); border-radius:18px; cursor:pointer; margin-top:10px; border:1px solid rgba(255,255,255,0.03);}
 .lg-ms{display:none; flex-direction:column; padding:10px 0;}
 .lg-ms.open{display:flex;}
 
 /* ── [5. 데이터 테이블 & 필터] ── */
 .stt{width:100%; border-collapse:separate; border-spacing:0 8px;}
-.stt th{padding:12px; color:var(--t3); font-size:11px; font-weight:800; text-align:center;}
+.stt th{padding:12px; color:var(--t3); font-size:11px; text-align:center;}
 .stt td{padding:16px 12px; background:rgba(255,255,255,0.02); text-align:center; font-weight:600;}
 .nm-cell{display:flex; align-items:center; gap:12px; text-align:left;}
-.nm-cell img{width:28px; height:28px; object-fit:contain;}
+.nm-cell img{width:24px;}
+.pills{display:flex; gap:10px; overflow-x:auto; padding-bottom:15px; margin-bottom:20px;}
+.pill{padding:10px 20px; border-radius:100px; border:1px solid rgba(255,255,255,0.05); background:rgba(255,255,255,0.02); color:var(--t2); cursor:pointer; font-weight:700; white-space:nowrap;}
+.pill.on{background:var(--p); color:var(--bg); border-color:var(--p);}
 
-.pills{display:flex; gap:10px; overflow-x:auto; padding-bottom:15px; margin-bottom:20px; scrollbar-width: none;}
-.pill{padding:12px 24px; border-radius:100px; border:1px solid rgba(255,255,255,0.05); background:rgba(255,255,255,0.02); color:var(--t2); cursor:pointer; font-weight:700; white-space:nowrap; transition:0.3s;}
-.pill.on{background:var(--p); color:var(--bg); border-color:var(--p); box-shadow:0 0 20px var(--ps);}
-
-/* AI PITCH */
-.ai-card{background:linear-gradient(165deg, #0d1117 0%, #05070a 100%); border:1px solid var(--pb); border-radius:25px; padding:30px; margin-bottom:24px; position:relative;}
-.prob-bar-wrap{height:14px; background:rgba(255,255,255,0.04); border-radius:100px; margin:20px 0; overflow:hidden; display:flex;}
-.prob-h{background:linear-gradient(90deg, #059669, var(--p)); box-shadow:0 0 20px var(--p);}
-.prob-a{background:linear-gradient(90deg, #dc2626, var(--red)); box-shadow:0 0 20px var(--red);}
-
-/* ── [6. 골 애니메이션 레이어] ── */
-#gt{position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.9); backdrop-filter:blur(20px); pointer-events:none;}
-.gt-box{text-align:center;}
-.gt-word{font-family:var(--f-h); font-size:120px; font-weight:900; color:var(--p); letter-spacing:15px; filter:drop-shadow(0 0 30px var(--p)); animation: gtCinema 0.8s forwards;}
+/* ── [6. 시네마틱 애니메이션] ── */
+#gt{position:fixed; inset:0; z-index:10000; display:none; align-items:center; justify-content:center; background:rgba(0,0,0,0.95); pointer-events:none;}
+.gt-word{font-family:var(--f-h); font-size:100px; font-weight:900; color:var(--p); filter:drop-shadow(0 0 30px var(--p)); animation: gtCinema 0.8s forwards;}
 @keyframes gtCinema{0%{transform:scale(2); opacity:0} 100%{transform:scale(1); opacity:1}}
 </style>
 </head>
 <body>
 
 <div id="ob">
-  <div class="ob-title">SELECT YOUR CLUB</div>
-  <p style="text-align:center; color:var(--t2); font-weight:600;">팀 컬러에 맞춰 전체 시스템 테마가 자동으로 변경됩니다.</p>
-  <div id="ob-list" class="ob-grid"></div>
-  <div style="text-align:center;">
-    <button onclick="startApp()" style="padding:18px 80px; border-radius:100px; border:none; background:var(--p); color:#000; font-weight:900; font-size:18px; cursor:pointer; box-shadow:0 10px 30px var(--ps);">START PITCH PRO</button>
+  <h1 style="text-align:center; font-family:var(--f-h); margin-bottom:10px;">PITCH PRO CONNECT</h1>
+  <p style="text-align:center; color:var(--t2); margin-bottom:40px;">당신의 클럽을 선택해 시스템을 동기화하세요.</p>
+  <div id="ob-container"></div>
+  <div style="text-align:center; margin-top:40px;">
+    <button onclick="startApp()" style="padding:20px 80px; border-radius:100px; border:none; background:var(--p); color:#000; font-weight:900; cursor:pointer; font-size:18px;">시스템 시작</button>
   </div>
 </div>
 
 <div id="app">
   <header class="hdr">
-    <div class="hdr-logo">PITCH PRO</div>
-    <div id="lpill" style="display:none; color:var(--red); font-weight:900; font-size:12px; text-shadow:0 0 10px var(--red); animation: pulse 1.5s infinite;">● LIVE</div>
-    <div id="team-tag" style="font-family:var(--f-h); font-size:11px; background:var(--ps); color:var(--p); padding:6px 16px; border-radius:100px; font-weight:800; border:1px solid var(--pb);">CONNECTING...</div>
+    <div style="font-family:var(--f-h); font-weight:900; font-size:24px; color:var(--p);">PITCH PRO</div>
+    <div id="lpill" style="display:none; color:var(--red); font-weight:900; font-size:12px;">● LIVE</div>
+    <div id="team-tag" style="background:var(--ps); color:var(--p); padding:6px 16px; border-radius:100px; font-size:11px; font-weight:800; border:1px solid var(--pb);">NO TEAM</div>
   </header>
 
   <div class="main-body">
     <aside class="sidebar">
-      <div class="si on" onclick="swP('home',this)">⚡ LIVE PITCH</div>
+      <div class="si on" onclick="swP('home',this)">⚡ LIVE MATCH</div>
       <div class="si" onclick="swP('sched',this)">📅 SCHEDULE</div>
       <div class="si" onclick="swP('ai',this)">🤖 AI PITCH</div>
       <div class="si" onclick="swP('std',this)">📊 STANDINGS</div>
@@ -111,46 +94,26 @@ body{
     </aside>
 
     <main class="pages">
-      <div class="page on" id="pg-home">
-        <h1 style="font-family:var(--f-h); font-weight:900; font-size:32px; margin-bottom:30px;">LIVE STREAMING</h1>
-        <div id="home-bd"></div>
-      </div>
-      
-      <div class="page" id="pg-sched">
-        <h1 style="font-family:var(--f-h); font-weight:900; font-size:32px; margin-bottom:10px;">MATCH SCHEDULE</h1>
-        <div id="date-nav" class="pills"></div>
-        <div id="sched-bd"></div>
-      </div>
-
-      <div class="page" id="pg-ai">
-        <h1 style="font-family:var(--f-h); font-weight:900; font-size:32px; margin-bottom:30px;">AI SUPERCOMPUTER</h1>
-        <div id="ai-bd"></div>
-      </div>
-
-      <div class="page" id="pg-std">
-        <div id="std-pills" class="pills"></div>
-        <div id="std-bd"></div>
-      </div>
-
-      <div class="page" id="pg-player">
-        <div id="pl-pills" class="pills"></div>
-        <div id="pl-bd"></div>
-      </div>
-
+      <div class="page on" id="pg-home"><div id="home-bd"></div></div>
+      <div class="page" id="pg-sched"><div id="date-nav" class="pills"></div><div id="sched-bd"></div></div>
+      <div class="page" id="pg-ai"><div id="ai-bd"></div></div>
+      <div class="page" id="pg-std"><div id="std-pills" class="pills"></div><div id="std-bd"></div></div>
+      <div class="page" id="pg-player"><div id="pl-pills" class="pills"></div><div id="pl-bd"></div></div>
       <div class="page" id="pg-fan">
-        <div id="fan-setup" class="ai-card"></div>
-        <h2 style="font-weight:800; margin-bottom:20px;">MY TEAM CALENDAR</h2>
-        <div id="fan-bd"></div>
+        <div id="fan-setup" style="background:var(--bg2); padding:30px; border-radius:24px; border:1px solid var(--pb); text-align:center;">
+          <h2 id="fan-team-name" style="color:var(--p);">화성 FC 팬존</h2>
+          <p style="margin:15px 0; color:var(--t2);">현재 팀 경기가 시작되었습니다! 지금 인증하세요.</p>
+          <button id="btn-ci" class="pill on" style="padding:15px 40px; font-size:18px;" onclick="alert('인증 완료! 포인트가 지급되었습니다.')">집관 인증하기</button>
+        </div>
       </div>
     </main>
   </div>
 </div>
 
-<div id="gt"><div class="gt-box"><div class="gt-word">GOAL!</div><div id="gt-info" style="font-size:28px; font-weight:800; color:#fff; margin-top:20px;"></div></div></div>
+<div id="gt"><div class="gt-word">GOAL!</div></div>
 
 <script>
-// ── [JS ENGINE: CUMULATIVE MASTER] ──
-
+// ── [JS ENGINE: 실시간 데이터 & 로직] ──
 const API = '/api/football';
 const LGS = [
   {code:'PL', name:'EPL', emblem:'https://crests.football-data.org/PL.png'},
@@ -158,97 +121,81 @@ const LGS = [
   {code:'BL1',name:'BUNDES', emblem:'https://crests.football-data.org/BL1.png'},
   {code:'SA', name:'SERIE A', emblem:'https://crests.football-data.org/SA.png'},
   {code:'FL1',name:'LIGUE 1', emblem:'https://crests.football-data.org/FL1.png'},
-  {code:'KL1',name:'K LEAGUE', emblem:'https://media.api-sports.io/football/leagues/292.png'}
+  {code:'KL1',name:'K LEAGUE 1', emblem:'https://media.api-sports.io/football/leagues/292.png'}
 ];
 
-const TEAMS = [
-  {id:764, name:'화성 FC', color:'#FF5E00', lg:'KL2', cr:'https://crests.football-data.org/764.png'},
-  {id:2756, name:'수원삼성', color:'#003DA5', lg:'KL2', cr:'https://media.api-sports.io/football/teams/2756.png'},
-  {id:57, name:'Arsenal', color:'#EF0107', lg:'PL', cr:'https://crests.football-data.org/57.png'},
-  {id:65, name:'Man City', color:'#6CABDD', lg:'PL', cr:'https://crests.football-data.org/65.png'},
-  {id:86, name:'Real Madrid', color:'#FEBE10', lg:'LA', cr:'https://crests.football-data.org/86.png'}
+// 온보딩용 리그별 팀 리스트 (이미지 바탕)
+const OB_DATA = [
+  {name: 'K LEAGUE 2', teams: [
+    {id:764, name:'화성 FC', color:'#FF5E00', cr:'https://crests.football-data.org/764.png'},
+    {id:2756, name:'수원삼성', color:'#003DA5', cr:'https://media.api-sports.io/football/teams/2756.png'},
+    {id:2758, name:'성남 FC', color:'#000000', cr:'https://media.api-sports.io/football/teams/2758.png'}
+  ]},
+  {name: 'PREMIER LEAGUE', teams: [
+    {id:57, name:'Arsenal', color:'#EF0107', cr:'https://crests.football-data.org/57.png'},
+    {id:65, name:'Man City', color:'#6CABDD', cr:'https://crests.football-data.org/65.png'},
+    {id:73, name:'Tottenham', color:'#132257', cr:'https://crests.football-data.org/73.png'}
+  ]}
 ];
 
 let MY_TEAM = null;
 let prevScores = {};
 const cache = {};
 
-// [1] 다이내믹 테마 시스템
-function applyTheme(color) {
-  const root = document.documentElement.style;
-  root.setProperty('--p', color);
-  root.setProperty('--ps', color + '26');
-  root.setProperty('--pb', color + '4d');
-  document.body.style.backgroundImage = `radial-gradient(at 0% 0%, ${color}26 0px, transparent 45%), radial-gradient(at 100% 100%, var(--ss) 0px, transparent 45%)`;
-}
-
-// [2] API 엔진 (Full Cumulative)
+// [1] 데이터 호출 엔진
 async function fetchData(path, isStatic = false) {
   const k = path + isStatic;
   if(cache[k] && (Date.now() - cache[k].ts < (isStatic?1800000:60000))) return cache[k].data;
   try {
     const r = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`);
     const d = await r.json();
-    if(d.errorCode === 429) return cache[k]?.data || d;
     cache[k] = { data: d, ts: Date.now() };
     return d;
   } catch(e) { return null; }
 }
 
-// [3] 라이브 & 골 사운드/애니메이션
+// [2] 라이브 로직
 async function loadHome() {
   const c = document.getElementById('home-bd');
+  c.innerHTML = '<div style="text-align:center; padding:50px;">라이브 데이터 수신 중...</div>';
   const d = await fetchData('/matches');
   if(!d?.matches) return;
 
   const live = d.matches.filter(m => ['IN_PLAY','HALFTIME'].includes(m.status));
   document.getElementById('lpill').style.display = live.length ? 'block' : 'none';
 
+  // 골 감지
   live.forEach(m => {
     const sc = `${m.score.fullTime.home}-${m.score.fullTime.away}`;
-    if(prevScores[m.id] && prevScores[m.id] !== sc) {
-        const team = m.score.fullTime.home > prevScores[m.id].split('-')[0] ? m.homeTeam.shortName : m.awayTeam.shortName;
-        triggerGoal(team);
-    }
+    if(prevScores[m.id] && prevScores[m.id] !== sc) triggerGoal(m.homeTeam.shortName);
     prevScores[m.id] = sc;
   });
 
   c.innerHTML = live.map(m => `
-    <div class="mc" onclick="showDtl(${m.id})">
-      <div class="mc-top"><span>${m.competition.name}</span><span style="color:var(--red);">● LIVE</span></div>
+    <div class="mc">
+      <div class="mc-top"><span>${m.competition.name}</span><span style="color:var(--red);">LIVE</span></div>
       <div class="mc-body">
-        <div class="mc-tm"><span>${m.homeTeam.shortName}</span></div>
-        <div class="mc-sc-box">${m.score.fullTime.home} : ${m.score.fullTime.away}</div>
-        <div class="mc-tm"><span>${m.awayTeam.shortName}</span></div>
+        <div class="mc-tm">${m.homeTeam.shortName}</div>
+        <div class="mc-sc-box">${m.score.fullTime.home}:${m.score.fullTime.away}</div>
+        <div class="mc-tm">${m.awayTeam.shortName}</div>
       </div>
-    </div>`).join('') || '<div style="padding:100px; text-align:center; color:var(--t3);">현재 진행 중인 경기가 없습니다.</div>';
+    </div>`).join('') || '<div style="text-align:center; padding:50px; color:var(--t2);">현재 진행 중인 경기가 없습니다.</div>';
 }
 
 function triggerGoal(team) {
   const gt = document.getElementById('gt');
-  document.getElementById('gt-info').textContent = `${team} SCORED!`;
   gt.style.display = 'flex';
-  
-  // 누적된 사운드 로직
-  const ctx = new (window.AudioContext || window.webkitAudioContext)();
-  const osc = ctx.createOscillator();
-  const g = ctx.createGain();
-  osc.connect(g); g.connect(ctx.destination);
-  osc.type = 'sine'; osc.frequency.value = 880;
-  g.gain.setValueAtTime(0.5, ctx.currentTime);
-  g.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 1.5);
-  osc.start(); osc.stop(ctx.currentTime + 1.5);
-
-  setTimeout(() => { gt.style.display = 'none'; }, 4000);
+  const audio = new Audio('https://www.soundjay.com/misc/sounds/bell-ringing-05.mp3');
+  audio.play().catch(()=>{});
+  setTimeout(() => gt.style.display = 'none', 3000);
 }
 
-// [4] 일정 (아코디언 및 4월 포함 전체 네비)
+// [3] 일정 아코디언 로직
 async function loadSched(date = new Date().toISOString().split('T')[0]) {
   const c = document.getElementById('sched-bd');
-  c.innerHTML = '<div style="text-align:center; padding:50px;">FETCHING SCHEDULE...</div>';
+  c.innerHTML = '<div style="text-align:center; padding:50px;">일정 로드 중...</div>';
   const d = await fetchData(`/matches?dateFrom=${date}&dateTo=${date}`);
-  
-  if(!d.matches?.length) { c.innerHTML = '<div style="padding:100px; text-align:center;">경기가 없습니다.</div>'; return; }
+  if(!d.matches?.length) { c.innerHTML = '<div style="text-align:center; padding:50px;">경기가 없습니다.</div>'; return; }
 
   const groups = d.matches.reduce((acc, m) => {
     acc[m.competition.name] = acc[m.competition.name] || [];
@@ -258,50 +205,59 @@ async function loadSched(date = new Date().toISOString().split('T')[0]) {
 
   c.innerHTML = Object.entries(groups).map(([name, ms], i) => `
     <div class="lg-hd" onclick="document.getElementById('lg-${i}').classList.toggle('open')">
-      <span style="flex:1;">${name}</span><span>${ms.length} MATCHES ▾</span>
+      <span style="flex:1;">${name}</span><span>${ms.length} 경기 ▾</span>
     </div>
     <div class="lg-ms" id="lg-${i}">
-      ${ms.map(m => `
-        <div class="mc" style="margin-top:10px; padding:15px 25px; display:flex; justify-content:space-between; align-items:center;">
-          <span style="font-size:12px; color:var(--t3);">${m.utcDate.slice(11,16)}</span>
-          <span style="flex:1; text-align:center; font-weight:700;">${m.homeTeam.shortName} vs ${m.awayTeam.shortName}</span>
-          <span style="font-weight:900; color:var(--p);">${m.score.fullTime.home??'-'}:${m.score.fullTime.away??'-'}</span>
-        </div>`).join('')}
+      ${ms.map(m => `<div class="mc" style="margin-top:10px; padding:15px; display:flex; justify-content:space-between;">
+        <span>${m.utcDate.slice(11,16)}</span><span>${m.homeTeam.shortName} vs ${m.awayTeam.shortName}</span>
+        <span style="color:var(--p); font-weight:800;">${m.score.fullTime.home??'-'}:${m.score.fullTime.away??'-'}</span>
+      </div>`).join('')}
     </div>`).join('');
 }
 
-// [5] AI PITCH (오늘/내일 전체 분석)
-async function loadAI() {
-  const c = document.getElementById('ai-bd');
-  const d = await fetchData('/matches');
-  c.innerHTML = d.matches?.slice(0, 10).map(m => {
-    const h = 40 + (m.id % 30); const a = 100 - h - 10;
-    return `
-      <div class="ai-card">
-        <div style="font-size:11px; color:var(--s); font-weight:900; margin-bottom:15px;">AI PROBABILITY ENGINE</div>
-        <div style="display:flex; justify-content:space-between; font-weight:900; font-size:20px;"><span>${m.homeTeam.shortName}</span><span>${m.awayTeam.shortName}</span></div>
-        <div class="prob-bar-wrap"><div class="prob-h" style="width:${h}%"></div><div class="prob-a" style="width:${a}%"></div></div>
-        <div style="display:flex; justify-content:space-between; font-size:13px; color:var(--t2);"><span>WIN ${h}%</span><span>WIN ${a}%</span></div>
-      </div>`;
-  }).join('') || '<div class="empty">데이터 없음</div>';
+// [4] 순위 & 선수 스탯 로직
+async function loadStd(code) {
+  const c = document.getElementById('std-bd');
+  c.innerHTML = '데이터 로딩...';
+  const d = await fetchData(`/competitions/${code}/standings`, true);
+  if(!d.standings) return;
+  const rows = d.standings[0].table;
+  c.innerHTML = `<table class="stt"><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>PTS</th></tr>` + 
+    rows.map(r => `<tr><td>${r.position}</td><td class="nm-cell"><img src="${r.team.crest}">${r.team.shortName}</td><td>${r.playedGames}</td><td>${r.won}</td><td>${r.draw}</td><td>${r.lost}</td><td style="color:var(--p);">${r.points}</td></tr>`).join('') + `</table>`;
 }
 
-// [6] 온보딩 초기화
+async function loadPlayers(lg) {
+  const c = document.getElementById('pl-bd');
+  c.innerHTML = '스탯 로딩...';
+  const d = await fetchData(`/competitions/${lg}/scorers`, true);
+  if(!d.scorers) return;
+  c.innerHTML = d.scorers.slice(0,10).map((s,i) => `
+    <div style="display:flex; justify-content:space-between; padding:20px; background:var(--bg2); border-radius:15px; margin-bottom:10px;">
+      <span><b>${i+1}</b> ${s.player.name} (${s.team.name})</span>
+      <span style="color:var(--p); font-weight:800;">${s.goals} 골</span>
+    </div>`).join('');
+}
+
+// [5] 온보딩 & 테마
 function initOb() {
-  const list = document.getElementById('ob-list');
-  list.innerHTML = TEAMS.map(t => `
-    <div class="ob-team" onclick="selectTeam(this, ${t.id})">
-      <img src="${t.cr}">
-      <span>${t.name}</span>
-    </div>
-  `).join('');
+  const container = document.getElementById('ob-container');
+  container.innerHTML = OB_DATA.map(lg => `
+    <div class="ob-section">
+      <div class="ob-lg-title">${lg.name}</div>
+      <div class="ob-grid">
+        ${lg.teams.map(t => `<div class="ob-team" onclick="selectTeam(this, ${JSON.stringify(t).replace(/"/g, '&quot;')})">
+          <img src="${t.cr}"><span>${t.name}</span>
+        </div>`).join('')}
+      </div>
+    </div>`).join('');
 }
 
-function selectTeam(el, id) {
+function selectTeam(el, team) {
   document.querySelectorAll('.ob-team').forEach(t => t.classList.remove('sel'));
   el.classList.add('sel');
-  MY_TEAM = TEAMS.find(t => t.id === id);
-  applyTheme(MY_TEAM.color);
+  MY_TEAM = team;
+  document.documentElement.style.setProperty('--p', team.color);
+  document.documentElement.style.setProperty('--ps', team.color + '26');
 }
 
 function startApp() {
@@ -309,45 +265,59 @@ function startApp() {
   localStorage.setItem('pp_team', JSON.stringify(MY_TEAM));
   document.getElementById('ob').style.display = 'none';
   document.getElementById('app').classList.add('show');
-  document.getElementById('team-tag').textContent = `${MY_TEAM.name} FAN CONNECTED`;
+  document.getElementById('team-tag').textContent = MY_TEAM.name + ' FAN';
   swP('home');
 }
 
-// [공통 전환 로직]
+// [6] 유틸리티 (탭 전환 등)
 function swP(name, el) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
   document.getElementById('pg-' + name).classList.add('on');
   document.querySelectorAll('.si').forEach(s => s.classList.remove('on'));
   if(el) el.classList.add('on');
-
   if(name === 'home') loadHome();
-  if(name === 'ai') loadAI();
   if(name === 'sched') {
     const nav = document.getElementById('date-nav');
     if(!nav.innerHTML) {
-        for(let i=-2; i<14; i++) {
-            const d = new Date(); d.setDate(d.getDate() + i);
-            const ds = d.toISOString().split('T')[0];
-            const btn = document.createElement('button');
-            btn.className = 'pill' + (i===0 ? ' on' : '');
-            btn.textContent = `${d.getMonth()+1}/${d.getDate()}`;
-            btn.onclick = () => { document.querySelectorAll('#date-nav .pill').forEach(p => p.classList.remove('on')); btn.classList.add('on'); loadSched(ds); };
-            nav.appendChild(btn);
-        }
+      for(let i=-2; i<10; i++) {
+        const d = new Date(); d.setDate(d.getDate() + i);
+        const ds = d.toISOString().split('T')[0];
+        const btn = document.createElement('button');
+        btn.className = 'pill' + (i===0?' on':'');
+        btn.textContent = `${d.getMonth()+1}/${d.getDate()}`;
+        btn.onclick = () => { document.querySelectorAll('#date-nav .pill').forEach(p => p.classList.remove('on')); btn.classList.add('on'); loadSched(ds); };
+        nav.appendChild(btn);
+      }
     }
     loadSched();
+  }
+  if(name === 'std') {
+    const p = document.getElementById('std-pills');
+    if(!p.innerHTML) p.innerHTML = LGS.map(l => `<button class="pill" onclick="loadStd('${l.code}')">${l.name}</button>`).join('');
+    loadStd('PL');
+  }
+  if(name === 'player') {
+    const p = document.getElementById('pl-pills');
+    if(!p.innerHTML) p.innerHTML = LGS.map(l => `<button class="pill" onclick="loadPlayers('${l.code}')">${l.name}</button>`).join('');
+    loadPlayers('PL');
+  }
+  if(name === 'fan') checkFanZone();
+}
+
+function checkFanZone() {
+  const btn = document.getElementById('btn-ci');
+  const now = new Date().getHours();
+  // 예시 로직: 저녁 시간에만 인증 가능하도록 설정 (실제론 경기 시작 시간과 비교)
+  if(now >= 18 && now <= 23) {
+    btn.disabled = false; btn.textContent = '지금 집관 인증하기';
+  } else {
+    btn.disabled = true; btn.textContent = '경기 시간에만 인증 가능';
   }
 }
 
 window.onload = () => {
   const saved = localStorage.getItem('pp_team');
-  if(saved) {
-    MY_TEAM = JSON.parse(saved);
-    applyTheme(MY_TEAM.color);
-    startApp();
-  } else {
-    initOb();
-  }
+  if(saved) { MY_TEAM = JSON.parse(saved); startApp(); } else { initOb(); }
 };
 </script>
 </body>
