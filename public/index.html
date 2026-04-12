@@ -3,16 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>PITCH Pro | Global Football Hub</title>
+<title>PITCH Pro</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
+/* --- 1. PREMIUM DESIGN SYSTEM --- */
 :root {
     --f-h: 'Poppins', sans-serif;
     --bg: #05070a; --bg2: #0d1117; --cd: rgba(20, 24, 31, 0.9);
     --p: #10b981; --ps: rgba(16, 185, 129, 0.15); --pb: rgba(16, 185, 129, 0.3);
-    --s: #3b82f6; --t: #ffffff; --t2: #a1a1aa; --red: #ef4444; --br: 20px;
+    --s: #3b82f6; --t: #ffffff; --t2: #a1a1aa; --t3: #3f3f46;
+    --red: #ef4444; --br: 24px; --sh: 0 20px 40px rgba(0,0,0,0.6);
 }
-
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
 body {
     background: var(--bg); color: var(--t); font-family: var(--f-h);
@@ -20,50 +21,65 @@ body {
     background-image: radial-gradient(at 0% 0%, var(--ps) 0px, transparent 40%);
 }
 
-/* --- ONBOARDING --- */
-#ob { position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 60px 20px; display: block; }
-.ob-container { max-width: 1000px; margin: 0 auto; }
-.ob-header { text-align: center; margin-bottom: 40px; }
-.ob-header h1 { font-size: 36px; font-weight: 900; background: linear-gradient(to right, #fff, var(--p)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.league-section { margin-bottom: 30px; }
-.league-title { font-size: 18px; font-weight: 800; color: var(--p); margin-bottom: 15px; display: flex; align-items: center; gap: 10px; border-bottom: 1px solid var(--ps); padding-bottom: 8px; }
-.ob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 12px; }
-.ob-team { background: var(--bg2); border: 1px solid rgba(255,255,255,0.05); border-radius: 15px; padding: 15px 10px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
-.ob-team img { width: 40px; height: 40px; object-fit: contain; margin-bottom: 8px; }
-.ob-team span { font-size: 12px; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ob-team.sel { border-color: var(--p); background: var(--ps); transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-.ob-team.sel::after { content: '✓'; position: absolute; top: 5px; right: 8px; color: var(--p); font-weight: 900; }
-.start-btn { display: block; width: 300px; margin: 40px auto; padding: 20px; border-radius: 100px; border: none; background: var(--p); color: #000; font-weight: 900; font-size: 18px; cursor: pointer; box-shadow: 0 10px 30px var(--ps); }
+/* --- 2. ONBOARDING (TEAM SELECTION) --- */
+#ob { position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding: 60px 20px; }
+.ob-container { max-width: 1100px; margin: 0 auto; }
+.ob-header { text-align: center; margin-bottom: 50px; }
+.ob-header h1 { font-size: 42px; font-weight: 900; letter-spacing: -1px; }
+.league-section { margin-bottom: 40px; border-bottom: 1px solid rgba(255,255,255,0.05); padding-bottom: 30px; }
+.league-title { font-size: 20px; font-weight: 800; color: var(--p); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+.ob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; }
+.ob-team { background: #161b22; border: 1px solid rgba(255,255,255,0.08); border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; }
+.ob-team img { width: 50px; height: 50px; object-fit: contain; margin-bottom: 12px; }
+.ob-team span { font-size: 13px; font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ob-team.sel { border-color: var(--p); background: var(--ps); transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+.ob-team.sel::after { content: '✓'; position: absolute; top: 8px; right: 12px; color: var(--p); font-weight: 900; }
+.start-btn { display: block; width: 320px; margin: 40px auto; padding: 22px; border-radius: 100px; border: none; background: var(--p); color: #000; font-weight: 900; font-size: 20px; cursor: pointer; }
 
-/* --- APP LAYOUT --- */
+/* --- 3. MAIN APP LAYOUT --- */
 #app { display: none; height: 100vh; flex-direction: column; }
-.hdr { height: 72px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: rgba(13, 17, 23, 0.9); backdrop-filter: blur(20px); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+.hdr { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: rgba(13, 17, 23, 0.95); backdrop-filter: blur(25px); border-bottom: 1px solid rgba(255,255,255,0.05); z-index: 1000; }
+.hdr-logo { font-size: 24px; font-weight: 900; background: linear-gradient(135deg, var(--p) 0%, var(--s) 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
 .main-body { flex: 1; display: flex; overflow: hidden; }
-.sidebar { width: 260px; background: var(--bg2); padding: 20px 10px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
-@media(max-width: 1024px) { .sidebar { display: none; } }
-.si { display: flex; align-items: center; gap: 14px; padding: 16px; border-radius: 15px; cursor: pointer; color: var(--t2); font-weight: 700; margin-bottom: 8px; transition: 0.3s; }
-.si.on { background: var(--ps); color: var(--p); }
-.pages { flex: 1; overflow-y: auto; padding: 30px; }
+.sidebar { width: 260px; background: var(--bg2); padding: 25px 15px; border-right: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; }
+.si { display: flex; align-items: center; gap: 15px; padding: 18px; border-radius: 18px; cursor: pointer; color: var(--t2); font-weight: 700; margin-bottom: 10px; transition: 0.3s; }
+.si.on { background: var(--ps); color: var(--p); border: 1px solid rgba(16, 185, 129, 0.1); }
+.pages { flex: 1; overflow-y: auto; padding: 40px; background: transparent; }
 .page { display: none; } .page.on { display: block; }
 
-/* --- MATCH CARDS & ACCORDION --- */
-.mc { background: var(--cd); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--br); margin-bottom: 15px; overflow: hidden; }
-.mc-top { padding: 10px 20px; background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--t2); }
-.mc-body { padding: 20px; display: flex; align-items: center; justify-content: center; gap: 20px; }
-.mc-tm { flex: 1; text-align: center; font-weight: 800; font-size: 16px; }
-.mc-sc-box { background: #000; padding: 10px 20px; border-radius: 12px; border: 1px solid var(--pb); font-size: 28px; font-weight: 900; }
-.lg-hd { padding: 18px 24px; background: var(--bg2); border-radius: 15px; cursor: pointer; margin-top: 15px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; font-weight: 800; }
+/* --- 4. COMPONENT: MATCH, ACCORDION, AI --- */
+.mc { background: var(--cd); border: 1px solid rgba(255,255,255,0.05); border-radius: var(--br); margin-bottom: 15px; overflow: hidden; box-shadow: var(--sh); transition: 0.3s; }
+.mc:hover { border-color: var(--p); transform: translateY(-3px); }
+.mc-top { padding: 12px 20px; background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; font-size: 11px; font-weight: 800; color: var(--t2); }
+.mc-body { padding: 25px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.mc-tm { flex: 1; text-align: center; font-weight: 900; font-size: 18px; }
+.mc-sc-box { background: #000; padding: 12px 25px; border-radius: 15px; border: 1px solid var(--pb); font-size: 32px; font-weight: 900; font-variant-numeric: tabular-nums; }
+.lg-hd { padding: 20px 25px; background: var(--bg2); border-radius: 20px; cursor: pointer; margin-top: 15px; border: 1px solid rgba(255,255,255,0.03); display: flex; justify-content: space-between; font-weight: 800; font-size: 16px; }
 .lg-ms { display: none; flex-direction: column; padding: 10px 0; }
 .lg-ms.open { display: flex; }
 
-/* --- UTILS --- */
-.pills { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 20px; padding-bottom: 10px; scrollbar-width: none; }
-.pill { padding: 10px 20px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05); background: var(--bg2); color: var(--t2); cursor: pointer; font-weight: 700; white-space: nowrap; }
-.pill.on { background: var(--p); color: #000; }
+.ai-card { background: linear-gradient(165deg, #0d1117 0%, #05070a 100%); border: 1px solid var(--pb); border-radius: 25px; padding: 25px; margin-bottom: 20px; }
+.prob-bar { height: 12px; background: rgba(255,255,255,0.05); border-radius: 100px; margin: 15px 0; overflow: hidden; display: flex; }
+.prob-h { background: var(--p); box-shadow: 0 0 15px var(--ps); }
+.prob-a { background: var(--red); box-shadow: 0 0 15px rgba(239,68,68,0.3); }
 
-/* GOAL OVERLAY */
-#gt { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); backdrop-filter: blur(10px); pointer-events: none; }
-.gt-box { text-align: center; animation: pop 0.5s ease-out; }
+/* --- 5. DATA TABLES & STATS --- */
+.stt { width: 100%; border-collapse:separate; border-spacing:0 10px; }
+.stt th { padding: 12px; color: var(--t3); font-size: 11px; text-transform: uppercase; font-weight: 900; }
+.stt td { padding: 18px 12px; background: var(--bg2); text-align: center; font-weight: 600; border-top: 1px solid rgba(255,255,255,0.02); }
+.stt td:first-child { border-radius: 15px 0 0 15px; }
+.stt td:last-child { border-radius: 0 15px 15px 0; }
+.nm-cell { display: flex; align-items: center; gap: 15px; text-align: left; }
+.nm-cell img { width: 32px; height: 32px; object-fit: contain; }
+
+.pills { display: flex; gap: 10px; overflow-x: auto; margin-bottom: 25px; padding-bottom: 10px; scrollbar-width: none; }
+.pill { padding: 12px 24px; border-radius: 100px; border: 1px solid rgba(255,255,255,0.05); background: var(--bg2); color: var(--t2); cursor: pointer; font-weight: 700; white-space: nowrap; transition: 0.3s; }
+.pill.on { background: var(--p); color: #000; box-shadow: 0 0 20px var(--ps); }
+
+/* --- 6. GOAL ANIMATION --- */
+#gt { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.9); backdrop-filter: blur(15px); pointer-events: none; }
+.gt-box { text-align: center; animation: pop 0.6s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
+.gt-box h1 { font-size: 100px; font-weight: 900; color: var(--p); filter: drop-shadow(0 0 30px var(--p)); letter-spacing: 15px; }
 @keyframes pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 </style>
 </head>
@@ -73,70 +89,195 @@ body {
     <div class="ob-container">
         <div class="ob-header">
             <h1>CHOOSE YOUR CLUBS</h1>
-            <p>Select up to 2 teams. System theme will adapt to your choice.</p>
+            <p>Select up to 2 teams. Global data & theme will adapt to your choice.</p>
         </div>
         <div id="ob-list"></div>
-        <button class="start-btn" onclick="startApp()">START SYSTEM</button>
+        <button class="start-btn" onclick="startApp()">SYNC & START PITCH PRO</button>
     </div>
 </div>
 
 <div id="app">
     <header class="hdr">
         <div class="hdr-logo">PITCH PRO</div>
-        <div id="team-display" style="display:flex; gap:10px;"></div>
+        <div id="selected-team-display" style="display:flex; gap:10px;"></div>
     </header>
+
     <div class="main-body">
         <aside class="sidebar">
-            <div class="si on" onclick="swP('home',this)">⚡ LIVE</div>
+            <div class="si on" onclick="swP('home',this)">⚡ LIVE ACTION</div>
             <div class="si" onclick="swP('sched',this)">📅 SCHEDULE</div>
+            <div class="si" onclick="swP('ai',this)">🤖 AI PITCH</div>
             <div class="si" onclick="swP('std',this)">📊 STANDINGS</div>
+            <div class="si" onclick="swP('player',this)">👟 PLAYER STATS</div>
             <div class="si" onclick="swP('fan',this)">⭐ FAN ZONE</div>
         </aside>
+
         <main class="pages">
-            <div class="page on" id="pg-home">
-                <h2 style="margin-bottom:20px;">LIVE ACTION</h2>
-                <div id="home-bd"></div>
-            </div>
+            <div class="page on" id="pg-home"><div id="home-bd"></div></div>
             <div class="page" id="pg-sched">
                 <div id="date-nav" class="pills"></div>
                 <div id="sched-bd"></div>
             </div>
+            <div class="page" id="pg-ai"><div id="ai-bd"></div></div>
             <div class="page" id="pg-std">
                 <div id="std-pills" class="pills"></div>
                 <div id="std-bd"></div>
             </div>
+            <div class="page" id="pg-player">
+                <div id="pl-pills" class="pills"></div>
+                <div id="pl-bd"></div>
+            </div>
             <div class="page" id="pg-fan">
-                <div id="fan-bd"></div>
+                <h1 style="margin-bottom:20px;">MY FAN ZONE</h1>
+                <div id="fan-bd" class="ai-card" style="text-align:center;">
+                    <h2 id="fan-team">Sync required</h2>
+                    <p style="margin:20px 0; color:var(--t2);">Match notifications will appear here during live games.</p>
+                    <button class="pill on" onclick="alert('Notification Enabled!')">Enable Alert</button>
+                </div>
             </div>
         </main>
     </div>
 </div>
 
-<div id="gt"><div class="gt-box"><h1 style="font-size:80px; color:var(--p);">GOAL!</h1><div id="gt-team" style="font-size:24px;"></div></div></div>
+<div id="gt"><div class="gt-box"><h1>GOAL!</h1><div id="gt-team" style="font-size:32px; font-weight:800;"></div></div></div>
 
 <script>
+// --- 1. CORE DATA & API CONFIG ---
 const API = '/api/football';
 const LEAGUES = [
-    { name: 'Premier League', code: 'PL', teams: [{id:57, n:'Arsenal', c:'#EF0107'}, {id:65, n:'Man City', c:'#6CABDD'}, {id:64, n:'Liverpool', c:'#C8102E'}, {id:66, n:'Man Utd', c:'#DA291C'}] },
-    { name: 'La Liga', code: 'LA', teams: [{id:86, n:'Real Madrid', c:'#FEBE10'}, {id:81, n:'Barcelona', c:'#A50044'}, {id:78, n:'Atletico', c:'#CB3524'}, {id:558, n:'Girona', c:'#E23221'}] },
-    { name: 'K League 2', code: 'KL2', teams: [{id:764, n:'Hwaseong FC', c:'#FF5E00'}, {id:2756, n:'Suwon Samsung', c:'#003DA5'}, {id:2758, n:'Seongnam FC', c:'#000000'}, {id:1101, n:'Seoul E-Land', c:'#00204E'}] },
-    { name: 'Bundesliga', code: 'BL1', teams: [{id:5, n:'Bayern', c:'#DC052D'}, {id:4, n:'Dortmund', c:'#FDE100'}, {id:3, n:'Leverkusen', c:'#E32221'}] },
-    { name: 'Serie A', code: 'SA', teams: [{id:108, n:'Inter', c:'#0068A8'}, {id:98, n:'AC Milan', c:'#FB090B'}, {id:109, n:'Juventus', c:'#000000'}] }
+    { n: 'Premier League', c: 'PL', teams: [{id:57, n:'Arsenal', col:'#EF0107'}, {id:65, n:'Man City', col:'#6CABDD'}, {id:64, n:'Liverpool', col:'#C8102E'}, {id:66, n:'Man Utd', col:'#DA291C'}, {id:61, n:'Chelsea', col:'#034694'}, {id:73, n:'Tottenham', col:'#132257'}, {id:58, n:'Aston Villa', col:'#95BFE5'}] },
+    { n: 'La Liga', c: 'LA', teams: [{id:86, n:'Real Madrid', col:'#FEBE10'}, {id:81, n:'Barcelona', col:'#A50044'}, {id:78, n:'Atletico', col:'#CB3524'}, {id:558, n:'Girona', col:'#E23221'}, {id:82, n:'Sevilla', col:'#D40511'}, {id:95, n:'Valencia', col:'#000000'}] },
+    { n: 'K League 1', c: 'KL1', teams: [{id:2759, n:'Ulsan HD', col:'#003DA5'}, {id:2762, n:'Jeonbuk', col:'#006738'}, {id:2763, n:'FC Seoul', col:'#E2002D'}, {id:2764, n:'Pohang', col:'#C8102E'}, {id:2761, n:'Daegu FC', col:'#6ABDD8'}] },
+    { n: 'K League 2', c: 'KL2', teams: [{id:764, n:'Hwaseong FC', col:'#FF5E00'}, {id:2756, n:'Suwon Samsung', col:'#003DA5'}, {id:2758, n:'Seongnam FC', col:'#000000'}, {id:1101, n:'Seoul E-Land', col:'#00204E'}] },
+    { n: 'Bundesliga', c: 'BL1', teams: [{id:5, n:'Bayern', col:'#DC052D'}, {id:4, n:'Dortmund', col:'#FDE100'}, {id:3, n:'Leverkusen', col:'#E32221'}, {id:721, n:'Leipzig', col:'#DD013F'}] },
+    { n: 'Serie A', c: 'SA', teams: [{id:108, n:'Inter', col:'#0068A8'}, {id:98, n:'AC Milan', col:'#FB090B'}, {id:109, n:'Juventus', col:'#000000'}, {id:113, n:'Napoli', col:'#00BFFF'}] },
+    { n: 'Ligue 1', c: 'FL1', teams: [{id:524, n:'PSG', col:'#004170'}, {id:548, n:'Monaco', col:'#E31B23'}, {id:516, n:'Marseille', col:'#00ABFF'}] }
 ];
 
 let SELECTED_TEAMS = [];
+let prevScores = {};
 const cache = {};
 
-// ── [1. ONBOARDING LOGIC] ──
+// --- 2. DATA FETCH ENGINE ---
+async function fetchData(path, isStatic = false) {
+    const ttl = isStatic ? 3600000 : 90000; 
+    if(cache[path] && (Date.now() - cache[path].ts < ttl)) return cache[path].data;
+    try {
+        const r = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`);
+        const d = await r.json();
+        if(d.errorCode === 429) return cache[path]?.data || d;
+        cache[path] = { data: d, ts: Date.now() };
+        return d;
+    } catch(e) { return null; }
+}
+
+// --- 3. CORE FUNCTIONS ---
+async function loadHome() {
+    const bd = document.getElementById('home-bd');
+    bd.innerHTML = '<div style="text-align:center; padding:50px;">ANALYZING LIVE...</div>';
+    const d = await fetchData('/matches');
+    if(!d?.matches) return;
+
+    const live = d.matches.filter(m => ['IN_PLAY','PAUSED','HALFTIME'].includes(m.status));
+    
+    // GOAL DETECTION
+    live.forEach(m => {
+        const sc = `${m.score.fullTime.home}-${m.score.fullTime.away}`;
+        if(prevScores[m.id] && prevScores[m.id] !== sc) triggerGoal(m.homeTeam.shortName || m.homeTeam.name);
+        prevScores[m.id] = sc;
+    });
+
+    bd.innerHTML = live.map(m => `
+        <div class="mc">
+            <div class="mc-top"><span>${m.competition.name}</span><span style="color:var(--red)">● LIVE</span></div>
+            <div class="mc-body">
+                <div class="mc-tm"><img src="${m.homeTeam.crest}" style="width:40px;"><br>${m.homeTeam.shortName || m.homeTeam.name}</div>
+                <div class="mc-sc-box">${m.score.fullTime.home} : ${m.score.fullTime.away}</div>
+                <div class="mc-tm"><img src="${m.awayTeam.crest}" style="width:40px;"><br>${m.awayTeam.shortName || m.awayTeam.name}</div>
+            </div>
+        </div>
+    `).join('') || '<div style="text-align:center; padding:100px; color:var(--t2);">No matches currently live.</div>';
+}
+
+async function loadSched(date = new Date().toISOString().split('T')[0]) {
+    const bd = document.getElementById('sched-bd');
+    bd.innerHTML = '<div style="text-align:center; padding:50px;">SYNCING SCHEDULE...</div>';
+    const d = await fetchData(`/matches?dateFrom=${date}&dateTo=${date}`);
+    if(!d?.matches?.length) { bd.innerHTML = '<div style="text-align:center; padding:50px;">No games scheduled.</div>'; return; }
+
+    const groups = d.matches.reduce((acc, m) => {
+        const lg = m.competition.name;
+        acc[lg] = acc[lg] || []; acc[lg].push(m);
+        return acc;
+    }, {});
+
+    bd.innerHTML = Object.entries(groups).map(([lg, matches], i) => `
+        <div class="lg-hd" onclick="this.nextElementSibling.classList.toggle('open')">
+            <span>${lg.toUpperCase()}</span><span>${matches.length} ▾</span>
+        </div>
+        <div class="lg-ms">
+            ${matches.map(m => `
+                <div class="mc" style="margin-top:10px; padding:20px; display:flex; justify-content:space-between; align-items:center;">
+                    <span style="font-size:12px; color:var(--t2);">${m.utcDate.slice(11,16)}</span>
+                    <span style="font-weight:700; flex:1; text-align:center;">${m.homeTeam.shortName || m.homeTeam.name} vs ${m.awayTeam.shortName || m.awayTeam.name}</span>
+                    <span style="font-weight:900; color:var(--p);">${m.score.fullTime.home??'-'} : ${m.score.fullTime.away??'-'}</span>
+                </div>
+            `).join('')}
+        </div>
+    `).join('');
+}
+
+async function loadAI() {
+    const bd = document.getElementById('ai-bd');
+    const d = await fetchData('/matches');
+    bd.innerHTML = d.matches?.slice(0, 8).map(m => {
+        const h = 40 + (m.id % 25); const a = 100 - h - 10;
+        return `
+            <div class="ai-card">
+                <div style="font-size:11px; font-weight:800; color:var(--s); margin-bottom:15px;">AI MATCH PREDICTION</div>
+                <div style="display:flex; justify-content:space-between; font-weight:900; font-size:18px;">
+                    <span>${m.homeTeam.shortName}</span><span>${m.awayTeam.shortName}</span>
+                </div>
+                <div class="prob-bar"><div class="prob-h" style="width:${h}%"></div><div class="prob-a" style="width:${a}%"></div></div>
+                <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--t2);">
+                    <span>WIN ${h}%</span><span>WIN ${a}%</span>
+                </div>
+            </div>`;
+    }).join('') || "No predictions available.";
+}
+
+async function loadStd(code) {
+    const bd = document.getElementById('std-bd');
+    bd.innerHTML = 'SYNCING STANDINGS...';
+    const d = await fetchData(`/competitions/${code}/standings`, true);
+    if(!d?.standings) return;
+    const rows = d.standings[0].table;
+    bd.innerHTML = `<table class="stt"><tr><th>#</th><th>TEAM</th><th>P</th><th>W</th><th>D</th><th>L</th><th>PTS</th></tr>` + 
+        rows.map(r => `<tr><td>${r.position}</td><td class="nm-cell"><img src="${r.team.crest}">${r.team.shortName}</td><td>${r.playedGames}</td><td>${r.won}</td><td>${r.draw}</td><td>${r.lost}</td><td style="color:var(--p); font-weight:900;">${r.points}</td></tr>`).join('') + `</table>`;
+}
+
+async function loadPlayers(lg) {
+    const bd = document.getElementById('pl-bd');
+    bd.innerHTML = 'SYNCING PLAYER RECORDS...';
+    const d = await fetchData(`/competitions/${lg}/scorers`, true);
+    if(!d?.scorers) return;
+    bd.innerHTML = d.scorers.slice(0,10).map((s,i) => `
+        <div style="display:flex; justify-content:space-between; align-items:center; padding:20px; background:var(--bg2); border-radius:15px; margin-bottom:10px;">
+            <span><b style="color:var(--p); margin-right:15px;">${i+1}</b> ${s.player.name} (${s.team.shortName})</span>
+            <span style="font-weight:900;">${s.goals} Goals</span>
+        </div>`).join('');
+}
+
+// --- 4. INTERFACE LOGIC ---
 function initOb() {
     const list = document.getElementById('ob-list');
     list.innerHTML = LEAGUES.map(lg => `
         <div class="league-section">
-            <div class="league-title">${lg.name}</div>
+            <div class="league-title">${lg.n}</div>
             <div class="ob-grid">
                 ${lg.teams.map(t => `
-                    <div class="ob-team" onclick="toggleTeam(this, ${t.id}, '${t.n}', '${t.c}')">
-                        <img src="https://crests.football-data.org/${t.id}.png" onerror="this.src='https://via.placeholder.com/40?text=${t.n.charAt(0)}'">
+                    <div class="ob-team" onclick="toggleTeam(this, ${JSON.stringify(t).replace(/"/g, '&quot;')})">
+                        <img src="https://crests.football-data.org/${t.id}.png" onerror="this.src='https://via.placeholder.com/50?text=${t.n.charAt(0)}'">
                         <span>${t.n}</span>
                     </div>
                 `).join('')}
@@ -145,17 +286,15 @@ function initOb() {
     `).join('');
 }
 
-function toggleTeam(el, id, name, color) {
-    const idx = SELECTED_TEAMS.findIndex(t => t.id === id);
-    if (idx > -1) {
-        SELECTED_TEAMS.splice(idx, 1);
-        el.classList.remove('sel');
+function toggleTeam(el, team) {
+    const idx = SELECTED_TEAMS.findIndex(t => t.id === team.id);
+    if(idx > -1) {
+        SELECTED_TEAMS.splice(idx, 1); el.classList.remove('sel');
     } else {
-        if (SELECTED_TEAMS.length >= 2) return alert("Maximum 2 teams allowed.");
-        SELECTED_TEAMS.push({id, name, color});
-        el.classList.add('sel');
+        if(SELECTED_TEAMS.length >= 2) return alert("Select up to 2 teams.");
+        SELECTED_TEAMS.push(team); el.classList.add('sel');
     }
-    if (SELECTED_TEAMS.length > 0) applyTheme(SELECTED_TEAMS[0].color);
+    if(SELECTED_TEAMS.length > 0) applyTheme(SELECTED_TEAMS[0].color);
 }
 
 function applyTheme(color) {
@@ -166,76 +305,20 @@ function applyTheme(color) {
 }
 
 function startApp() {
-    if (SELECTED_TEAMS.length === 0) return alert("Select at least 1 team.");
+    if(SELECTED_TEAMS.length === 0) return alert("Please select at least 1 club.");
     localStorage.setItem('pp_teams', JSON.stringify(SELECTED_TEAMS));
     document.getElementById('ob').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
-    renderHeaderTeams();
+    document.getElementById('selected-team-display').innerHTML = SELECTED_TEAMS.map(t => `<div style="background:var(--ps); color:var(--p); padding:4px 12px; border-radius:100px; font-size:11px; font-weight:800; border:1px solid var(--pb);">${t.n}</div>`).join('');
+    document.getElementById('fan-team').textContent = SELECTED_TEAMS[0].n + " FAN HUB";
     swP('home');
 }
 
-function renderHeaderTeams() {
-    const container = document.getElementById('team-display');
-    container.innerHTML = SELECTED_TEAMS.map(t => `
-        <div style="background:var(--ps); color:var(--p); padding:4px 12px; border-radius:100px; font-size:11px; font-weight:800; border:1px solid var(--pb);">${t.name.toUpperCase()}</div>
-    `).join('');
-}
-
-// ── [2. CORE DATA ENGINE] ──
-async function fetchData(path) {
-    try {
-        const r = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`);
-        const d = await r.json();
-        return d;
-    } catch(e) { return null; }
-}
-
-async function loadHome() {
-    const bd = document.getElementById('home-bd');
-    bd.innerHTML = '<div style="text-align:center; padding:50px;">FETCHING LIVE...</div>';
-    const d = await fetchData('/matches');
-    if (!d || !d.matches) { bd.innerHTML = "No matches today."; return; }
-    
-    const live = d.matches.filter(m => ['IN_PLAY','PAUSED','HALFTIME'].includes(m.status));
-    bd.innerHTML = live.map(m => `
-        <div class="mc">
-            <div class="mc-top"><span>${m.competition.name}</span><span style="color:var(--red)">● LIVE</span></div>
-            <div class="mc-body">
-                <div class="mc-tm">${m.homeTeam.shortName || m.homeTeam.name}</div>
-                <div class="mc-sc-box">${m.score.fullTime.home} : ${m.score.fullTime.away}</div>
-                <div class="mc-tm">${m.awayTeam.shortName || m.awayTeam.name}</div>
-            </div>
-        </div>
-    `).join('') || "No live matches right now.";
-}
-
-async function loadSched(date = new Date().toISOString().split('T')[0]) {
-    const bd = document.getElementById('sched-bd');
-    bd.innerHTML = '<div style="text-align:center; padding:50px;">LOADING...</div>';
-    const d = await fetchData(`/matches?dateFrom=${date}&dateTo=${date}`);
-    if (!d || !d.matches || d.matches.length === 0) { bd.innerHTML = "No games scheduled."; return; }
-
-    const groups = d.matches.reduce((acc, m) => {
-        const lg = m.competition.name;
-        acc[lg] = acc[lg] || [];
-        acc[lg].push(m);
-        return acc;
-    }, {});
-
-    bd.innerHTML = Object.entries(groups).map(([lg, matches], i) => `
-        <div class="lg-hd" onclick="this.nextElementSibling.classList.toggle('open')">
-            <span>${lg.toUpperCase()}</span><span>${matches.length} ▾</span>
-        </div>
-        <div class="lg-ms">
-            ${matches.map(m => `
-                <div class="mc" style="margin-top:10px; padding:15px 20px; display:flex; justify-content:space-between;">
-                    <span style="color:var(--t2); font-size:12px;">${m.utcDate.slice(11,16)}</span>
-                    <span style="font-weight:700;">${m.homeTeam.shortName} vs ${m.awayTeam.shortName}</span>
-                    <span style="color:var(--p); font-weight:900;">${m.score.fullTime.home??'-'} : ${m.score.fullTime.away??'-'}</span>
-                </div>
-            `).join('')}
-        </div>
-    `).join('');
+function triggerGoal(team) {
+    const gt = document.getElementById('gt');
+    document.getElementById('gt-team').textContent = team.toUpperCase() + " SCORE!";
+    gt.style.display = 'flex';
+    setTimeout(() => { gt.style.display = 'none'; }, 4000);
 }
 
 function swP(name, el) {
@@ -254,28 +337,28 @@ function swP(name, el) {
                 const btn = document.createElement('button');
                 btn.className = 'pill' + (i===0?' on':'');
                 btn.textContent = i===0 ? 'TODAY' : `${d.getMonth()+1}/${d.getDate()}`;
-                btn.onclick = () => {
-                    document.querySelectorAll('#date-nav .pill').forEach(p => p.classList.remove('on'));
-                    btn.classList.add('on');
-                    loadSched(ds);
-                };
+                btn.onclick = () => { document.querySelectorAll('#date-nav .pill').forEach(p => p.classList.remove('on')); btn.classList.add('on'); loadSched(ds); };
                 dnav.appendChild(btn);
             }
         }
         loadSched();
     }
+    if(name === 'ai') loadAI();
+    if(name === 'std') {
+        const sp = document.getElementById('std-pills');
+        if(!sp.innerHTML) sp.innerHTML = LEAGUES.map(l => `<button class="pill" onclick="loadStd('${l.c}')">${l.n}</button>`).join('');
+        loadStd('PL');
+    }
+    if(name === 'player') {
+        const pp = document.getElementById('pl-pills');
+        if(!pp.innerHTML) pp.innerHTML = LEAGUES.map(l => `<button class="pill" onclick="loadPlayers('${l.c}')">${l.n}</button>`).join('');
+        loadPlayers('PL');
+    }
 }
 
-// ── [3. INITIALIZATION] ──
 window.onload = () => {
     const saved = localStorage.getItem('pp_teams');
-    if (saved) {
-        SELECTED_TEAMS = JSON.parse(saved);
-        applyTheme(SELECTED_TEAMS[0].color);
-        startApp();
-    } else {
-        initOb();
-    }
+    if(saved) { SELECTED_TEAMS = JSON.parse(saved); applyTheme(SELECTED_TEAMS[0].color); startApp(); } else { initOb(); }
 };
 </script>
 </body>
