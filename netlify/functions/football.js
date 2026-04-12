@@ -1,56 +1,67 @@
-// netlify/functions/football.js
-// football-data.org 프록시 + The Odds API 프록시
-
 const FD_BASE = 'https://api.football-data.org/v4';
-const ODDS_BASE = 'https://api.the-odds-api.com/v4';
+const KL_BASE = 'https://v3.football.api-sports.io';
+
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Access-Control-Allow-Methods': 'GET, OPTIONS',
+  'Content-Type': 'application/json',
+};
 
 exports.handler = async (event) => {
-  const headers = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Content-Type': 'application/json',
-  };
-
   if (event.httpMethod === 'OPTIONS') {
-    return { statusCode: 204, headers, body: '' };
+    return { statusCode: 204, headers: CORS, body: '' };
   }
 
   const params = { ...(event.queryStringParameters || {}) };
-  const type = params.type || 'fd'; // 'fd' or 'odds'
+  const type = params.type || 'fd';
   const path = params.path || '';
   delete params.type;
   delete params.path;
 
-  // football-data.org
-  if (type === 'fd') {
-    const apiKey = process.env.FOOTBALL_API_KEY;
-    if (!apiKey) return { statusCode: 401, headers, body: JSON.stringify({ error: 'No FD key' }) };
-    const qs = new URLSearchParams(params).toString();
-    const url = `${FD_BASE}${path}${qs ? '?' + qs : ''}`;
-    try {
-      const res = await fetch(url, { headers: { 'X-Auth-Token': apiKey } });
-      const data = await res.json();
-      return { statusCode: 200, headers, body: JSON.stringify(data) };
-    } catch (e) {
-      return { statusCode: 502, headers, body: JSON.stringify({ error: e.message }) };
-    }
-  }
+  try {
+    // ── football-data.org ──
+    if (type === 'fd') {
+      const apiKey = process.env.FOOTBALL_API_KEY;
+      if (!apiKey) {
+        return { statusCode: 200, headers: CORS, body: JSON.stringify({ error: 'No API key', message: 'FOOTBALL_API_KEY 환경변수를 Netlify에 설정해주세요' }) };
+      }
+      const qs = new URLSearchParams(params).toString();
+      const url = `${FD_BASE}${path}${qs ? '?' + qs : ''}`;
 
-  // The Odds API
-  if (type === 'odds') {
-    const oddsKey = process.env.ODDS_API_KEY;
-    if (!oddsKey) return { statusCode: 401, headers, body: JSON.stringify({ error: 'No Odds key' }) };
-    const qs = new URLSearchParams({ ...params, apiKey: oddsKey }).toString();
-    const url = `${ODDS_BASE}${path}?${qs}`;
-    try {
-      const res = await fetch(url);
-      const data = await res.json();
-      return { statusCode: 200, headers, body: JSON.stringify(data) };
-    } catch (e) {
-      return { statusCode: 502, headers, body: JSON.stringify({ error: e.message }) };
-    }
-  }
+      const res = await fetch(url, {
+        headers: { 'X-Auth-Token': apiKey, 'Accept': 'application/json' }
+      });
 
-  return { statusCode: 400, headers, body: JSON.stringify({ error: 'Invalid type' }) };
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch { return { statusCode: 200, headers: CORS, body: JSON.stringify({ error: 'Parse error', status: res.status }) }; }
+
+      // Rate limit 응답 그대로 전달 (클라이언트에서 처리)
+      return { statusCode: 200, headers: CORS, body: JSON.stringify(data) };
+    }
+
+    // ── api-football.com (K리그) ──
+    if (type === 'kl') {
+      const apiKey = process.env.APIFOOTBALL_KEY || '421bb1da924d4946cbd3bab1313cc926';
+      const qs = new URLSearchParams(params).toString();
+      const url = `${KL_BASE}${path}${qs ? '?' + qs : ''}`;
+
+      const res = await fetch(url, {
+        headers: { 'x-apisports-key': apiKey, 'Accept': 'application/json' }
+      });
+
+      const text = await res.text();
+      let data;
+      try { data = JSON.parse(text); }
+      catch { return { statusCode: 200, headers: CORS, body: JSON.stringify({ error: 'Parse error', status: res.status }) }; }
+
+      return { statusCode: 200, headers: CORS, body: JSON.stringify(data) };
+    }
+
+    return { statusCode: 200, headers: CORS, body: JSON.stringify({ error: 'Unknown type' }) };
+  } catch (e) {
+    return { statusCode: 200, headers: CORS, body: JSON.stringify({ error: e.message }) };
+  }
 };
