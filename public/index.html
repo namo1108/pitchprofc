@@ -3,88 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>PITCH IN - 25/26 Season</title>
+<title>PITCH IN - Professional Football Dashboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 :root {
     --p: #10b981; --bg: #05070a; --bg2: #0d1117; --cd: rgba(22, 27, 34, 0.95);
-    --t: #ffffff; --t2: #a1a1aa; --red: #ef4444; --sh: 0 20px 40px rgba(0,0,0,0.6);
+    --t: #ffffff; --t2: #a1a1aa; --red: #ef4444; --blue: #3b82f6; --orange: #f59e0b; --sh: 0 20px 40px rgba(0,0,0,0.6);
 }
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; }
 body { background: var(--bg); color: var(--t); overflow: hidden; height: 100vh; }
 
-/* 온보딩 - 리그 탭 및 팀 선택 섹션 */
+/* 온보딩 스타일 */
 #ob { position: fixed; inset: 0; background: var(--bg); z-index: 9999; overflow-y: auto; padding-bottom: 120px; }
 .ob-header { text-align: center; padding: 60px 20px 20px; }
 .ob-header h1 { font-size: 48px; font-weight: 900; color: var(--p); letter-spacing: -2px; }
-.ob-header p { color: var(--t2); font-size: 14px; margin-top: 10px; }
-
-/* 리그 선택 탭 스타일 */
-.ob-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; padding: 0 20px; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+.ob-tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 30px; padding: 0 20px; overflow-x: auto; scrollbar-width: none; }
 .ob-tabs::-webkit-scrollbar { display: none; }
 .tab-btn { background: #161b22; color: var(--t2); border: 1px solid rgba(255,255,255,0.1); padding: 12px 24px; border-radius: 50px; cursor: pointer; font-weight: 700; white-space: nowrap; transition: 0.2s; }
 .tab-btn.on { background: var(--p); color: #000; border-color: var(--p); }
 
 .ob-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 15px; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-.ob-team { background: #161b22; border: 2px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.ob-team { background: #161b22; border: 2px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 20px 10px; text-align: center; cursor: pointer; transition: 0.3s; }
 .ob-team:hover, .ob-team.sel { border-color: var(--p); background: rgba(16, 185, 129, 0.1); transform: translateY(-5px); }
-.ob-team .crest-box { width: 60px; height: 60px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; border: 1px solid rgba(255,255,255,0.1); overflow: hidden; }
-.ob-team img { width: 40px; height: 40px; object-fit: contain; }
-.ob-team span { font-size: 13px; font-weight: 700; color: var(--t); }
+.ob-team .crest-box { width: 64px; height: 64px; background: #fff; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 12px; padding: 8px; }
+.ob-team img { width: 100%; height: 100%; object-fit: contain; }
 
 .ob-footer { position: fixed; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, var(--bg) 80%, transparent); padding: 30px; text-align: center; }
-.btn-main { background: var(--p); color: #000; padding: 18px 60px; border-radius: 100px; font-weight: 900; font-size: 18px; cursor: pointer; border: none; box-shadow: 0 10px 30px rgba(16, 185, 129, 0.4); }
+.btn-main { background: var(--p); color: #000; padding: 18px 60px; border-radius: 100px; font-weight: 900; font-size: 18px; cursor: pointer; border: none; }
 
-/* 앱 메인 레이아웃 (인덱스 기능 유지) */
+/* 메인 레이아웃 */
 #app { display: none; height: 100vh; flex-direction: column; }
 .hdr { height: 75px; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: var(--bg2); border-bottom: 1px solid rgba(255,255,255,0.05); }
-.hdr-logo { font-size: 26px; font-weight: 900; color: var(--p); letter-spacing: 1px; }
+.hdr-logo { font-size: 26px; font-weight: 900; color: var(--p); }
 .main-body { flex: 1; display: flex; overflow: hidden; }
 .sidebar { width: 260px; background: #080a0f; border-right: 1px solid rgba(255,255,255,0.05); padding: 25px; }
-.si { padding: 16px 20px; border-radius: 15px; cursor: pointer; color: var(--t2); font-weight: 700; margin-bottom: 8px; transition: 0.2s; display: flex; align-items: center; gap: 12px; border: none; background: transparent; width: 100%; text-align: left; }
-.si:hover, .si.on { background: rgba(16, 185, 129, 0.15); color: var(--p); }
+.si { padding: 16px 20px; border-radius: 15px; cursor: pointer; color: var(--t2); font-weight: 700; margin-bottom: 8px; display: flex; align-items: center; gap: 12px; background: transparent; border: none; width: 100%; text-align: left; }
+.si.on { background: rgba(16, 185, 129, 0.15); color: var(--p); }
 .pages { flex: 1; overflow-y: auto; padding: 40px; background: #05070a; }
 .page { display: none; } .page.on { display: block; }
 
-/* 경기 카드 */
-.mc { background: var(--cd); border-radius: 24px; margin-bottom: 20px; border: 1px solid rgba(255,255,255,0.05); overflow: hidden; transition: 0.3s; }
-.mc-header { padding: 15px 25px; background: rgba(255,255,255,0.02); display: flex; justify-content: space-between; font-size: 12px; font-weight: 800; color: var(--t2); }
-.mc-content { padding: 30px; display: flex; align-items: center; justify-content: space-around; }
-.mc-team { text-align: center; width: 140px; font-weight: 800; }
-.mc-team img { width: 64px; height: 64px; margin-bottom: 15px; }
-.mc-score { font-size: 48px; font-weight: 900; background: #000; padding: 10px 30px; border-radius: 20px; color: var(--p); }
+/* 순위표 구분선 색상 */
+.zone-ucl { border-left: 4px solid var(--blue) !important; }
+.zone-uel { border-left: 4px solid var(--orange) !important; }
+.zone-uecl { border-left: 4px solid #a855f7 !important; }
+.zone-rele { border-left: 4px solid var(--red) !important; }
 
-/* 애니메이션 및 기타 */
+/* 월간 스케줄 네비게이션 */
+.sched-month-nav { display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 20px; }
+.sched-days { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 10px; scrollbar-width: none; }
+.sched-day-card { min-width: 60px; padding: 10px; background: #161b22; border-radius: 12px; text-align: center; cursor: pointer; border: 1px solid transparent; }
+.sched-day-card.on { border-color: var(--p); background: rgba(16, 185, 129, 0.1); color: var(--p); }
+
+/* 경기 카드 */
+.mc { background: var(--cd); border-radius: 20px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.05); }
+.mc-header { padding: 12px 20px; font-size: 11px; color: var(--t2); display: flex; justify-content: space-between; }
+.mc-content { padding: 20px; display: flex; align-items: center; justify-content: space-around; }
+.mc-team { text-align: center; width: 100px; font-size: 13px; font-weight: 700; }
+.mc-team img { width: 40px; height: 40px; margin-bottom: 8px; }
+.mc-score { font-size: 32px; font-weight: 900; color: var(--p); }
+
+table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+th { text-align: left; padding: 12px; color: var(--t2); font-size: 12px; border-bottom: 1px solid rgba(255,255,255,0.1); }
+td { padding: 14px 12px; border-bottom: 1px solid rgba(255,255,255,0.05); font-size: 14px; }
+
 #gt { position: fixed; inset: 0; z-index: 10000; display: none; align-items: center; justify-content: center; background: rgba(0,0,0,0.85); backdrop-filter: blur(10px); }
-.gt-box { text-align: center; animation: goal-pop 0.5s cubic-bezier(0.17, 0.89, 0.32, 1.49); }
-.gt-box h1 { font-size: 120px; font-weight: 900; color: var(--p); text-shadow: 0 0 50px var(--p); }
-@keyframes goal-pop { from { transform: scale(0.5); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-.loader { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 100px; gap: 20px; }
-.spinner { width: 40px; height: 40px; border: 4px solid rgba(16, 185, 129, 0.1); border-top-color: var(--p); border-radius: 50%; animation: spin 0.8s linear infinite; }
-@keyframes spin { to { transform: rotate(360deg); } }
+.gt-box h1 { font-size: 80px; font-weight: 900; color: var(--p); }
 </style>
 </head>
 <body>
 
 <div id="ob">
     <div class="ob-header">
-        <h1>PITCH IN 25/26</h1>
-        <p>글로벌 축구 데이터를 실시간으로 동기화합니다. 응원팀을 선택하세요 (최대 2팀).</p>
+        <h1>PITCH IN</h1>
+        <p>팀 엠블럼을 확인하고 응원 팀을 선택하세요.</p>
     </div>
-    
     <div id="league-tabs" class="ob-tabs"></div>
-
     <div id="ob-list" class="ob-grid"></div>
-
-    <div class="ob-footer">
-        <button class="btn-main" onclick="startApp()">PITCH IN 시작</button>
-    </div>
+    <div class="ob-footer"><button class="btn-main" onclick="startApp()">대시보드 시작</button></div>
 </div>
 
 <div id="app">
     <header class="hdr">
         <div class="hdr-logo">PITCH IN</div>
-        <div id="hdr-selected" style="display:flex; gap:12px;"></div>
+        <div id="hdr-selected" style="display:flex; gap:10px;"></div>
     </header>
     <div class="main-body">
         <aside class="sidebar">
@@ -92,65 +93,61 @@ body { background: var(--bg); color: var(--t); overflow: hidden; height: 100vh; 
             <button class="si" onclick="swP('sched',this)"><span>📅</span> SCHEDULE</button>
             <button class="si" onclick="swP('std',this)"><span>📊</span> STANDINGS</button>
             <button class="si" onclick="swP('player',this)"><span>👟</span> PLAYERS</button>
-            <button class="si" onclick="swP('fan',this)"><span>⭐</span> FAN ZONE</button>
         </aside>
         <main class="pages">
             <div class="page on" id="pg-home"></div>
             <div class="page" id="pg-sched">
-                <div id="sched-nav" style="display:flex; gap:12px; margin-bottom:30px; overflow-x:auto; padding-bottom:10px;"></div>
-                <div id="sched-list"></div>
+                <div class="sched-month-nav">
+                    <button class="tab-btn" onclick="changeMonth(-1)">◀</button>
+                    <h2 id="current-month-display">2026.04</h2>
+                    <button class="tab-btn" onclick="changeMonth(1)">▶</button>
+                </div>
+                <div id="sched-days-container" class="sched-days"></div>
+                <div id="sched-list" style="margin-top:20px;"></div>
             </div>
             <div class="page" id="pg-std">
-                <div id="std-tabs" style="display:flex; gap:10px; margin-bottom:25px; overflow-x:auto;"></div>
+                <div id="std-tabs" class="ob-tabs"></div>
                 <div id="std-bd"></div>
             </div>
             <div class="page" id="pg-player">
-                <div id="pl-tabs" style="display:flex; gap:10px; margin-bottom:25px; overflow-x:auto;"></div>
-                <div id="pl-bd"></div>
-            </div>
-            <div class="page" id="pg-fan">
-                <div id="fan-bd" class="mc" style="padding:40px; text-align:center;">
-                    <h2 id="fan-team-name" style="color:var(--p); margin-bottom:15px;">나의 팀</h2>
-                    <p style="color:var(--t2); margin-bottom:30px;">집관 포인트가 적립됩니다! 🔥</p>
-                    <button class="btn-main" style="padding:15px 40px;" onclick="alert('포인트 적립 완료!')">집관 인증하기</button>
+                <div id="pl-tabs" class="ob-tabs" style="justify-content:flex-start;">
+                    <button class="tab-btn on" onclick="loadPlayers('PL', 'goals')">득점 순위</button>
+                    <button class="tab-btn" onclick="loadPlayers('PL', 'assists')">도움 순위</button>
                 </div>
+                <div id="pl-bd"></div>
             </div>
         </main>
     </div>
 </div>
 
-<div id="gt"><div class="gt-box"><h1>GOAL!</h1><div id="gt-team-nm" style="font-size:32px; font-weight:800;"></div></div></div>
-<audio id="audio-goal" src="https://assets.mixkit.co/active_storage/sfx/2047/2047-preview.mp3"></audio>
+<div id="gt"><div class="gt-box"><h1>GOAL!</h1><div id="gt-team-nm" style="font-size:32px; text-align:center;"></div></div></div>
 
 <script>
 const API = '/api/football';
-// 이미지 3~9번 기반 전체 리그/팀 데이터
+// 엠블럼 URL 생성기 (예시 이미지 주소 - 실제 API 연동 시 API 제공 URL로 대체됨)
+const getCrest = (name) => `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=fff&color=000&bold=true`;
+
 const LEAGUES = [
-    { n: 'Premier League', c: 'PL', teams: ['Arsenal', 'Aston Villa', 'Man City', 'Liverpool', 'Tottenham', 'Chelsea', 'Man Utd', 'Newcastle', 'Nottingham', 'Leeds', 'Burnley', 'Bournemouth', 'Brighton', 'Brentford', 'Sunderland', 'Everton', 'Wolves', 'West Ham', 'Palace', 'Fulham'] },
-    { n: 'La Liga', c: 'PD', teams: ['Real Madrid', 'Barcelona', 'Atletico Madrid', 'Girona', 'Real Sociedad', 'Rayo', 'Levante', 'Mallorca', 'Valencia', 'Betis', 'Villarreal', 'Sevilla', 'Celta', 'Alaves', 'Espanyol', 'Elche', 'Oviedo', 'Osasuna', 'Getafe'] },
-    { n: 'Bundesliga', c: 'BL1', teams: ['Dortmund', 'Leipzig', 'Leverkusen', 'Mainz', 'Gladbach', 'Bayern', 'Werder', 'Wolfsburg', 'Stuttgart', 'Augsburg', 'Union Berlin', 'St. Pauli', 'Koln', 'Freiburg', 'Frankfurt', 'Heidenheim', 'Hamburg', 'Hoffenheim'] },
-    { n: 'Serie A', c: 'SA', teams: ['Napoli', 'Lazio', 'Lecce', 'Roma', 'Milan', 'Verona', 'Bologna', 'Sassuolo', 'Atalanta', 'Udinese', 'Juventus', 'Inter', 'Genoa', 'Cagliari', 'Como', 'Cremonese', 'Torino', 'Parma', 'Pisa', 'Fiorentina'] },
-    { n: 'Ligue 1', c: 'FL1', teams: ['Nantes', 'Nice', 'Lens', 'Rennes', 'Lorient', 'Le Havre', 'Lyon', 'Lille', 'Marseille', 'Metz', 'Monaco', 'Brest', 'Strasbourg', 'Angers', 'Auxerre', 'Toulouse', 'Paris FC', 'PSG'] },
-    { n: 'K League 1', c: 'KL1', teams: ['강원', '광주', '김천', '대전', '부천', '서울', '안양', '울산', '인천', '전북', '제주', '포항'] },
-    { n: 'K League 2', c: 'KL2', teams: ['경남', '김포', '김해', '대구', '부산', '서울E', '성남', '수원', '수원FC', '아산', '안산', '용인', '전남', '천안', '청주', '파주', '화성 FC'] }
+    { n: 'Premier League', c: 'PL', teams: ['Arsenal', 'Man City', 'Liverpool', 'Tottenham', 'Chelsea', 'Man Utd'] },
+    { n: 'La Liga', c: 'PD', teams: ['Real Madrid', 'Barcelona', 'Atletico Madrid', 'Girona'] },
+    { n: 'K League 1', c: 'KL1', teams: ['울산', '포항', '서울', '전북', '광주', '강원'] },
+    { n: 'K League 2', c: 'KL2', teams: ['화성 FC', '수원', '부산', '전남', '경남'] }
 ];
 
 let SELECTED_TEAMS = [];
 let currentLeague = 'PL';
-let prevScores = {};
+let viewDate = new Date();
 
-// 온보딩 초기화 및 리그 전환
+// 1. 온보딩 엠블럼 적용 및 초기화
 function initOb() {
     const tabs = document.getElementById('league-tabs');
-    tabs.innerHTML = LEAGUES.map(lg => `
-        <button class="tab-btn ${lg.c === currentLeague ? 'on' : ''}" onclick="switchLeague('${lg.c}', this)">${lg.n}</button>
-    `).join('');
+    tabs.innerHTML = LEAGUES.map(lg => `<button class="tab-btn ${lg.c === currentLeague ? 'on' : ''}" onclick="switchLeague('${lg.c}', this)">${lg.n}</button>`).join('');
     renderTeams();
 }
 
 function switchLeague(code, el) {
     currentLeague = code;
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('on'));
+    document.querySelectorAll('#league-tabs .tab-btn').forEach(b => b.classList.remove('on'));
     el.classList.add('on');
     renderTeams();
 }
@@ -160,7 +157,7 @@ function renderTeams() {
     const lg = LEAGUES.find(l => l.c === currentLeague);
     list.innerHTML = lg.teams.map(t => `
         <div class="ob-team ${SELECTED_TEAMS.includes(t) ? 'sel' : ''}" onclick="toggleTeam(this, '${t}')">
-            <div class="crest-box"><img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t)}&background=000&color=fff&bold=true"></div>
+            <div class="crest-box"><img src="${getCrest(t)}" alt="${t}"></div>
             <span>${t}</span>
         </div>
     `).join('');
@@ -171,116 +168,107 @@ function toggleTeam(el, team) {
         SELECTED_TEAMS = SELECTED_TEAMS.filter(t => t !== team);
         el.classList.remove('sel');
     } else {
-        if (SELECTED_TEAMS.length >= 2) return alert('최대 2개 팀까지 선택 가능합니다.');
+        if (SELECTED_TEAMS.length >= 2) return alert('최대 2팀까지 선택 가능합니다.');
         SELECTED_TEAMS.push(team);
         el.classList.add('sel');
     }
 }
 
-// 인덱스 기능: 앱 시작
-async function startApp() {
+// 2. 월간 일정 기능 (옆으로 넘기기)
+function renderMonthDays() {
+    const container = document.getElementById('sched-days-container');
+    const display = document.getElementById('current-month-display');
+    container.innerHTML = '';
+    
+    const year = viewDate.getFullYear();
+    const month = viewDate.getMonth();
+    display.textContent = `${year}.${String(month + 1).padStart(2, '0')}`;
+
+    const lastDay = new Date(year, month + 1, 0).getDate();
+    for (let i = 1; i <= lastDay; i++) {
+        const d = new Date(year, month, i);
+        const dayStr = d.toISOString().split('T')[0];
+        const isToday = new Date().toISOString().split('T')[0] === dayStr;
+        container.innerHTML += `
+            <div class="sched-day-card ${isToday ? 'on' : ''}" onclick="loadSched('${dayStr}')">
+                <div style="font-size:10px;">${['일','월','화','수','목','금','토'][d.getDay()]}</div>
+                <div style="font-size:16px; font-weight:800;">${i}</div>
+            </div>
+        `;
+    }
+}
+
+function changeMonth(val) {
+    viewDate.setMonth(viewDate.getMonth() + val);
+    renderMonthDays();
+}
+
+// 3. 순위표 엠블럼 및 구역 구분 (챔스/강등)
+async function loadStd(code) {
+    const bd = document.getElementById('std-bd');
+    bd.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+    const d = await fetch(`${API}?type=fd&path=/competitions/${code}/standings`).then(res => res.json());
+    const table = d.standings[0].table;
+    
+    bd.innerHTML = `<table>
+        <tr><th>순위</th><th>팀</th><th>경기</th><th>승점</th></tr>
+        ${table.map(r => {
+            let zoneClass = '';
+            if (r.position <= 4) zoneClass = 'zone-ucl';
+            else if (r.position === 5) zoneClass = 'zone-uel';
+            else if (r.position === 6) zoneClass = 'zone-uecl';
+            else if (r.position >= table.length - 2) zoneClass = 'zone-rele';
+
+            return `<tr class="${zoneClass}">
+                <td style="font-weight:800; text-align:center;">${r.position}</td>
+                <td style="display:flex; align-items:center; gap:10px;">
+                    <img src="${r.team.crest || getCrest(r.team.name)}" width="24" height="24">
+                    ${r.team.name}
+                </td>
+                <td style="text-align:center;">${r.playedGames}</td>
+                <td style="text-align:center; color:var(--p); font-weight:900;">${r.points}</td>
+            </tr>`;
+        }).join('')}
+    </table>`;
+}
+
+// 4. 선수 탭 득점/도움 순위
+async function loadPlayers(code, type = 'goals') {
+    const bd = document.getElementById('pl-bd');
+    bd.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
+    // 실제 API 연동 시 type에 따라 다른 경로 또는 필터 사용
+    const d = await fetch(`${API}?type=fd&path=/competitions/${code}/scorers`).then(res => res.json());
+    
+    bd.innerHTML = `<table>
+        <tr><th>순위</th><th>선수</th><th>팀</th><th>${type === 'goals' ? '득점' : '도움'}</th></tr>
+        ${d.scorers.slice(0, 10).map((s, i) => `
+            <tr>
+                <td style="font-weight:800; color:var(--p);">${i+1}</td>
+                <td style="font-weight:700;">${s.player.name}</td>
+                <td>${s.team.name}</td>
+                <td style="font-weight:900; color:var(--p);">${type === 'goals' ? s.goals : (s.assists || 0)}</td>
+            </tr>
+        `).join('')}
+    </table>`;
+}
+
+// 메인 앱 시작
+function startApp() {
     if (SELECTED_TEAMS.length === 0) return alert('팀을 선택해주세요.');
     document.getElementById('ob').style.display = 'none';
     document.getElementById('app').style.display = 'flex';
-    document.getElementById('hdr-selected').innerHTML = SELECTED_TEAMS.map(t => `<img src="https://ui-avatars.com/api/?name=${encodeURIComponent(t)}&size=32&background=10b981&color=000&bold=true" style="border-radius:50%" title="${t}">`).join('');
-    loadHome();
-    initTabs();
+    document.getElementById('hdr-selected').innerHTML = SELECTED_TEAMS.map(t => `<img src="${getCrest(t)}" style="width:30px; border-radius:50%;">`).join('');
+    renderMonthDays();
 }
 
-// 라이브 경기 연동 및 골 감지
-async function loadHome() {
-    const bd = document.getElementById('pg-home');
-    bd.innerHTML = '<div class="loader"><div class="spinner"></div>데이터 동기화 중...</div>';
-    
-    try {
-        const d = await fetch(`${API}?type=fd&path=/matches`).then(r => r.json());
-        if (!d.matches || d.matches.length === 0) {
-            bd.innerHTML = '<div style="text-align:center; padding:100px; color:var(--t2);">현재 진행 중인 라이브 경기가 없습니다.</div>';
-            return;
-        }
-
-        bd.innerHTML = d.matches.filter(m => ['IN_PLAY', 'PAUSED', 'HALFTIME'].includes(m.status)).map(m => {
-            const currentScore = `${m.score.fullTime.home}-${m.score.fullTime.away}`;
-            if (prevScores[m.id] && prevScores[m.id] !== currentScore) triggerGoal(m.homeTeam.shortName || m.homeTeam.name);
-            prevScores[m.id] = currentScore;
-
-            return `
-                <div class="mc">
-                    <div class="mc-header"><span>${m.competition.name}</span><span style="color:var(--p)">LIVE ${m.utcDate.slice(11,16)}</span></div>
-                    <div class="mc-content">
-                        <div class="mc-team"><img src="${m.homeTeam.crest || ''}"><div>${m.homeTeam.name}</div></div>
-                        <div class="mc-score">${m.score.fullTime.home ?? 0} : ${m.score.fullTime.away ?? 0}</div>
-                        <div class="mc-team"><img src="${m.awayTeam.crest || ''}"><div>${m.awayTeam.name}</div></div>
-                    </div>
-                </div>
-            `;
-        }).join('') || '<p style="text-align:center; padding:50px;">선택한 팀의 라이브 경기가 없습니다.</p>';
-    } catch(e) { bd.innerHTML = "데이터를 불러올 수 없습니다."; }
-}
-
-// 골 애니메이션
-function triggerGoal(team) {
-    const gt = document.getElementById('gt');
-    const audio = document.getElementById('audio-goal');
-    document.getElementById('gt-team-nm').textContent = team + " SCORE!";
-    gt.style.display = 'flex';
-    audio.play().catch(() => {});
-    setTimeout(() => gt.style.display = 'none', 3000);
-}
-
-// 인덱스 페이지 전환 로직
 function swP(id, el) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
     document.getElementById('pg-' + id).classList.add('on');
     document.querySelectorAll('.si').forEach(s => s.classList.remove('on'));
     el.classList.add('on');
     if(id === 'std') loadStd('PL');
-    if(id === 'player') loadPlayers('PL');
 }
 
-// 메인 기능 초기화 (순위, 일정 탭 생성)
-function initTabs() {
-    const stdTabs = document.getElementById('std-tabs');
-    const plTabs = document.getElementById('pl-tabs');
-    const schedNav = document.getElementById('sched-nav');
-    
-    const tabsHtml = LEAGUES.map(lg => `<button class="si" style="white-space:nowrap; width:auto;" onclick="loadStd('${lg.c}')">${lg.n}</button>`).join('');
-    if(stdTabs) stdTabs.innerHTML = tabsHtml;
-    if(plTabs) plTabs.innerHTML = LEAGUES.map(lg => `<button class="si" style="white-space:nowrap; width:auto;" onclick="loadPlayers('${lg.c}')">${lg.n}</button>`).join('');
-    
-    if(schedNav) {
-        schedNav.innerHTML = '';
-        for (let i = 0; i < 7; i++) {
-            const d = new Date(); d.setDate(d.getDate() + i);
-            const day = d.toISOString().split('T')[0];
-            schedNav.innerHTML += `<button class="si" style="white-space:nowrap; width:auto;" onclick="loadSched('${day}')">${day.slice(5)}</button>`;
-        }
-    }
-}
-
-// 데이터 로드 함수 (기존 PITCH Pro 로직 동일)
-async function loadStd(code) {
-    const bd = document.getElementById('std-bd');
-    bd.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
-    try {
-        const d = await fetch(`${API}?type=fd&path=/competitions/${code}/standings`).then(res => res.json());
-        const table = d.standings[0].table;
-        bd.innerHTML = `<table style="width:100%; border-collapse:collapse;">
-            ${table.map(r => `<tr style="border-bottom:1px solid rgba(255,255,255,0.05);"><td style="padding:12px;">${r.position}</td><td style="padding:12px;">${r.team.name}</td><td style="padding:12px; color:var(--p); font-weight:900;">${r.points}</td></tr>`).join('')}
-        </table>`;
-    } catch(e) { bd.innerHTML = "로드 실패"; }
-}
-
-async function loadSched(date) {
-    const bd = document.getElementById('sched-list');
-    bd.innerHTML = '<div class="loader"><div class="spinner"></div></div>';
-    try {
-        const d = await fetch(`${API}?type=fd&path=/matches?dateFrom=${date}&dateTo=${date}`).then(res => res.json());
-        bd.innerHTML = d.matches.map(m => `<div class="mc" style="padding:15px; text-align:center;">${m.homeTeam.name} vs ${m.awayTeam.name}</div>`).join('') || '경기가 없습니다.';
-    } catch(e) { bd.innerHTML = "로드 실패"; }
-}
-
-// 초기 실행
 initOb();
 </script>
 </body>
