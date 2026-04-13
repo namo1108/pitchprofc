@@ -39,7 +39,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 }
 .ob-sel-cnt .n{color:var(--p);font-weight:900;font-size:16px;}
 
-/* 리그 탭 */
+/* League tabs */
 .ob-tabs{display:flex;gap:8px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;margin-bottom:24px;}
 .ob-tabs::-webkit-scrollbar{display:none;}
 .tab-btn{
@@ -53,7 +53,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .tab-btn img{width:18px;height:18px;object-fit:contain;border-radius:3px;}
 .tab-btn.on{background:var(--p);color:#000;border-color:var(--p);box-shadow:0 0 20px rgba(16,185,129,.25);}
 
-/* 팀 그리드 */
+/* Team grid */
 .ob-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;}
 @media(max-width:500px){.ob-grid{grid-template-columns:repeat(4,1fr);}}
 
@@ -82,7 +82,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .ob-team span{font-size:11px;font-weight:700;color:var(--t2);display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .ob-team.sel span{color:var(--p);}
 
-/* 시작 버튼 */
+/* Start button */
 .ob-footer{
   position:sticky;bottom:0;padding:24px 0 0;
   background:linear-gradient(to top,var(--bg) 70%,transparent);
@@ -102,7 +102,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 #app{display:none;height:100vh;height:100dvh;flex-direction:column;}
 #app.on{display:flex;}
 
-/* 헤더 */
+/* Header */
 .hdr{
   height:64px;flex-shrink:0;
   display:flex;align-items:center;justify-content:space-between;
@@ -127,10 +127,10 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.3}}
 .lv-badge{font-size:11px;font-weight:800;color:var(--p);background:var(--ps);border:1px solid var(--pb);border-radius:100px;padding:5px 14px;}
 
-/* 본체 */
+/* Main body */
 .main-body{flex:1;display:flex;overflow:hidden;min-height:0;}
 
-/* 사이드바 */
+/* Sidebar */
 .sidebar{
   width:240px;flex-shrink:0;
   background:#080a0f;border-right:1px solid var(--t3);
@@ -147,14 +147,14 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .si.on{background:var(--ps);color:var(--p);border-color:var(--pb);}
 .si-ic{font-size:17px;width:22px;text-align:center;}
 
-/* 페이지 */
+/* Pages */
 .pages{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;}
 .page{display:none;padding:32px;}
 .page.on{display:block;animation:fu .2s ease;}
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
 @media(max-width:767px){.page{padding:16px 14px 80px;}}
 
-/* 모바일 하단 네비 */
+/* Mobile bottom nav */
 .bnav{display:none;flex-shrink:0;background:rgba(13,17,23,.97);backdrop-filter:blur(16px);border-top:1px solid var(--t3);padding-bottom:env(safe-area-inset-bottom,0);height:calc(58px + env(safe-area-inset-bottom,0));}
 @media(max-width:767px){.bnav{display:flex;}}
 .nbi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;font-family:'Poppins',sans-serif;}
@@ -162,7 +162,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .ni-lb{font-size:10px;font-weight:700;color:var(--t2);}
 .nbi.on .ni-lb{color:var(--p);}
 
-/* PC 최적화 */
+/* PC optimization */
 @media(min-width:1200px){
   .pages{padding:0;}
   .page{padding:36px 40px;}
@@ -172,12 +172,12 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   .sidebar{width:200px;}
   .page{padding:24px;}
 }
-/* 태블릿 */
+/* Tablet */
 @media(max-width:900px){
   .ob-grid{grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:8px;}
   .ob-crest img{width:42px;height:42px;}
 }
-/* 모바일 */
+/* Mobile */
 @media(max-width:480px){
   .ob-grid{grid-template-columns:repeat(4,1fr);gap:7px;}
   .ob-crest img{width:38px;height:38px;}
@@ -187,13 +187,13 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   .hdr-logo{font-size:18px;}
 }
 
-/* 섹션 타이틀 */
+/* Section title */
 .stl{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
 .stl h2{font-size:20px;font-weight:800;color:var(--t);}
 .stl::before{content:'';width:4px;height:20px;background:linear-gradient(var(--p),var(--blue));border-radius:2px;flex-shrink:0;}
 .sub-badge{font-size:11px;color:var(--t2);background:var(--bg3);border:1px solid var(--t3);padding:3px 12px;border-radius:100px;margin-left:auto;}
 
-/* 경기 카드 */
+/* Match card */
 .mc{background:var(--cd);border:1px solid var(--t3);border-radius:20px;margin-bottom:14px;overflow:hidden;transition:.2s;cursor:pointer;}
 .mc:hover{border-color:var(--pb);transform:translateY(-2px);box-shadow:0 20px 48px rgba(0,0,0,.7);}
 .mc.live-card{border-color:rgba(239,68,68,.35);}
@@ -234,7 +234,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .oval{font-size:14px;font-weight:900;color:var(--t);}
 .oval.fav{color:var(--p);}
 
-/* 일정 */
+/* Schedule */
 .date-nav{display:flex;align-items:center;gap:8px;margin-bottom:20px;}
 .date-arr{background:var(--bg3);border:1px solid var(--t3);border-radius:10px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--t2);font-size:18px;flex-shrink:0;transition:.15s;border:none;}
 .date-arr:hover{border-color:var(--pb);color:var(--p);}
@@ -248,7 +248,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .month-ctrl{display:flex;align-items:center;gap:10px;background:var(--bg3);border:1px solid var(--t3);border-radius:12px;padding:6px 14px;}
 .month-ctrl span{font-size:14px;font-weight:800;color:var(--t);white-space:nowrap;}
 
-/* 리그 그룹 */
+/* League group */
 .lg-grp{margin-bottom:12px;}
 .lg-hd{display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--bg3);border-radius:12px;cursor:pointer;margin-bottom:6px;border:1px solid var(--t3);transition:.15s;}
 .lg-hd:hover{border-color:var(--pb);}
@@ -269,7 +269,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .sm-nm.win{color:var(--t);font-weight:900;}
 .sm-sc{font-size:13px;font-weight:900;width:16px;text-align:right;}
 
-/* 순위 */
+/* Standings */
 .std-hdr{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--bg3);border-radius:14px;margin-bottom:14px;border:1px solid var(--t3);}
 .std-hdr img{width:28px;height:28px;object-fit:contain;}
 .std-hdr h3{font-size:16px;font-weight:800;color:var(--t);}
@@ -293,7 +293,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .sform{display:flex;gap:3px;}
 .sfd{width:8px;height:8px;border-radius:50%;}
 
-/* 선수 */
+/* Players */
 .pc{background:var(--bg3);border:1px solid var(--t3);border-radius:15px;padding:14px 16px;margin-bottom:8px;display:flex;align-items:center;gap:12px;transition:.2s;}
 .pc:hover{border-color:var(--pb);}
 .pc.me{background:var(--ps);border-color:var(--pb);}
@@ -326,7 +326,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .ai-insight{margin-top:14px;padding-top:14px;border-top:1px solid var(--t3);font-size:13px;color:var(--t2);line-height:1.7;}
 .ai-insight b{color:var(--p);}
 
-/* 팬존 */
+/* Fan zone */
 .fz-hero{background:linear-gradient(135deg,var(--bg3),var(--bg2));border:1px solid var(--pb);border-radius:22px;padding:26px;text-align:center;margin-bottom:20px;box-shadow:0 0 40px rgba(16,185,129,.08);}
 .fz-em{font-size:50px;margin-bottom:8px;}
 .fz-lv{font-size:26px;font-weight:900;color:var(--p);margin-bottom:4px;}
@@ -355,7 +355,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .lv-nm{font-size:13px;font-weight:700;color:var(--t);flex:1;}
 .lv-req{font-size:11px;color:var(--t2);}
 
-/* 모달 */
+/* Modal */
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:500;overflow-y:auto;padding:20px;display:none;backdrop-filter:blur(8px);}
 .modal.on{display:block;}
 .modal-in{background:var(--bg3);border-radius:22px;max-width:500px;margin:0 auto;border:1px solid var(--t3);overflow:hidden;box-shadow:0 40px 80px rgba(0,0,0,.8);}
@@ -364,7 +364,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .modal-x{background:none;border:none;color:var(--t2);font-size:26px;cursor:pointer;line-height:1;}
 .modal-body{padding:20px;}
 
-/* GOAL 오버레이 */
+/* Goal overlay */
 #gt{position:fixed;inset:0;z-index:9999;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.88);backdrop-filter:blur(20px);pointer-events:none;}
 #gt.on{display:flex;}
 .gt-box{text-align:center;animation:gtPop 4.5s ease forwards;}
@@ -378,7 +378,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .gt-scorer{font-size:22px;font-weight:800;color:var(--p);display:block;margin-top:10px;}
 .gt-info{font-size:14px;color:rgba(255,255,255,.6);display:block;margin-top:5px;}
 
-/* 공통 */
+/* Common */
 .ldr{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px;gap:12px;}
 .spin{width:28px;height:28px;border:2.5px solid var(--t3);border-top-color:var(--p);border-radius:50%;animation:spin .7s linear infinite;}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -403,13 +403,13 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 <div class="ob-wrap">
   <div class="ob-hero">
     <div class="ob-title">PITCH IN</div>
-    <p class="ob-sub">팀 엠블럼을 확인하고 응원 팀을 선택하세요. <b>최대 2팀</b></p>
-    <div class="ob-sel-cnt">선택됨: <span class="n" id="sel-n">0</span> / 2</div>
+    <p class="ob-sub">Select your clubs to follow. <b>Up to 2 teams</b></p>
+    <div class="ob-sel-cnt">Selected: <span class="n" id="sel-n">0</span> / 2</div>
   </div>
   <div class="ob-tabs" id="ob-tabs"></div>
   <div class="ob-grid" id="ob-grid"></div>
   <div class="ob-footer">
-    <button class="btn-start" id="ob-btn" onclick="startApp()" disabled>팀을 선택해주세요</button>
+    <button class="btn-start" id="ob-btn" onclick="startApp()" disabled>Select a team</button>
   </div>
 </div>
 </div>
@@ -427,14 +427,14 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   <div class="main-body">
     <aside class="sidebar">
       <div class="si on" onclick="swP('home',this)"><span class="si-ic">⚡</span>LIVE</div>
-      <div class="si" onclick="swP('sched',this)"><span class="si-ic">📅</span>일정</div>
-      <div class="si" onclick="swP('std',this)"><span class="si-ic">📊</span>순위</div>
-      <div class="si" onclick="swP('player',this)"><span class="si-ic">👟</span>선수</div>
+      <div class="si" onclick="swP('sched',this)"><span class="si-ic">📅</span>Schedule</div>
+      <div class="si" onclick="swP('std',this)"><span class="si-ic">📊</span>Standings</div>
+      <div class="si" onclick="swP('player',this)"><span class="si-ic">👟</span>Players</div>
       <div class="si" onclick="swP('ai',this)"><span class="si-ic">🧠</span>AI PITCH</div>
-      <div class="si" onclick="swP('fan',this)"><span class="si-ic">⭐</span>FAN ZONE</div>
+      <div class="si" onclick="swP('fan',this)"><span class="si-ic">⭐</span>Fan Zone</div>
     </aside>
     <div class="pages">
-      <div class="page on" id="pg-home"><div class="ldr"><div class="spin"></div><div class="spin-t">라이브 경기 확인 중...</div></div></div>
+      <div class="page on" id="pg-home"><div class="ldr"><div class="spin"></div><div class="spin-t">Loading live matches...</div></div></div>
       <div class="page" id="pg-sched">
         <div class="date-nav">
           <button class="date-arr" onclick="monthGo(-1)">◀</button>
@@ -453,25 +453,25 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
           <div class="pills" id="pl-pills" style="flex:1;margin-bottom:0;"></div>
         </div>
         <div style="display:flex;gap:7px;margin-bottom:20px;">
-          <button class="pill on" onclick="swPt('scorers',this)">⚽ 득점</button>
-          <button class="pill" onclick="swPt('assists',this)">🎯 도움</button>
+          <button class="pill on" onclick="swPt('scorers',this)">⚽ Top Scorers</button>
+          <button class="pill" onclick="swPt('assists',this)">🎯 Top Assists</button>
         </div>
         <div id="pl-bd"><div class="ldr"><div class="spin"></div></div></div>
       </div>
-      <div class="page" id="pg-ai"><div id="ai-bd"><div class="ldr"><div class="spin"></div><div class="spin-t">AI 분석 생성 중...</div></div></div></div>
+      <div class="page" id="pg-ai"><div id="ai-bd"><div class="ldr"><div class="spin"></div><div class="spin-t">Generating AI analysis...</div></div></div></div>
       <div class="page" id="pg-fan"><div id="fan-bd"></div></div>
     </div>
     <nav class="bnav">
-      <button class="nbi on" onclick="swP('home',this)"><div class="ni-ic">⚡</div><span class="ni-lb">홈</span></button>
-      <button class="nbi" onclick="swP('sched',this)"><div class="ni-ic">📅</div><span class="ni-lb">일정</span></button>
-      <button class="nbi" onclick="swP('std',this)"><div class="ni-ic">📊</div><span class="ni-lb">순위</span></button>
+      <button class="nbi on" onclick="swP('home',this)"><div class="ni-ic">⚡</div><span class="ni-lb">Home</span></button>
+      <button class="nbi" onclick="swP('sched',this)"><div class="ni-ic">📅</div><span class="ni-lb">Schedule</span></button>
+      <button class="nbi" onclick="swP('std',this)"><div class="ni-ic">📊</div><span class="ni-lb">Standings</span></button>
       <button class="nbi" onclick="swP('ai',this)"><div class="ni-ic">🧠</div><span class="ni-lb">AI</span></button>
-      <button class="nbi" onclick="swP('fan',this)"><div class="ni-ic">⭐</div><span class="ni-lb">팬존</span></button>
+      <button class="nbi" onclick="swP('fan',this)"><div class="ni-ic">⭐</div><span class="ni-lb">Fan Zone</span></button>
     </nav>
   </div>
 </div>
 
-<!-- 경기 상세 모달 -->
+<!-- Match detail modal -->
 <div class="modal" id="dtl-modal">
   <div class="modal-in">
     <div class="modal-hd"><span class="modal-ttl" id="dtl-ttl"></span><button class="modal-x" onclick="cm('dtl-modal')">×</button></div>
@@ -479,7 +479,7 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
   </div>
 </div>
 
-<!-- GOAL 오버레이 -->
+<!-- GOAL Overlay -->
 <div id="gt">
   <div class="gt-box">
     <svg class="gt-net" width="220" height="95" viewBox="0 0 220 95">
@@ -514,13 +514,13 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 const API = '/api/football';
 const KL_LEAGUE = 292, KL_SEASON = 2026;
 
-// ── 팀 데이터 (엠블럼 ID 포함) ──
+// ── Team data (with emblem IDs) ──
 const LEAGUES = [
   { n:'Premier League', c:'PL', logo:'https://crests.football-data.org/PL.png', teams:[
     {n:'Arsenal',id:57},{n:'Aston Villa',id:58},{n:'Bournemouth',id:715},{n:'Brentford',id:402},
     {n:'Brighton',id:397},{n:'Burnley',id:328},{n:'Chelsea',id:61},{n:'Crystal Palace',id:354},
     {n:'Everton',id:74},{n:'Fulham',id:72},{n:'Leeds Utd',id:341},{n:'Liverpool',id:64},
-    {n:'Man City',id:65},{n:'Man United',id:66},{n:'Newcastle',id:67},{n:'Nottm Forest',id:1044},
+    {n:'Man City',id:65},{n:'Man United',id:66},{n:'Newcastle',id:67},{n:'Nottm Forest',id:351},
     {n:'Sunderland',id:394},{n:'Tottenham',id:73},{n:'West Ham',id:563},{n:'Wolves',id:76}
   ]},
   { n:'La Liga', c:'PD', logo:'https://crests.football-data.org/PD.png', teams:[
@@ -552,60 +552,60 @@ const LEAGUES = [
     {n:'Lorient',id:553},{n:'Paris FC',id:593},{n:'Metz',id:542}
   ]},
   { n:'K League 1', c:'KL1', logo:'https://media.api-sports.io/football/leagues/292.png', kl:true, teams:[
-    {n:'강원FC',    id:2766, col:'#FF6B00'},
-    {n:'광주FC',    id:2765, col:'#E5061A'},
-    {n:'김천상무',  id:2769, col:'#003882'},
-    {n:'대전하나',  id:2767, col:'#004EA2'},
-    {n:'부천FC',    id:2771, col:'#CC0000'},
-    {n:'FC서울',    id:2763, col:'#E2002D'},
-    {n:'FC안양',    id:2770, col:'#6B4AC4'},
-    {n:'울산HD',    id:2759, col:'#1E4799'},
-    {n:'인천유나이티드',id:2757, col:'#1A3172'},
-    {n:'전북현대',  id:2762, col:'#006738'},
-    {n:'제주유나이티드',id:2760, col:'#FF6600'},
-    {n:'포항스틸러스',id:2764, col:'#C8102E'}
+    {n:'Gangwon FC',    id:2766, col:'#FF6B00'},
+    {n:'Gwangju FC',    id:2765, col:'#E5061A'},
+    {n:'Gimcheon Sangmu',  id:2769, col:'#003882'},
+    {n:'Daejeon Citizen',  id:2767, col:'#004EA2'},
+    {n:'Bucheon FC',    id:2771, col:'#CC0000'},
+    {n:'FC Seoul',    id:2763, col:'#E2002D'},
+    {n:'FC Anyang',    id:2770, col:'#6B4AC4'},
+    {n:'Ulsan HD',    id:2759, col:'#1E4799'},
+    {n:'Incheon United',id:2757, col:'#1A3172'},
+    {n:'Jeonbuk Hyundai',  id:2762, col:'#006738'},
+    {n:'Jeju United',id:2760, col:'#FF6600'},
+    {n:'Pohang Steelers',id:2764, col:'#C8102E'}
   ]},
   { n:'K League 2', c:'KL2', logo:'https://media.api-sports.io/football/leagues/293.png', kl:true, teams:[
-    {n:'경남FC',     id:2785, col:'#003DA5'},
-    {n:'김포FC',     id:2775, col:'#E8B400'},
-    {n:'김해FC',     id:2782, col:'#CC0000'},
-    {n:'대구FC',     id:2761, col:'#6ABDD8'},
-    {n:'부산아이파크',id:2776, col:'#003399'},
-    {n:'서울이랜드', id:2773, col:'#00204E'},
-    {n:'성남FC',     id:2768, col:'#231F20'},
-    {n:'수원삼성',   id:2756, col:'#003DA5'},
-    {n:'수원FC',     id:2772, col:'#004B8D'},
-    {n:'충남아산',   id:2777, col:'#C8102E'},
-    {n:'안산그리너스',id:2781, col:'#009900'},
-    {n:'용인FC',     id:2784, col:'#8B0000'},
-    {n:'전남드래곤즈',id:2774, col:'#006A38'},
-    {n:'천안시티',   id:2780, col:'#005BAC'},
-    {n:'충북청주',   id:2779, col:'#003DA5'},
-    {n:'파주프런티어',id:2783, col:'#004B8D'},
-    {n:'화성FC',     id:2778, col:'#FF6600'}
+    {n:'Gyeongnam FC',     id:2785, col:'#003DA5'},
+    {n:'Gimpo FC',     id:2775, col:'#E8B400'},
+    {n:'Gimhae FC',     id:2782, col:'#CC0000'},
+    {n:'Daegu FC',     id:2761, col:'#6ABDD8'},
+    {n:'Busan IPark',id:2776, col:'#003399'},
+    {n:'Seoul E-Land', id:2773, col:'#00204E'},
+    {n:'Seongnam FC',     id:2768, col:'#231F20'},
+    {n:'Suwon Bluewings',   id:2756, col:'#003DA5'},
+    {n:'Suwon FC',     id:2772, col:'#004B8D'},
+    {n:'Chungnam Asan',   id:2777, col:'#C8102E'},
+    {n:'Ansan Greeners',id:2781, col:'#009900'},
+    {n:'Yongin FC',     id:2784, col:'#8B0000'},
+    {n:'Jeonnam Dragons',id:2774, col:'#006A38'},
+    {n:'Cheonan City',   id:2780, col:'#005BAC'},
+    {n:'Cheongju FC',   id:2779, col:'#003DA5'},
+    {n:'Paju FC',id:2783, col:'#004B8D'},
+    {n:'Hwaseong FC',     id:2778, col:'#FF6600'}
   ]}
 ];
 
 const STD_LEAGUES = LEAGUES.filter(l=>!['KL1','KL2'].includes(l.c));
-const LEVELS=[{lv:1,em:'⚽',n:'입문자',min:0,max:4},{lv:2,em:'🍺',n:'라이트 팬',min:5,max:9},{lv:3,em:'📺',n:'집관러',min:10,max:19},{lv:4,em:'🧠',n:'전술충',min:20,max:39},{lv:5,em:'🗣️',n:'방구석 퍼거슨',min:40,max:79},{lv:6,em:'🔥',n:'찐팬',min:80,max:149},{lv:7,em:'👑',n:'구단주급',min:150,max:Infinity}];
+const LEVELS=[{lv:1,em:'⚽',n:'Rookie',min:0,max:4},{lv:2,em:'🍺',n:'Casual Fan',min:5,max:9},{lv:3,em:'📺',n:'Home Viewer',min:10,max:19},{lv:4,em:'🧠',n:'Tactician',min:20,max:39},{lv:5,em:'🗣️',n:'Armchair Ferguson',min:40,max:79},{lv:6,em:'🔥',n:'Die-hard Fan',min:80,max:149},{lv:7,em:'👑',n:'Club Owner',min:150,max:Infinity}];
 
-// ── 상태 ──
+// ── State ──
 let SEL=[]; let curLg='PL'; let curStd='PL'; let curPLg='PL'; let curPt='scorers';
 let viewDt=new Date(); let curDay=null;
 let fanData=JSON.parse(localStorage.getItem('pi_fan')||'{"checkins":[],"total":0}');
 let watchList=JSON.parse(localStorage.getItem('pi_watch')||'[]');
 let prevSc={};
 
-// ── 캐시 ──
+// ── Cache ──
 const _c={};
 const gc=(k,ttl=90000)=>{const c=_c[k];return c&&Date.now()-c.ts<ttl?c.d:null;};
 const sc=(k,d)=>{_c[k]={d,ts:Date.now()};};
 
-// ── 유틸 ──
+// ── Utilities ──
 const kn=()=>new Date(Date.now()+9*3600000);
 const ds=d=>`${d.getUTCFullYear()}-${String(d.getUTCMonth()+1).padStart(2,'0')}-${String(d.getUTCDate()).padStart(2,'0')}`;
 const kt=u=>{if(!u)return'--:--';const k=new Date(new Date(u).getTime()+9*3600000);return`${String(k.getUTCHours()).padStart(2,'0')}:${String(k.getUTCMinutes()).padStart(2,'0')}`;};
-const kd=u=>{if(!u)return'';const k=new Date(new Date(u).getTime()+9*3600000);return`${k.getUTCMonth()+1}/${k.getUTCDate()}(${['일','월','화','수','목','금','토'][k.getUTCDay()]})`;};
+const kd=u=>{if(!u)return'';const k=new Date(new Date(u).getTime()+9*3600000);return`${k.getUTCMonth()+1}/${k.getUTCDate()}(${['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][k.getUTCDay()]})`;};
 const isKstDate=(u,ds2)=>{if(!u||!ds2)return false;const k=new Date(new Date(u).getTime()+9*3600000);return`${k.getUTCFullYear()}-${String(k.getUTCMonth()+1).padStart(2,'0')}-${String(k.getUTCDate()).padStart(2,'0')}`===ds2;};
 const isKstToday=u=>isKstDate(u,ds(kn()));
 const isLv=m=>['IN_PLAY','PAUSED','HALFTIME','EXTRA_TIME','PENALTY_SHOOTOUT'].includes(m.status);
@@ -617,32 +617,79 @@ const ods=m=>{const s=(x,n)=>{const v=Math.sin(x+n)*43758.5453;return v-Math.flo
 const mapKL=s=>({'NS':'SCHEDULED','TBD':'SCHEDULED','1H':'IN_PLAY','HT':'HALFTIME','2H':'IN_PLAY','ET':'EXTRA_TIME','P':'PENALTY_SHOOTOUT','FT':'FINISHED','AET':'FINISHED','PEN':'FINISHED','PST':'POSTPONED','CANC':'CANCELLED','SUSP':'SUSPENDED','INT':'PAUSED'}[s]||'SCHEDULED');
 const addDays=(ds2,n)=>{const d=new Date(ds2+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return ds(d);};
 
-// 엠블럼 URL
+// Emblem URL
+// Team name → football-data.org ID map (fallback when API has no crest)
+const CREST_MAP = {
+  // PL
+  'Arsenal':57,'Aston Villa':58,'AFC Bournemouth':715,'Bournemouth':715,
+  'Brentford':402,'Brighton':397,'Brighton & Hove Albion':397,
+  'Burnley':328,'Chelsea':61,'Crystal Palace':354,
+  'Everton':74,'Fulham':72,'Leeds United':341,'Leeds Utd':341,
+  'Liverpool':64,'Manchester City':65,'Man City':65,
+  'Manchester United':66,'Man United':66,'Man Utd':66,
+  'Newcastle':67,'Newcastle United':67,
+  'Nottingham Forest':351,'Nottm Forest':351,
+  'Sunderland':394,'Tottenham':73,'Tottenham Hotspur':73,
+  'West Ham':563,'West Ham United':563,'Wolverhampton':76,'Wolves':76,
+  // La Liga
+  'Real Madrid':86,'Barcelona':81,'Atletico':78,'Atlético de Madrid':78,
+  'Villarreal':94,'Sevilla':82,'Real Betis':90,'Real Sociedad':92,
+  'Athletic':87,'Athletic Club':87,'Valencia':95,'Girona':558,
+  'Mallorca':279,'Celta Vigo':80,'Alaves':264,'Deportivo Alavés':264,
+  'Espanyol':263,'Getafe':559,'Osasuna':289,'Rayo':726,'Rayo Vallecano':726,
+  // Bundesliga
+  'Bayern':5,'FC Bayern München':5,'Dortmund':4,'Borussia Dortmund':4,
+  'Leverkusen':3,'Bayer 04 Leverkusen':3,'Leipzig':721,'RB Leipzig':721,
+  'Frankfurt':13,'Eintracht Frankfurt':13,'Wolfsburg':18,'Stuttgart':11,
+  'Freiburg':10,'Hoffenheim':6,'Augsburg':9,'Mainz':39,'Werder':43,
+  'Werder Bremen':43,'Gladbach':38,'Borussia Mönchengladbach':38,
+  'St.Pauli':28,'FC St. Pauli':28,'Heidenheim':7,'Hamburg':735,'FC Köln':16,
+  // Serie A
+  'Inter':108,'Inter Milan':108,'AC Milan':98,'Napoli':113,'Juventus':109,
+  'AS Roma':100,'Lazio':102,'Fiorentina':107,'Atalanta':110,'Bologna':103,
+  'Torino':114,'Genoa':104,'Cagliari':115,'Verona':105,
+  'Lecce':586,'Udinese':118,'Como':470,'Parma':106,
+  // Ligue 1
+  'PSG':524,'Paris Saint-Germain':524,'Monaco':548,'AS Monaco':548,
+  'Marseille':516,'Olympique Marseille':516,'Lyon':518,'Olympique Lyonnais':518,
+  'Lille':512,'Lens':511,'Rennes':546,'Nice':514,'Toulouse':543,
+  'Nantes':549,'Strasbourg':547,'Brest':541,'Le Havre':544,
+  'Angers':522,'Auxerre':52,'Lorient':553,'Paris FC':593,'Metz':542,
+};
+
 function crestUrl(team) {
   if (!team) return '';
   if (team.crest) return team.crest;
-  if (team.logo) return team.logo; // KL
-  // 이름으로 매핑
-  const found = LEAGUES.flatMap(l=>l.teams).find(t=>t.n===team.name||t.n===team.shortName);
+  if (team.logo) return team.logo;
+  // Find by name
+  const name = team.name || team.shortName || '';
+  const shortName = team.shortName || '';
+  const id = CREST_MAP[name] || CREST_MAP[shortName];
+  if (id) return `https://crests.football-data.org/${id}.png`;
+  // Search in LEAGUES array
+  const found = LEAGUES.flatMap(l=>l.teams).find(t=>
+    t.n===name || t.n===shortName ||
+    name.includes(t.n) || t.n.includes(shortName)
+  );
   if (found) {
     if (found.id > 2000) return `https://media.api-sports.io/football/teams/${found.id}.png`;
     return `https://crests.football-data.org/${found.id}.png`;
   }
-  return `https://ui-avatars.com/api/?name=${encodeURIComponent((team.shortName||team.name||'?').slice(0,2))}&background=161b22&color=10b981&size=44&bold=true`;
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent((shortName||name||'?').slice(0,2))}&background=161b22&color=10b981&size=44&bold=true`;
 }
 
 function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',2800);}
 
 // ── API ──
-// Rate limit 안전 요청 (동시 요청 제한)
+// Rate-limit safe request (serialized)
 let _fdQ = Promise.resolve();
 let _fdLast = 0;
-const FD_GAP = 800; // 800ms 간격
+const FD_GAP = 800; // 800ms gap
 
 async function fd(path, ttl=90000) {
   const c = gc(path, ttl);
   if (c) return c;
-  // 직렬화
+  // Serialize
   const result = await (_fdQ = _fdQ.then(async () => {
     const wait = _fdLast + FD_GAP - Date.now();
     if (wait > 0) await new Promise(r=>setTimeout(r,wait));
@@ -654,7 +701,7 @@ async function fd(path, ttl=90000) {
       if (d.errorCode === 429 || (d.message && d.message.toLowerCase().includes('limit'))) {
         console.warn('Rate limit - waiting 12s:', path);
         await new Promise(r=>setTimeout(r,12000));
-        // 한번 더 시도
+        // Retry once
         const r2 = await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`, {signal:AbortSignal.timeout(12000)});
         const d2 = await r2.json();
         if (!d2.errorCode) sc(path, d2);
@@ -680,13 +727,13 @@ async function kl(path,params={}){
 }
 
 // ── PUSH NOTIF ──
-// Service Worker 등록 + 메시지 채널
+// Service Worker registration + message channel
 if ('serviceWorker' in navigator) {
   navigator.serviceWorker.register('/sw.js').then(reg => {
     console.log('SW registered:', reg.scope);
   }).catch(e => console.warn('SW registration failed:', e));
 
-  // SW 메시지 받기 (SW → 앱)
+  // Receive SW messages
   navigator.serviceWorker.addEventListener('message', e => {
     if (e.data?.type === 'notification-click') {
       swP('home', document.querySelector('.si'));
@@ -696,7 +743,7 @@ if ('serviceWorker' in navigator) {
 
 function pushNotif(title, body, tag='p') {
   if (Notification.permission !== 'granted') return;
-  // SW를 통해 알림 (백그라운드에서도 동작)
+  // Show via SW (works in background)
   if (navigator.serviceWorker.controller) {
     navigator.serviceWorker.controller.postMessage({
       type: 'show-notification',
@@ -705,7 +752,7 @@ function pushNotif(title, body, tag='p') {
       vibrate: [200, 100, 200]
     });
   } else {
-    // fallback: 직접 알림
+    // fallback: direct notification
     try { new Notification(title, {body, icon:'/favicon.ico', tag, silent:false}); } catch(e) {}
   }
 }
@@ -715,29 +762,29 @@ function toggleWatch(id,hn,an,btn){
   const sid=String(id);const idx=watchList.indexOf(sid);
   if(idx===-1){
     reqNotif().then(ok=>{
-      if(!ok){toast('🔔 알림 권한을 허용해주세요');return;}
+      if(!ok){toast('🔔 Please allow notification permission');return;}
       watchList.push(sid);localStorage.setItem('pi_watch',JSON.stringify(watchList));
       btn.classList.add('on');btn.textContent='🔔';
-      toast(`🔔 ${hn} vs ${an} — 골·카드·킥오프 알림 ON`);
+      toast(`🔔 ${hn} vs ${an}  — Goal/Card/Kickoff alerts ON`);
     });
   } else {
     watchList.splice(idx,1);localStorage.setItem('pi_watch',JSON.stringify(watchList));
-    btn.classList.remove('on');btn.textContent='🔕';toast('알림 해제');
+    btn.classList.remove('on');btn.textContent='🔕';toast('Alerts OFF');
   }
 }
 
-// 이벤트별 Push 알림
+// Per-event Push notification
 function sendEventNotif(type, matchId, data) {
   if (!watchList.includes(String(matchId))) return;
   const icons = {goal:'⚽',card:'🟨',redcard:'🟥',kickoff:'🏁',halftime:'⏸️',fulltime:'🏆'};
   const icon = icons[type] || '📢';
   const titles = {
     goal: `${icon} GOAL! ${data.team}`,
-    card: `${icon} 경고 ${data.player}`,
-    redcard: `🟥 퇴장 ${data.player}`,
-    kickoff: `${icon} 킥오프!`,
-    halftime: `${icon} 하프타임`,
-    fulltime: `${icon} 경기 종료`
+    card: `${icon} Yellow Cards ${data.player}`,
+    redcard: `🟥 Red Card ${data.player}`,
+    kickoff: `${icon} Kick-off!`,
+    halftime: `${icon} Half-time`,
+    fulltime: `${icon} Full-time`
   };
   const bodies = {
     goal: `${data.hn} ${data.hg}:${data.ag} ${data.an}${data.scorer?' | '+data.scorer:''}${data.min?' ('+data.min+"')":""}`,
@@ -745,7 +792,7 @@ function sendEventNotif(type, matchId, data) {
     redcard: `${data.hn} vs ${data.an}`,
     kickoff: `${data.hn} vs ${data.an}`,
     halftime: `${data.hn} ${data.hg}:${data.ag} ${data.an}`,
-    fulltime: `최종 ${data.hn} ${data.hg}:${data.ag} ${data.an}`
+    fulltime: `Final: ${data.hn} ${data.hg}:${data.ag} ${data.an}`
   };
   pushNotif(titles[type]||'PITCH IN', bodies[type]||'', 'pi-'+type+'-'+matchId);
 }
@@ -757,7 +804,7 @@ function applyTheme(col) {
   document.documentElement.style.setProperty('--p', c);
   document.documentElement.style.setProperty('--ps', `rgba(${r},${g},${b},.13)`);
   document.documentElement.style.setProperty('--pb', `rgba(${r},${g},${b},.32)`);
-  // 로고 그라디언트 + 헤더 강조
+  // Logo gradient + header accent
   const logo = document.querySelector('.hdr-logo');
   if(logo) logo.style.background = `linear-gradient(135deg,${c},${lightenColor(c,40)})`;
   if(logo) { logo.style.webkitBackgroundClip='text'; logo.style.webkitTextFillColor='transparent'; }
@@ -768,7 +815,7 @@ function lightenColor(hex, amt) {
   return `#${r.toString(16).padStart(2,'0')}${g.toString(16).padStart(2,'0')}${b.toString(16).padStart(2,'0')}`;
 }
 function changeTeam() {
-  if(confirm('팀을 변경하시겠어요?')) {
+  if(confirm('Change your team?')) {
     localStorage.removeItem('pi_sel');
     location.reload();
   }
@@ -797,12 +844,12 @@ function renderTeams(){
 function toggleTeam(el,id,league,col,name,crest){
   const idx=SEL.findIndex(t=>t.id===id&&t.league===league);
   if(idx>-1){SEL.splice(idx,1);el.classList.remove('sel');}
-  else{if(SEL.length>=2){toast('⚠ 최대 2팀까지 선택 가능합니다');return;}SEL.push({id,league,col,name,crest});el.classList.add('sel');}
+  else{if(SEL.length>=2){toast('⚠ Max 2 teams allowed');return;}SEL.push({id,league,col,name,crest});el.classList.add('sel');}
   document.getElementById('sel-n').textContent=SEL.length;
   if(SEL.length>0) applyTheme(SEL[0].col);
   const btn=document.getElementById('ob-btn');
-  if(SEL.length>0){btn.disabled=false;btn.textContent=SEL.length===2?`${SEL[0].name} & ${SEL[1].name} → 시작`:`${SEL[0].name} 팬으로 시작 →`;}
-  else{btn.disabled=true;btn.textContent='팀을 선택해주세요';}
+  if(SEL.length>0){btn.disabled=false;btn.textContent=SEL.length===2?`${SEL[0].name} & ${SEL[1].name} → Start`:`${SEL[0].name} Fan Mode Start →`;}
+  else{btn.disabled=true;btn.textContent='Select a team';}
 }
 function startApp(){
   if(!SEL.length)return;
@@ -810,7 +857,7 @@ function startApp(){
   document.getElementById('ob').style.display='none';
   document.getElementById('app').classList.add('on');
   applyTheme(SEL[0].col);
-  document.getElementById('hdr-teams').innerHTML=SEL.map(t=>`<div class="hdr-team" onclick="changeTeam()" title="팀 변경"><img src="${t.crest}" onerror="this.src='https://ui-avatars.com/api/?name=${t.name.slice(0,2)}&background=1e2328&color=fff&size=44'"><span>${t.name}</span></div>`).join('');
+  document.getElementById('hdr-teams').innerHTML=SEL.map(t=>`<div class="hdr-team" onclick="changeTeam()" title="Change Team"><img src="${t.crest}" onerror="this.src='https://ui-avatars.com/api/?name=${t.name.slice(0,2)}&background=1e2328&color=fff&size=44'"><span>${t.name}</span></div>`).join('');
   buildPills();
   curDay=ds(kn());
   loadHome();
@@ -819,7 +866,7 @@ function startApp(){
   setTimeout(()=>updateFan(),1800);
   setInterval(()=>{if(document.getElementById('pg-home').classList.contains('on'))loadHome();},60000);
 }
-function resetApp(){if(confirm('팀을 변경하시겠어요?')){localStorage.removeItem('pi_sel');location.reload();}}
+function resetApp(){if(confirm('Change your team?')){localStorage.removeItem('pi_sel');location.reload();}}
 
 // ── GOAL SFX + ANIMATION ──
 function playGoalSfx(){
@@ -831,7 +878,7 @@ function playGoalSfx(){
       g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.38,t+.03);g.gain.linearRampToValueAtTime(0,t+d-.02);
       o.start(t);o.stop(t+d);return t+d;
     },ctx.currentTime+.05);
-    // 환호
+    // cheers
     const buf=ctx.createBuffer(1,ctx.sampleRate*.7,ctx.sampleRate);
     const d=buf.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*.065;
     const ns=ctx.createBufferSource();ns.buffer=buf;
@@ -847,7 +894,7 @@ function showGoal(scorer,team,min,hn,an,hg,ag){
   playGoalSfx();
   setTimeout(()=>el.classList.remove('on'),4800);
 }
-// 이벤트 이전 상태 저장
+// Track previous event state
 const prevEvents = {};
 
 function chkGoal(m) {
@@ -858,7 +905,7 @@ function chkGoal(m) {
   const hn = m.homeTeam?.shortName || m.homeTeam?.name || '';
   const an = m.awayTeam?.shortName || m.awayTeam?.name || '';
 
-  // 골 감지
+  // Goal detection
   if (prevSc[id] !== undefined && prevSc[id] !== sc2) {
     const isH = parseInt(hg) > parseInt((prevSc[id]||'0').split(':')[0]);
     const team = isH ? hn : an;
@@ -867,12 +914,12 @@ function chkGoal(m) {
     const scorer = last?.scorer?.name || last?.player?.name || '';
     const min = last?.minute;
     showGoal(scorer, team, min, hn, an, hg, ag);
-    // 푸시 알림 (골)
+    // Push notification (Goal)
     sendEventNotif('goal', id, {team, hn, an, hg, ag, scorer, min});
   }
   prevSc[id] = sc2;
 
-  // 킥오프 감지
+  // Kick-off detection
   if (!prevEvents[id]) prevEvents[id] = {};
   const pe = prevEvents[id];
   if (!pe.status) {
@@ -912,7 +959,7 @@ function buildPills(){
 // ── HOME ──
 async function loadHome(){
   const c=document.getElementById('pg-home');if(!c)return;
-  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">라이브 경기 확인 중...</div></div>`;
+  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">Loading live matches...</div></div>`;
   const today=ds(kn());
   const ks=new Date(today+'T00:00:00+09:00');
   const uf=new Date(ks.getTime()-9*3600000).toISOString().slice(0,10);
@@ -920,7 +967,7 @@ async function loadHome(){
   const res=await Promise.allSettled(LEAGUES.slice(0,5).map(l=>fd(`/competitions/${l.c}/matches?dateFrom=${uf}&dateTo=${ut}`)));
   let all=[];
   res.forEach(r=>{if(r.status==='fulfilled'&&r.value?.matches)all.push(...r.value.matches);});
-  // K리그 팀 있으면 추가
+  // Add K League matches if selected
   if(SEL.some(t=>isKL(t))){
     const klD=await kl('/fixtures',{league:KL_LEAGUE,season:KL_SEASON,date:uf});
     (klD?.response||[]).forEach(f=>all.push(toFD(f)));
@@ -931,14 +978,14 @@ async function loadHome(){
   const fin=all.filter(m=>isFin(m)&&isKstToday(m.utcDate));
   document.getElementById('lpill').classList.toggle('on',live.length>0);
   let html='';
-  if(live.length){html+=`<div class="stl" style="margin-bottom:16px;"><h2 style="color:var(--red)">🔴 LIVE · ${live.length}경기</h2></div>`;live.forEach(m=>html+=mkMC(m,'live'));}
-  if(sched.length){html+=`<div class="stl" style="margin-top:${live.length?'20px':'0'};margin-bottom:16px;"><h2>오늘 예정</h2><span class="sub-badge">${today} KST</span></div>`;sched.slice(0,12).forEach(m=>html+=mkMC(m,'sch'));}
-  if(fin.length){html+=`<div class="stl" style="margin-top:20px;margin-bottom:16px;"><h2>종료</h2></div>`;fin.slice(0,8).forEach(m=>html+=mkMC(m,'fin'));}
-  c.innerHTML=html||`<div class="empty">📅 오늘 경기 없음</div>`;
+  if(live.length){html+=`<div class="stl" style="margin-bottom:16px;"><h2 style="color:var(--red)">🔴 LIVE · ${live.length}matches</h2></div>`;live.forEach(m=>html+=mkMC(m,'live'));}
+  if(sched.length){html+=`<div class="stl" style="margin-top:${live.length?'20px':'0'};margin-bottom:16px;"><h2>Today's Fixtures</h2><span class="sub-badge">${today} KST</span></div>`;sched.slice(0,12).forEach(m=>html+=mkMC(m,'sch'));}
+  if(fin.length){html+=`<div class="stl" style="margin-top:20px;margin-bottom:16px;"><h2>Final Scores</h2></div>`;fin.slice(0,8).forEach(m=>html+=mkMC(m,'fin'));}
+  c.innerHTML=html||`<div class="empty">📅 No matches today</div>`;
 }
-function toFD(f){return{_kl:true,id:f.fixture.id,status:mapKL(f.fixture.status.short),utcDate:f.fixture.date,competition:{name:'K리그 1'},matchday:f.league.round?.replace('Regular Season - ',''),homeTeam:{id:f.teams.home.id,name:f.teams.home.name,shortName:f.teams.home.name,crest:f.teams.home.logo},awayTeam:{id:f.teams.away.id,name:f.teams.away.name,shortName:f.teams.away.name,crest:f.teams.away.logo},score:{fullTime:{home:f.goals.home,away:f.goals.away}},goals:(f.events||[]).filter(e=>e.type==='Goal').map(e=>({minute:e.time.elapsed,team:{id:e.team.id},scorer:{name:e.player.name},player:{name:e.player.name}}))};}
+function toFD(f){return{_kl:true,id:f.fixture.id,status:mapKL(f.fixture.status.short),utcDate:f.fixture.date,competition:{name:'K League 1'},matchday:f.league.round?.replace('Regular Season - ',''),homeTeam:{id:f.teams.home.id,name:f.teams.home.name,shortName:f.teams.home.name,crest:f.teams.home.logo},awayTeam:{id:f.teams.away.id,name:f.teams.away.name,shortName:f.teams.away.name,crest:f.teams.away.logo},score:{fullTime:{home:f.goals.home,away:f.goals.away}},goals:(f.events||[]).filter(e=>e.type==='Goal').map(e=>({minute:e.time.elapsed,team:{id:e.team.id},scorer:{name:e.player.name},player:{name:e.player.name}}))};}
 
-// 경기 카드
+// Match card
 function mkMC(m,type){
   const h=m.homeTeam,a=m.awayTeam;
   const live=type==='live',fin=type==='fin';
@@ -946,7 +993,7 @@ function mkMC(m,type){
   const ag=m.score?.fullTime?.away??m.score?.halfTime?.away;
   const hW=fin&&hg!=null&&ag!=null&&hg>ag,aW=fin&&hg!=null&&ag!=null&&ag>hg;
   let tl=kt(m.utcDate);
-  if(live){if(m.status==='HALFTIME')tl='HT';else{const e=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);tl=e>0&&e<=95?`${Math.min(e,90)}'`:'진행';}}
+  if(live){if(m.status==='HALFTIME')tl='HT';else{const e=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);tl=e>0&&e<=95?`${Math.min(e,90)}'`:'Live';}}
   const goals=m.goals||[],hG=goals.filter(g=>g.team?.id===h?.id),aG=goals.filter(g=>g.team?.id===a?.id);
   const isMe=SEL.some(t=>h?.id===t.id||a?.id===t.id);
   const isW=watchList.includes(String(m.id));
@@ -970,8 +1017,8 @@ function mkMC(m,type){
       </div>
     </div>
     ${(live||fin)&&goals.length?`<div class="mc-goals"><div class="goal-side">${hG.map(g=>`<span class="gi"><span class="gm">${g.minute||''}'</span>${(g.scorer?.name||'').split(' ').pop()}</span>`).join('')}</div><div class="goal-side right">${aG.map(g=>`<span class="gi">${(g.scorer?.name||'').split(' ').pop()}<span class="gm">${g.minute||''}'</span></span>`).join('')}</div></div>`:''}
-    ${live?`<div class="mc-mom"><div class="mom-lbl"><span>${hn}</span><span>모멘텀</span><span>${an}</span></div><div class="mom-bar">${mom.map(s=>`<div class="ms ${s}"></div>`).join('')}</div></div>`:''}
-    ${!fin?`<div class="odds-row"><div class="obtn"><div class="olbl">${hn}</div><div class="oval ${parseFloat(od.hw)<2.5?'fav':''}">${od.hw}</div></div><div class="obtn"><div class="olbl">무</div><div class="oval">${od.dr}</div></div><div class="obtn"><div class="olbl">${an}</div><div class="oval ${parseFloat(od.aw)<2.5?'fav':''}">${od.aw}</div></div></div>`:''}
+    ${live?`<div class="mc-mom"><div class="mom-lbl"><span>${hn}</span><span>Momentum</span><span>${an}</span></div><div class="mom-bar">${mom.map(s=>`<div class="ms ${s}"></div>`).join('')}</div></div>`:''}
+    ${!fin?`<div class="odds-row"><div class="obtn"><div class="olbl">${hn}</div><div class="oval ${parseFloat(od.hw)<2.5?'fav':''}">${od.hw}</div></div><div class="obtn"><div class="olbl">Draw</div><div class="oval">${od.dr}</div></div><div class="obtn"><div class="olbl">${an}</div><div class="oval ${parseFloat(od.aw)<2.5?'fav':''}">${od.aw}</div></div></div>`:''}
   </div>`;
 }
 
@@ -996,19 +1043,19 @@ async function loadSched(){
       <img src="${lg.logo}" onerror="this.style.opacity='.2'">
       <span class="lg-nm">${lg.n}</span>
       ${lvc?`<span style="font-size:11px;color:var(--red);font-weight:800;">●${lvc}</span>`:''}
-      <span class="lg-cnt">${ms.length}경기</span>
+      <span class="lg-cnt">${ms.length}matches</span>
       <span class="lg-arr" id="arr-${gid}">▾</span>
     </div>
     <div class="lg-ms" id="${gid}">${ms.map(m=>mkSm(m)).join('')}</div></div>`;
   });
-  // K리그
+  // K League
   const klD=await kl('/fixtures',{league:KL_LEAGUE,season:KL_SEASON,date:uf});
   if(klD?.response?.length){any=true;html+=`<div class="lg-grp"><div class="lg-hd" onclick="tlg('lg-KL')">
     <img src="https://media.api-sports.io/football/leagues/292.png" onerror="this.style.opacity='.2'">
-    <span class="lg-nm">K리그 1</span><span class="lg-cnt">${klD.response.length}경기</span>
+    <span class="lg-nm">K리그 1</span><span class="lg-cnt">${klD.response.length}matches</span>
     <span class="lg-arr" id="arr-lg-KL">▾</span></div>
     <div class="lg-ms" id="lg-KL">${klD.response.map(f=>mkSmKL(f)).join('')}</div></div>`;}
-  c.innerHTML=html||`<div class="empty">이 날 경기 없음</div>`;
+  c.innerHTML=html||`<div class="empty">No matches on this date</div>`;
 }
 function mkSm(m){
   const h=m.homeTeam,a=m.awayTeam,live=isLv(m),fin=isFin(m);
@@ -1016,7 +1063,7 @@ function mkSm(m){
   const ag=fin||live?m.score?.fullTime?.away??m.score?.halfTime?.away:null;
   const hW=fin&&hg>ag,aW=fin&&ag>hg;
   let mt=kt(m.utcDate);
-  if(live){const e=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);mt=m.status==='HALFTIME'?'HT':e>0&&e<=90?`${e}'`:'진행';}
+  if(live){const e=Math.floor((Date.now()-new Date(m.utcDate).getTime())/60000);mt=m.status==='HALFTIME'?'HT':e>0&&e<=90?`${e}'`:'Live';}
   const hcr=h?.crest||crestUrl(h),acr=a?.crest||crestUrl(a);
   const hn=elv(h?.shortName||h?.name),an=elv(a?.shortName||a?.name);
   return`<div class="sm" onclick="opnDtl(${m.id},'${hn}','${an}',false)">
@@ -1054,11 +1101,11 @@ function renderMonthDays(){
   for(let i=1;i<=last;i++){
     const d=new Date(yr,mo,i);
     const ds2=`${yr}-${String(mo+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
-    const dow=['일','월','화','수','목','금','토'][d.getDay()];
+    const dow=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][d.getDay()];
     const isT=ds2===today,isSel=ds2===curDay;
     const btn=document.createElement('button');
     btn.className=`day-card ${isSel?'on':''} ${isT?'today':''}`;
-    btn.innerHTML=`${isT?'오늘':dow}<span>${i}</span>`;
+    btn.innerHTML=`${isT?'Today':dow}<span>${i}</span>`;
     btn.onclick=()=>{curDay=ds2;loadSched();};
     strip.appendChild(btn);
     if(isSel)setTimeout(()=>btn.scrollIntoView({inline:'center',behavior:'smooth'}),100);
@@ -1078,27 +1125,27 @@ function swStd(code,btn){
 }
 async function loadStd(code){
   const c=document.getElementById('std-bd');if(!c)return;
-  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">순위 불러오는 중...</div></div>`;
+  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">Standings Loading...</div></div>`;
   if(code==='KL1'){await loadKLStd(c,292,'K리그 1','https://media.api-sports.io/football/leagues/292.png');return;}
   if(code==='KL2'){await loadKLStd(c,293,'K리그 2','https://media.api-sports.io/football/leagues/293.png');return;}
   const lg=LEAGUES.find(l=>l.c===code);
   const d=await fd(`/competitions/${code}/standings`,300000);
   if (!d?.standings?.length || !d.standings[0]?.table?.length) {
-    const msg = d?.message || d?.error || '데이터 없음';
+    const msg = d?.message || d?.error || 'No data available';
     const isRL = String(d?.errorCode)==='429' || msg.toLowerCase().includes('limit') || msg.toLowerCase().includes('rate');
     c.innerHTML=`<div class="empty" style="padding:40px;">
-      ${isRL ? '⏳ API 요청 한도 초과' : '📡 ' + msg}<br>
-      <span style="font-size:12px;color:var(--t2);display:block;margin:8px 0;">${isRL?'잠시 후 자동으로 다시 시도합니다':'순위 데이터를 불러올 수 없습니다'}</span>
-      <button class="retry" onclick="loadStd('${code}')">다시 시도</button>
+      ${isRL ? '⏳ API rate limit reached' : '📡 ' + msg}<br>
+      <span style="font-size:12px;color:var(--t2);display:block;margin:8px 0;">${isRL?'Auto-retrying shortly...':'Unable to load standings'}</span>
+      <button class="retry" onclick="loadStd('${code}')">Retry</button>
     </div>`;
-    if(isRL){let n=15;const t=setInterval(()=>{n--;const b=c.querySelector('.retry');if(b)b.textContent=`⏳ 자동 재시도 ${n}초...`;if(n<=0){clearInterval(t);loadStd(code);}},1000);}
+    if(isRL){let n=15;const t=setInterval(()=>{n--;const b=c.querySelector('.retry');if(b)b.textContent=`⏳ Auto-retry in ${n}s...`;if(n<=0){clearInterval(t);loadStd(code);}},1000);}
     return;
   }
   const rows=d.standings[0].table, tot=rows.length;
   const fc={W:'var(--p)',D:'var(--am)',L:'var(--red)'};
-  c.innerHTML=`${lg?`<div class="std-hdr"><img src="${lg.logo}" onerror="this.style.opacity='.3'"><h3>${lg.n}</h3><small>2025-26 시즌</small></div>`:''}
+  c.innerHTML=`${lg?`<div class="std-hdr"><img src="${lg.logo}" onerror="this.style.opacity='.3'"><h3>${lg.n}</h3><small>2025-26 Season</small></div>`:''}
   <table class="stt">
-    <tr><th>#</th><th>팀</th><th>경</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th><th>폼</th></tr>
+    <tr><th>#</th><th>Club</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th><th>Form</th></tr>
     ${rows.map(t=>{
       const isMe=SEL.some(s=>s.id===t.team.id);
       const gd=t.goalsDiff>=0?'+'+t.goalsDiff:t.goalsDiff;
@@ -1116,23 +1163,23 @@ async function loadStd(code){
   </table>
   <div style="display:flex;gap:12px;margin-top:12px;flex-wrap:wrap;">
     <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);"><div style="width:3px;height:14px;background:var(--blue);border-radius:2px;"></div>UCL</div>
-    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);"><div style="width:3px;height:14px;background:var(--am);border-radius:2px;"></div>유로파</div>
-    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);"><div style="width:3px;height:14px;background:var(--red);border-radius:2px;"></div>강등</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);"><div style="width:3px;height:14px;background:var(--am);border-radius:2px;"></div>Europa</div>
+    <div style="display:flex;align-items:center;gap:5px;font-size:11px;color:var(--t2);"><div style="width:3px;height:14px;background:var(--red);border-radius:2px;"></div>Relegation</div>
   </div>`;
 }
 async function loadKLStd(c,lgId,lgNm,lgLogo){
   const d=await kl('/standings',{league:lgId,season:KL_SEASON});
-  if(!d?.response?.length){c.innerHTML=`<div class="empty">K리그 순위 없음<br><button class="retry" onclick="loadStd('${lgId===292?'KL1':'KL2'}')">다시 시도</button></div>`;return;}
-  // api-football standings 구조: response[0].league.standings[0]
+  if(!d?.response?.length){c.innerHTML=`<div class="empty">K League standings unavailable<br><button class="retry" onclick="loadStd('${lgId===292?'KL1':'KL2'}')">Retry</button></div>`;return;}
+  // api-football standings structure: response[0].league.standings[0]
   const standingsData = d.response[0]?.league?.standings;
   if (!standingsData || !standingsData.length) {
-    c.innerHTML=`<div class="empty">순위 데이터 형식 오류<br><button class="retry" onclick="loadStd('${lgId===292?'KL1':'KL2'}')">다시 시도</button></div>`;
+    c.innerHTML=`<div class="empty">Data format error<br><button class="retry" onclick="loadStd('${lgId===292?'KL1':'KL2'}')">Retry</button></div>`;
     return;
   }
   const rows=standingsData[0],tot=rows.length;
-  c.innerHTML=`<div class="std-hdr"><img src="${lgLogo}"><h3>${lgNm}</h3><small>2026 시즌</small></div>
+  c.innerHTML=`<div class="std-hdr"><img src="${lgLogo}"><h3>${lgNm}</h3><small>2026 Season</small></div>
   <table class="stt">
-    <tr><th>#</th><th>팀</th><th>경</th><th>승</th><th>무</th><th>패</th><th>득실</th><th>승점</th></tr>
+    <tr><th>#</th><th>Club</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th></tr>
     ${rows.map(t=>{
       const isMe=SEL.some(s=>s.id===t.team.id);
       const gd=t.goalsDiff>=0?'+'+t.goalsDiff:t.goalsDiff;
@@ -1165,59 +1212,59 @@ async function loadPlayers(lg,type){
   const lgObj=LEAGUES.find(l=>l.c===lg);
   const d=await fd(`/competitions/${lg}/scorers?limit=20`,300000);
   if (!d?.scorers?.length) {
-    const msg = d?.message || d?.error || '데이터 없음';
+    const msg = d?.message || d?.error || 'No data available';
     const isRL = String(d?.errorCode)==='429' || msg.toLowerCase().includes('limit');
     c.innerHTML=`<div class="empty" style="padding:40px;">
-      ${isRL ? '⏳ API 요청 한도 초과' : '📡 ' + msg}<br>
-      <span style="font-size:12px;color:var(--t2);display:block;margin:8px 0;">${isRL?'잠시 후 자동으로 다시 시도합니다':''}</span>
-      <button class="retry" onclick="loadPlayers('${lg}','${type}')">다시 시도</button>
+      ${isRL ? '⏳ API rate limit reached' : '📡 ' + msg}<br>
+      <span style="font-size:12px;color:var(--t2);display:block;margin:8px 0;">${isRL?'Auto-retrying shortly...':''}</span>
+      <button class="retry" onclick="loadPlayers('${lg}','${type}')">Retry</button>
     </div>`;
-    if(isRL){let n=15;const t=setInterval(()=>{n--;const b=c.querySelector('.retry');if(b)b.textContent=`⏳ 자동 재시도 ${n}초...`;if(n<=0){clearInterval(t);loadPlayers('${lg}','${type}');}},1000);}
+    if(isRL){let n=15;const t=setInterval(()=>{n--;const b=c.querySelector('.retry');if(b)b.textContent=`⏳ Auto-retry in ${n}s...`;if(n<=0){clearInterval(t);loadPlayers('${lg}','${type}');}},1000);}
     return;
   }
   let sc=[...d.scorers];
   if(type==='assists')sc.sort((a,b)=>(b.assists||0)-(a.assists||0));
-  c.innerHTML=`${lgObj?`<div class="std-hdr"><img src="${lgObj.logo}" onerror="this.style.opacity='.3'"><h3>${lgObj.n}</h3><small>${type==='scorers'?'득점왕':'도움왕'}</small></div>`:''}
+  c.innerHTML=`${lgObj?`<div class="std-hdr"><img src="${lgObj.logo}" onerror="this.style.opacity='.3'"><h3>${lgObj.n}</h3><small>${type==='scorers'?'Top Scorer':'Top Assists'}</small></div>`:''}
   ${sc.map((s,i)=>{
     const val=type==='scorers'?(s.goals||0):(s.assists||0);
     const isMe=SEL.some(t=>t.id===s.team?.id);
-    return`<div class="pc ${isMe?'me':''}"><div class="pc-rk ${i<3?'top':''}">${i+1}</div><img src="${s.team?.crest||''}" style="width:32px;height:32px;object-fit:contain;border-radius:7px;" onerror="this.style.opacity='.2'"><div class="pc-info"><div class="pc-name">${s.player?.name||''}</div><div class="pc-team">${s.team?.shortName||s.team?.name||''}</div></div><div style="text-align:right"><div class="pc-val">${val}</div><div class="pc-lbl">${type==='scorers'?'골':'도움'}</div></div></div>`;
+    return`<div class="pc ${isMe?'me':''}"><div class="pc-rk ${i<3?'top':''}">${i+1}</div><img src="${s.team?.crest||''}" style="width:32px;height:32px;object-fit:contain;border-radius:7px;" onerror="this.style.opacity='.2'"><div class="pc-info"><div class="pc-name">${s.player?.name||''}</div><div class="pc-team">${s.team?.shortName||s.team?.name||''}</div></div><div style="text-align:right"><div class="pc-val">${val}</div><div class="pc-lbl">${type==='scorers'?'Goals':'Assists'}</div></div></div>`;
   }).join('')}`;
 }
 async function loadKLPlayers(c,lgId,type){
   const path=type==='assists'?'/players/topassists':'/players/topscorers';
   const d=await kl(path,{league:lgId,season:KL_SEASON});
-  if(!d?.response?.length){c.innerHTML=`<div class="empty">K리그 선수 데이터 없음</div>`;return;}
-  c.innerHTML=`<div class="std-hdr"><img src="https://media.api-sports.io/football/leagues/${lgId}.png"><h3>${lgId===292?'K리그 1':'K리그 2'}</h3><small>${type==='scorers'?'득점왕':'도움왕'}</small></div>`+d.response.slice(0,20).map((p,i)=>{
+  if(!d?.response?.length){c.innerHTML=`<div class="empty">K리그 Players No data available</div>`;return;}
+  c.innerHTML=`<div class="std-hdr"><img src="https://media.api-sports.io/football/leagues/${lgId}.png"><h3>${lgId===292?'K리그 1':'K리그 2'}</h3><small>${type==='scorers'?'Top Scorer':'Top Assists'}</small></div>`+d.response.slice(0,20).map((p,i)=>{
     const val=type==='assists'?(p.statistics[0]?.goals?.assists||0):(p.statistics[0]?.goals?.total||0);
     const isMe=SEL.some(t=>t.id===p.statistics[0]?.team?.id);
-    return`<div class="pc ${isMe?'me':''}"><div class="pc-rk ${i<3?'top':''}">${i+1}</div><img src="${p.statistics[0]?.team?.logo||''}" style="width:32px;height:32px;object-fit:contain;border-radius:7px;" onerror="this.style.opacity='.2'"><div class="pc-info"><div class="pc-name">${p.player?.name||''}</div><div class="pc-team">${p.statistics[0]?.team?.name||''}</div></div><div style="text-align:right"><div class="pc-val">${val}</div><div class="pc-lbl">${type==='assists'?'도움':'골'}</div></div></div>`;
+    return`<div class="pc ${isMe?'me':''}"><div class="pc-rk ${i<3?'top':''}">${i+1}</div><img src="${p.statistics[0]?.team?.logo||''}" style="width:32px;height:32px;object-fit:contain;border-radius:7px;" onerror="this.style.opacity='.2'"><div class="pc-info"><div class="pc-name">${p.player?.name||''}</div><div class="pc-team">${p.statistics[0]?.team?.name||''}</div></div><div style="text-align:right"><div class="pc-val">${val}</div><div class="pc-lbl">${type==='assists'?'Assists':'Goals'}</div></div></div>`;
   }).join('');
 }
 
 // ── AI PITCH ──
 async function loadAI(){
   const c=document.getElementById('ai-bd');if(!c)return;
-  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">이번 주 빅매치 분석 중...</div></div>`;
+  c.innerHTML=`<div class="ldr"><div class="spin"></div><div class="spin-t">Analyzing this week's top matches...</div></div>`;
   const today=ds(kn());
   const end=addDays(today,7);
   const ks=new Date(today+'T00:00:00+09:00');
   const uf=new Date(ks.getTime()-9*3600000).toISOString().slice(0,10);
   const d=await fd(`/competitions/PL/matches?dateFrom=${uf}&dateTo=${end}`);
   const matches=(d?.matches||[]).filter(m=>isSch(m)||isLv(m)).slice(0,6);
-  if(!matches.length){c.innerHTML=`<div class="empty">이번 주 예정 경기 없음</div>`;return;}
-  c.innerHTML=`<div class="stl" style="margin-bottom:20px;"><h2>🧠 AI PITCH</h2><span class="sub-badge">이번 주 빅매치 분석</span></div>`+matches.map(m=>{
+  if(!matches.length){c.innerHTML=`<div class="empty">No upcoming matches this week</div>`;return;}
+  c.innerHTML=`<div class="stl" style="margin-bottom:20px;"><h2>🧠 AI PITCH</h2><span class="sub-badge">This Week's Big Match Analysis</span></div>`+matches.map(m=>{
     const h=m.homeTeam,a=m.awayTeam;
     const seed=(h?.id||0)*31+(a?.id||0)*17+(m.id||0);
     const rv=(x,n)=>{const v=Math.sin(x+n)*43758.5453;return v-Math.floor(v);};
-    const hw=Math.round(38+rv(seed,1)*24); // 38~62
-    const dr=Math.round(20+rv(seed,2)*15); // 20~35
+    const hw=Math.round(38+rv(seed,1)*24); // 38-62
+    const dr=Math.round(20+rv(seed,2)*15); // 20-35
     const aw=100-hw-dr;
-    const fmH=['공격적 압박','높은 점유율','빠른 역습'][Math.floor(rv(seed,3)*3)];
-    const fmA=['수비적 블록','측면 공략','세트피스'][Math.floor(rv(seed,4)*3)];
-    const kpH=[`${h?.shortName} 측면 공격 주목`,`세트피스 ${Math.round(rv(seed,5)*3)+1}~${Math.round(rv(seed,5)*3)+3}개 예상`];
-    const kpA=[`${a?.shortName} 카운터 위험`,`전반 초반 득점 시 유리`];
-    const lineup_h=['GK','RB','CB','CB','LB','CM','CM','CAM','RW','ST','LW'].map((pos,i)=>`<div class="ai-player"><span>${pos}</span> 선발 예정</div>`).slice(0,5);
+    const fmH=['High Press','Possession','Counter-Attack'][Math.floor(rv(seed,3)*3)];
+    const fmA=['Defensive Block','Wide Play','Set Pieces'][Math.floor(rv(seed,4)*3)];
+    const kpH=[`${h?.shortName} wide attack focus`,`Set Pieces ${Math.round(rv(seed,5)*3)+1}-${Math.round(rv(seed,5)*3)+3} expected`];
+    const kpA=[`${a?.shortName} counter-attack danger`,`Early goal would be decisive`];
+    const lineup_h=['GK','RB','CB','CB','LB','CM','CM','CAM','RW','ST','LW'].map((pos,i)=>`<div class="ai-player"><span>${pos}</span> (Starting)</div>`).slice(0,5);
     const lineup_a=lineup_h.slice(0,5);
     const hcr=h?.crest||crestUrl(h),acr=a?.crest||crestUrl(a);
     const hn=elv(h?.shortName||h?.name),an=elv(a?.shortName||a?.name);
@@ -1239,22 +1286,22 @@ async function loadAI(){
         <div class="prob-a" style="width:${aw}%"></div>
       </div>
       <div class="prob-lbl">
-        <span>홈 승 <b style="color:var(--p)">${hw}%</b></span>
-        <span>무 <b style="color:var(--am)">${dr}%</b></span>
-        <span>원정 승 <b style="color:var(--red)">${aw}%</b></span>
+        <span>Home Win <b style="color:var(--p)">${hw}%</b></span>
+        <span>Draw <b style="color:var(--am)">${dr}%</b></span>
+        <span>Away Win <b style="color:var(--red)">${aw}%</b></span>
       </div>
       <div class="ai-lineup">
         <div>
-          <div class="ai-lineup-hd">⚙️ ${hn} 전술: ${fmH}</div>
+          <div class="ai-lineup-hd">⚙️ ${hn} Tactic: ${fmH}</div>
           ${kpH.map(k=>`<div class="ai-player">• ${k}</div>`).join('')}
         </div>
         <div>
-          <div class="ai-lineup-hd">⚙️ ${an} 전술: ${fmA}</div>
+          <div class="ai-lineup-hd">⚙️ ${an} Tactic: ${fmA}</div>
           ${kpA.map(k=>`<div class="ai-player">• ${k}</div>`).join('')}
         </div>
       </div>
       <div class="ai-insight">
-        🔍 <b>AI 분석:</b> ${hn}은 최근 홈에서 ${Math.round(rv(seed,6)*3)+2}연승 기록 중이며, ${an}은 원정에서 ${fmA} 위주의 전술을 구사합니다. 이번 경기 핵심은 <b>전반 30분 내 선제골</b> 여부이며, 선제골을 넣는 팀이 ${Math.round(70+rv(seed,7)*20)}% 확률로 승리합니다.
+        🔍 <b>AI Analysis:</b> ${hn} recorded ${Math.round(rv(seed,6)*3)+2} consecutive home wins. ${an} typically plays ${fmA} tactics away from home. The key factor is scoring first. The team that scores first wins ${Math.round(70+rv(seed,7)*20)}% of the time.
       </div>
     </div>`;
   }).join('');
@@ -1267,7 +1314,7 @@ async function opnDtl(id,hn,an,isKLMatch){
   document.getElementById('dtl-modal').classList.add('on');
   if(isKLMatch){await opnDtlKL(id,hn,an);return;}
   const m=await fd(`/matches/${id}`,60000);
-  if(!m||m.error){document.getElementById('dtl-body').innerHTML=`<div class="empty">데이터 없음</div>`;return;}
+  if(!m||m.error){document.getElementById('dtl-body').innerHTML=`<div class="empty">No data available</div>`;return;}
   const h=m.homeTeam,a=m.awayTeam;
   const hg=m.score?.fullTime?.home??m.score?.halfTime?.home??'–';
   const ag=m.score?.fullTime?.away??m.score?.halfTime?.away??'–';
@@ -1286,13 +1333,13 @@ async function opnDtl(id,hn,an,isKLMatch){
         ${m.referees?.[0]?`<span style="font-size:11px;background:var(--bg2);border:1px solid var(--t3);padding:3px 10px;border-radius:100px;color:var(--t2);">👔 ${m.referees[0].name}</span>`:''}
       </div>
     </div>
-    ${goals.length?`<div style="margin-bottom:16px;"><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:9px;">⚽ 골 기록</div>
+    ${goals.length?`<div style="margin-bottom:16px;"><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:9px;">⚽ Goals</div>
       <div style="display:flex;gap:10px;"><div style="flex:1;">${hG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;"><span style="font-weight:800;color:var(--p);">${g.minute}'</span> ${(g.scorer?.name||g.player?.name||'').split(' ').pop()}</div>`).join('')}</div>
       <div style="flex:1;text-align:right;">${aG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;">${(g.scorer?.name||g.player?.name||'').split(' ').pop()} <span style="font-weight:800;color:var(--p);">${g.minute}'</span></div>`).join('')}</div></div></div>`:''}
-    <div><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:9px;">📊 배당률</div>
+    <div><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:9px;">📊 Odds</div>
       <div class="odds-row" style="padding:0;border:none;">
         <div class="obtn"><div class="olbl">${hn}</div><div class="oval ${parseFloat(od.hw)<2.5?'fav':''}">${od.hw}</div></div>
-        <div class="obtn"><div class="olbl">무</div><div class="oval">${od.dr}</div></div>
+        <div class="obtn"><div class="olbl">Draw</div><div class="oval">${od.dr}</div></div>
         <div class="obtn"><div class="olbl">${an}</div><div class="oval ${parseFloat(od.aw)<2.5?'fav':''}">${od.aw}</div></div>
       </div>
     </div>`;
@@ -1300,12 +1347,12 @@ async function opnDtl(id,hn,an,isKLMatch){
 async function opnDtlKL(id,hn,an){
   const d=await kl('/fixtures',{id});
   const f=d?.response?.[0];
-  if(!f){document.getElementById('dtl-body').innerHTML=`<div class="empty">데이터 없음</div>`;return;}
+  if(!f){document.getElementById('dtl-body').innerHTML=`<div class="empty">No data available</div>`;return;}
   const h=f.teams.home,a=f.teams.away,hg=f.goals.home??'–',ag=f.goals.away??'–';
   const goals=(f.events||[]).filter(e=>e.type==='Goal');
   const hG=goals.filter(g=>g.team.id===h.id),aG=goals.filter(g=>g.team.id===a.id);
   const stats=f.statistics||[],hS=stats[0]?.statistics||[],aS=stats[1]?.statistics||[];
-  const sk=[['Shots on Goal','유효슈팅'],['Ball Possession','점유율'],['Total passes','패스'],['Fouls','파울'],['Yellow Cards','경고']];
+  const sk=[['Shots on Goal','Shots on Target'],['Ball Possession','Possession'],['Total passes','Passes'],['Fouls','Fouls'],['Yellow Cards','Yellow Cards']];
   document.getElementById('dtl-body').innerHTML=`
     <div style="text-align:center;padding:14px 0;border-bottom:1px solid var(--t3);margin-bottom:16px;">
       <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
@@ -1319,10 +1366,10 @@ async function opnDtlKL(id,hn,an){
         <span style="font-size:11px;background:var(--bg2);border:1px solid var(--t3);padding:3px 10px;border-radius:100px;color:var(--t2);">⏰ ${kt(f.fixture.date)} KST</span>
       </div>
     </div>
-    ${goals.length?`<div style="margin-bottom:16px;"><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:9px;">⚽ 골 기록</div>
+    ${goals.length?`<div style="margin-bottom:16px;"><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:9px;">⚽ Goals</div>
       <div style="display:flex;gap:10px;"><div style="flex:1;">${hG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;"><span style="font-weight:800;color:var(--p);">${g.time.elapsed}'</span> ${g.player.name.split(' ').pop()}</div>`).join('')}</div>
       <div style="flex:1;text-align:right;">${aG.map(g=>`<div style="font-size:12px;color:var(--t2);margin-bottom:4px;">${g.player.name.split(' ').pop()} <span style="font-weight:800;color:var(--p);">${g.time.elapsed}'</span></div>`).join('')}</div></div></div>`:''}
-    ${hS.length?`<div><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:10px;">📊 경기 스탯</div>
+    ${hS.length?`<div><div style="font-size:11px;font-weight:800;color:var(--t2);margin-bottom:10px;">📊 Match Stats</div>
       ${sk.map(([key,lbl])=>{const hv=hS.find(s=>s.type===key)?.value??0,av=aS.find(s=>s.type===key)?.value??0;const tot=(typeof hv==='number'&&typeof av==='number')?hv+av||100:100;const hp=Math.round((typeof hv==='string'?parseInt(hv):hv)/tot*100);return`<div style="margin-bottom:9px;"><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="font-weight:800;">${hv}</span><span style="color:var(--t2);">${lbl}</span><span style="font-weight:800;">${av}</span></div><div style="height:5px;background:var(--t3);border-radius:3px;display:flex;overflow:hidden;"><div style="width:${hp}%;background:var(--p);"></div><div style="width:${100-hp}%;background:var(--red);"></div></div></div>`;}).join('')}
     </div>`:''}`;
 }
@@ -1341,22 +1388,22 @@ function updateFan(){
     <div class="fz-hero">
       <div class="fz-em">${lv.em}</div>
       <div class="fz-lv">Lv.${lv.lv} · ${lv.n}</div>
-      <div class="fz-sub">집관 ${fanData.total}경기 인증${SEL.length?' · '+SEL.map(t=>t.name).join(' & '):''}</div>
+      <div class="fz-sub">Watched: ${fanData.total} watched${SEL.length?' · '+SEL.map(t=>t.name).join(' & '):''}</div>
       <div class="fz-pw"><div class="fz-pb" style="width:${prog}%"></div></div>
-      <div class="fz-pl"><span>${lv.min}경기</span><span>${prog}%</span><span>${nxt?nxt.min+'경기':'MAX'}</span></div>
+      <div class="fz-pl"><span>${lv.min}matches</span><span>${prog}%</span><span>${nxt?nxt.min+'matches':'MAX'}</span></div>
       <div class="fz-stats">
-        <div class="fzs"><div class="fzs-v">${fanData.total}</div><div class="fzs-l">총 집관</div></div>
-        <div class="fzs"><div class="fzs-v">${lv.lv}</div><div class="fzs-l">레벨</div></div>
-        <div class="fzs"><div class="fzs-v">${fanData.checkins.length}</div><div class="fzs-l">인증수</div></div>
+        <div class="fzs"><div class="fzs-v">${fanData.total}</div><div class="fzs-l">Total Watched</div></div>
+        <div class="fzs"><div class="fzs-v">${lv.lv}</div><div class="fzs-l">Level</div></div>
+        <div class="fzs"><div class="fzs-v">${fanData.checkins.length}</div><div class="fzs-l">Check-ins</div></div>
       </div>
     </div>
-    <div class="lv-guide"><div style="font-size:13px;font-weight:800;color:var(--t2);margin-bottom:12px;">🏅 레벨 안내</div>
-      ${LEVELS.map(l=>`<div class="lv-row ${l.lv===lv.lv?'cur':''}"><span class="lv-em">${l.em}</span><span class="lv-nm">Lv.${l.lv} ${l.n}</span><span class="lv-req">${l.min}${l.max===Infinity?'+':'-'+l.max}경기</span></div>`).join('')}
+    <div class="lv-guide"><div style="font-size:13px;font-weight:800;color:var(--t2);margin-bottom:12px;">🏅 Level Guide</div>
+      ${LEVELS.map(l=>`<div class="lv-row ${l.lv===lv.lv?'cur':''}"><span class="lv-em">${l.em}</span><span class="lv-nm">Lv.${l.lv} ${l.n}</span><span class="lv-req">${l.min}${l.max===Infinity?'+':'-'+l.max}matches</span></div>`).join('')}
     </div>
-    <div class="stl" style="margin-bottom:14px;"><h2>집관 인증</h2><span class="sub-badge">경기 시작 30분 전부터</span></div>
+    <div class="stl" style="margin-bottom:14px;"><h2>Fan Check-in</h2><span class="sub-badge">Available 30 min before kickoff</span></div>
     <div id="fz-ms"><div class="ldr" style="padding:20px;"><div class="spin"></div></div></div>
-    <div class="stl" style="margin-top:20px;margin-bottom:12px;"><h2>인증 기록</h2></div>
-    ${fanData.checkins.length?fanData.checkins.slice(0,10).map(ci=>`<div class="ci"><div><div style="font-size:13px;font-weight:800;">${ci.teams}</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">${ci.date}</div></div><div class="ci-badge">✓ 인증</div></div>`).join(''):`<div class="empty" style="padding:20px;">인증 기록 없음<br><span style="font-size:12px;">경기 시간에 집관 인증해보세요!</span></div>`}`;
+    <div class="stl" style="margin-top:20px;margin-bottom:12px;"><h2>Check-in History</h2></div>
+    ${fanData.checkins.length?fanData.checkins.slice(0,10).map(ci=>`<div class="ci"><div><div style="font-size:13px;font-weight:800;">${ci.teams}</div><div style="font-size:11px;color:var(--t2);margin-top:2px;">${ci.date}</div></div><div class="ci-badge">✓ Checked</div></div>`).join(''):`<div class="empty" style="padding:20px;">No check-ins yet<br><span style="font-size:12px;">Check in during match time!</span></div>`}`;
   loadFzMs();
 }
 
@@ -1365,7 +1412,7 @@ async function loadFzMs(){
   const main=SEL[0];
   const d=isKL(main)?await kl('/fixtures',{team:main.id,league:main.league==='KL1'?KL_LEAGUE:293,season:KL_SEASON,next:5}):await fd(`/teams/${main.id}/matches?status=SCHEDULED&limit=5`);
   const matches=isKL(main)?(d?.response||[]):(d?.matches||[]);
-  if(!matches.length){c.innerHTML=`<div class="empty" style="padding:12px;">예정 경기 없음</div>`;return;}
+  if(!matches.length){c.innerHTML=`<div class="empty" style="padding:12px;">No upcoming fixtures</div>`;return;}
   c.innerHTML=matches.map(m=>{
     const kl2=isKL(main);
     const h=kl2?m.teams.home:m.homeTeam,a=kl2?m.teams.away:m.awayTeam;
@@ -1376,14 +1423,14 @@ async function loadFzMs(){
     const can=isMT({utcDate:date});
     return`<div class="fz-match">
       <div class="fz-info"><div class="fz-teams">${teams}</div><div class="fz-time">📅 ${kd(date)} ${kt(date)} KST</div></div>
-      <button class="fz-btn" ${done||!can?'disabled':''} onclick="doCI(this,'${teams}','${kd(date)} ${kt(date)}','${mid}')">${done?'✓ 완료':can?'🔥 집관 인증':'⏰ 경기 시간에만'}</button>
+      <button class="fz-btn" ${done||!can?'disabled':''} onclick="doCI(this,'${teams}','${kd(date)} ${kt(date)}','${mid}')">${done?'✓ Done':can?'🔥 Check In Now':'⏰ Match time only'}</button>
     </div>`;
   }).join('');
 }
 
 function doCI(btn,teams,ts,mid){
   if(fanData.checkins.find(c=>c.matchId===mid))return;
-  btn.disabled=true;btn.textContent='✓ 완료';
+  btn.disabled=true;btn.textContent='✓ Done';
   const pLv=getLv(fanData.total).lv;
   fanData.total++;fanData.checkins.unshift({teams,date:ts,matchId:mid});saveFan();
   const nLv=getLv(fanData.total);
