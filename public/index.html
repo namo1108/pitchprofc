@@ -55,13 +55,16 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 
 /* Team grid */
 .ob-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:10px;}
-@media(max-width:500px){.ob-grid{grid-template-columns:repeat(4,1fr);}}
-
-.ob-team{
-  background:var(--bg3);border:2px solid var(--t3);
-  border-radius:16px;padding:16px 8px 12px;
-  text-align:center;cursor:pointer;transition:.2s;
-  position:relative;
+@media(max-width:500px){
+  .ob-grid {
+    grid-template-columns: repeat(3, 1fr); /* 4열에서 3열로 변경 */
+    gap: 12px;
+  }
+  .ob-team span {
+    font-size: 12px; /* 텍스트 크기 살짝 키움 */
+    white-space: normal; /* 긴 이름은 두 줄로 표시되도록 */
+    line-height: 1.2;
+  }
 }
 .ob-team:hover{border-color:rgba(16,185,129,.4);transform:translateY(-2px);}
 .ob-team.sel{border-color:var(--p);background:var(--ps);transform:translateY(-4px);box-shadow:0 8px 24px rgba(16,185,129,.2);}
@@ -152,15 +155,26 @@ html,body{height:100%;font-family:'Poppins',sans-serif;background:var(--bg);colo
 .page{display:none;padding:32px;}
 .page.on{display:block;animation:fu .2s ease;}
 @keyframes fu{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
-@media(max-width:767px){.page{padding:16px 14px 80px;}}
+@media(max-width:767px){
+  .page {
+    padding: 20px 16px 100px; /* 세 번째 값(하단 여백)을 80px에서 100px로 늘림 */
+  }
+}
 
 /* Mobile bottom nav */
-.bnav{display:none;flex-shrink:0;background:rgba(13,17,23,.97);backdrop-filter:blur(16px);border-top:1px solid var(--t3);padding-bottom:env(safe-area-inset-bottom,0);height:calc(58px + env(safe-area-inset-bottom,0));}
-@media(max-width:767px){.bnav{display:flex;}}
-.nbi{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:none;background:none;cursor:pointer;font-family:'Poppins',sans-serif;}
-.ni-ic{font-size:20px;}
-.ni-lb{font-size:10px;font-weight:700;color:var(--t2);}
-.nbi.on .ni-lb{color:var(--p);}
+display: none;
+  position: fixed; /* 추가: 화면 하단에 고정 */
+  bottom: 0;      /* 추가 */
+  left: 0;        /* 추가 */
+  right: 0;       /* 추가 */
+  flex-shrink: 0;
+  background: rgba(13, 17, 23, 0.97);
+  backdrop-filter: blur(16px);
+  border-top: 1px solid var(--t3);
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  height: calc(65px + env(safe-area-inset-bottom, 0)); /* 높이 약간 조절 */
+  z-index: 1000;  /* 추가: 다른 요소보다 위에 오도록 */
+}
 
 /* PC optimization */
 @media(min-width:1200px){
