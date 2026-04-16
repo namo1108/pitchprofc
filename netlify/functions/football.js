@@ -1,45 +1,35 @@
-const CACHE_NAME = 'pitch-in-v2';
+const FD  = 'https://api.football-data.org/v4';
+const KL  = 'https://v3.football.api-sports.io';
 
-self.addEventListener('install', e => {
-  self.skipWaiting();
-});
+const CORS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Headers': 'Content-Type',
+  'Content-Type': 'application/json',
+};
 
-self.addEventListener('activate', e => {
-  e.waitUntil(self.clients.claim());
-});
+exports.handler = async (event) => {
+  if (event.httpMethod === 'OPTIONS') return { statusCode: 204, headers: CORS, body: '' };
 
-// 앱에서 보내는 메시지 처리 (알림 표시)
-self.addEventListener('message', e => {
-  if (e.data?.type === 'show-notification') {
-    const { title, body, tag, icon, vibrate } = e.data;
-    e.waitUntil(
-      self.registration.showNotification(title, {
-        body,
-        icon: icon || '/favicon.ico',
-        badge: '/favicon.ico',
-        tag,
-        vibrate: vibrate || [200, 100, 200],
-        renotify: true,
-        requireInteraction: false,
-        data: { timestamp: Date.now() }
-      })
-    );
+  const { type='fd', path='', ...rest } = event.queryStringParameters || {};
+  const qs = new URLSearchParams(rest).toString();
+
+  try {
+    if (type === 'fd') {
+      const key = process.env.FOOTBALL_API_KEY || 'b00e3059f51741b7add3fcaab7eaadf0';
+      const url = `${FD}${path}${qs ? '?' + qs : ''}`;
+      const r = await fetch(url, { headers: { 'X-Auth-Token': key } });
+      const data = await r.json();
+      return { statusCode: 200, headers: CORS, body: JSON.stringify(data) };
+    }
+    if (type === 'kl') {
+      const key = process.env.APIFOOTBALL_KEY || '421bb1da924d4946cbd3bab1313cc926';
+      const url = `${KL}${path}${qs ? '?' + qs : ''}`;
+      const r = await fetch(url, { headers: { 'x-apisports-key': key } });
+      const data = await r.json();
+      return { statusCode: 200, headers: CORS, body: JSON.stringify(data) };
+    }
+    return { statusCode: 400, headers: CORS, body: JSON.stringify({ error: 'Unknown type' }) };
+  } catch (e) {
+    return { statusCode: 500, headers: CORS, body: JSON.stringify({ error: e.message }) };
   }
-});
-
-// Push 알림 클릭
-self.addEventListener('notificationclick', e => {
-  e.notification.close();
-  e.waitUntil(
-    clients.matchAll({ type: 'window', includeUncontrolled: true }).then(clientList => {
-      for (const client of clientList) {
-        if (client.url.includes(self.location.origin) && 'focus' in client) {
-          client.focus();
-          client.postMessage({ type: 'notification-click' });
-          return;
-        }
-      }
-      if (clients.openWindow) return clients.openWindow('/');
-    })
-  );
-});
+};
