@@ -560,7 +560,7 @@ img{display:block}
 // ── API Configuration ──
 // football-data.org supports CORS on free tier (direct browser calls OK)
 // Cloudflare Worker URL (optional, for K League data)
-const WORKER_URL = ''; // Set this if you deploy a Cloudflare Worker
+const WORKER_URL = 'https://pitchprofc.skagh662.workers.dev';
 
 // Direct API keys (safe for client-side on free tier)
 const FD_KEY = 'b00e3059f51741b7add3fcaab7eaadf0';
@@ -675,15 +675,13 @@ async function fd(path,ttl=90000){
     try{
       let r;
       if(ON_NETLIFY){
-        // Netlify proxy
         r=await fetch(`/api/football?type=fd&path=${encodeURIComponent(path)}`,{signal:AbortSignal.timeout(12000)});
+      } else if(WORKER_URL){
+        // Via Cloudflare Worker
+        r=await fetch(`${WORKER_URL}?type=fd&path=${encodeURIComponent(path)}`,{signal:AbortSignal.timeout(12000)});
       } else {
-        // Direct call to football-data.org (CORS supported)
-        const base=FD_BASE+path;
-        r=await fetch(base,{
-          headers:{'X-Auth-Token':FD_KEY},
-          signal:AbortSignal.timeout(12000)
-        });
+        // Direct call to football-data.org
+        r=await fetch(FD_BASE+path,{headers:{'X-Auth-Token':FD_KEY},signal:AbortSignal.timeout(12000)});
       }
       if(!r.ok)return null;
       const d=await r.json();
@@ -1066,6 +1064,8 @@ async function renderStd(){
   const encPath=encodeURIComponent('/competitions/'+curLg+'/standings');
   const testURL=ON_NETLIFY
     ? `/api/football?type=fd&path=${encPath}`
+    : WORKER_URL
+    ? `${WORKER_URL}?type=fd&path=${encPath}`
     : `${FD_BASE}/competitions/${curLg}/standings`;
   console.log('[Standings] Calling:', testURL);
 
@@ -1075,8 +1075,16 @@ async function renderStd(){
   let attempts;
   if(ON_NETLIFY){
     attempts=[testURL, testURL+'&season=2024', testURL+'&season=2025'];
+  } else if(WORKER_URL){
+    // Via Cloudflare Worker
+    const ep=encodeURIComponent('/competitions/'+curLg+'/standings');
+    attempts=[
+      `${WORKER_URL}?type=fd&path=${ep}`,
+      `${WORKER_URL}?type=fd&path=${ep}&season=2024`,
+      `${WORKER_URL}?type=fd&path=${ep}&season=2025`,
+    ];
   } else {
-    // Direct calls to football-data.org with Auth header
+    // Direct to football-data.org
     attempts=[
       {url:`${FD_BASE}/competitions/${curLg}/standings`,          headers:{'X-Auth-Token':FD_KEY}},
       {url:`${FD_BASE}/competitions/${curLg}/standings?season=2024`, headers:{'X-Auth-Token':FD_KEY}},
