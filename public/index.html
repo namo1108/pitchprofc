@@ -557,7 +557,21 @@ img{display:block}
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 // PITCH IN v5 — Complete Engine
 // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-const API = '/api/football';
+// ── API Configuration ──
+// football-data.org supports CORS on free tier (direct browser calls OK)
+// Cloudflare Worker URL (optional, for K League data)
+const WORKER_URL = ''; // Set this if you deploy a Cloudflare Worker
+
+// Direct API keys (safe for client-side on free tier)
+const FD_KEY = 'b00e3059f51741b7add3fcaab7eaadf0';
+const KL_KEY = '421bb1da924d4946cbd3bab1313cc926';
+
+const FD_BASE = 'https://api.football-data.org/v4';
+const KL_BASE = 'https://v3.football.api-sports.io';
+
+// Use Netlify proxy if on Netlify, else direct
+const ON_NETLIFY = location.hostname.endsWith('.netlify.app');
+const API = ON_NETLIFY ? '/api/football' : null; // null = use direct calls
 const KL_LG=292, KL2_LG=293, KL_SZ=2026;
 
 // ── i18n ──────────────────────────────────
@@ -655,17 +669,27 @@ const toast=(msg,col)=>{const el=document.getElementById('toast');el.textContent
 // ── API ────────────────────────────────────
 async function fd(path,ttl=90000){
   const cached=gc(path,ttl);if(cached)return cached;
-  // Deduplicate in-flight requests
   if(fd._inf&&fd._inf[path])return fd._inf[path];
   if(!fd._inf)fd._inf={};
   const promise=(async()=>{
     try{
-      const r=await fetch(`${API}?type=fd&path=${encodeURIComponent(path)}`,{signal:AbortSignal.timeout(12000)});
+      let r;
+      if(ON_NETLIFY){
+        // Netlify proxy
+        r=await fetch(`/api/football?type=fd&path=${encodeURIComponent(path)}`,{signal:AbortSignal.timeout(12000)});
+      } else {
+        // Direct call to football-data.org (CORS supported)
+        const base=FD_BASE+path;
+        r=await fetch(base,{
+          headers:{'X-Auth-Token':FD_KEY},
+          signal:AbortSignal.timeout(12000)
+        });
+      }
       if(!r.ok)return null;
       const d=await r.json();
       if(!d.errorCode||d.errorCode===200){sc(path,d);}
       return d;
-    }catch(e){return null;}
+    }catch(e){console.warn('[fd]',e.message,path);return null;}
     finally{if(fd._inf)delete fd._inf[path];}
   })();
   fd._inf[path]=promise;
@@ -675,8 +699,24 @@ const fdAll=(paths,ttl)=>Promise.all(paths.map(p=>fd(p,ttl)));
 async function klAPI(path,params={}){
   const qs=new URLSearchParams(params).toString();
   const key=path+'?'+qs;const c=gc(key,120000);if(c)return c;
-  try{const r=await fetch(`${API}?type=kl&path=${encodeURIComponent(path)}&${qs}`,{signal:AbortSignal.timeout(12000)});if(!r.ok)return null;const d=await r.json();if(d.errors&&Object.keys(d.errors).length)return null;sc(key,d);return d;}
-  catch{return null;}
+  try{
+    let r;
+    if(ON_NETLIFY){
+      r=await fetch(`/api/football?type=kl&path=${encodeURIComponent(path)}&${qs}`,{signal:AbortSignal.timeout(12000)});
+    } else if(WORKER_URL){
+      r=await fetch(`${WORKER_URL}?type=kl&path=${encodeURIComponent(path)}&${qs}`,{signal:AbortSignal.timeout(12000)});
+    } else {
+      // Direct call to api-sports.io
+      r=await fetch(`${KL_BASE}${path}${qs?'?'+qs:''}`,{
+        headers:{'x-apisports-key':KL_KEY},
+        signal:AbortSignal.timeout(12000)
+      });
+    }
+    if(!r.ok)return null;
+    const d=await r.json();
+    if(d.errors&&Object.keys(d.errors).length)return null;
+    sc(key,d);return d;
+  }catch{return null;}
 }
 
 // ── Service Worker + Notifications ────────
@@ -1014,62 +1054,110 @@ async function loadStd(){
 function stdGo(code,btn){curLg=code;document.querySelectorAll('#std-tabs .ptab').forEach(b=>b.classList.toggle('on-p',b.dataset.c===code));renderStd();}
 
 async function renderStd(){
-  const body=document.getElementById('std-body');if(!body)return;
+  const body=document.getElementById('std-body');
+  if(!body)return;
   body.innerHTML=sk(8);
-  if(curLg==='KL1'||curLg==='KL2'){await renderKLStd(body,curLg==='KL1'?KL_LG:KL2_LG);return;}
-
-  // Direct fetch with season fallback (try 2024 then 2025)
-  let data=null;
-  const seasons=['2024','2025'];
-  for(const season of seasons){
-    try{
-      const path=encodeURIComponent('/competitions/'+curLg+'/standings');
-      const url=`${API}?type=fd&path=${path}&season=${season}`;
-      const r=await fetch(url,{signal:AbortSignal.timeout(14000)});
-      if(r.ok){
-        const d=await r.json();
-        if(d?.standings?.[0]?.table?.length){data=d;break;}
-        // Try without season param on first attempt
-        if(season==='2024'){
-          const url2=`${API}?type=fd&path=${path}`;
-          const r2=await fetch(url2,{signal:AbortSignal.timeout(14000)});
-          if(r2.ok){const d2=await r2.json();if(d2?.standings?.[0]?.table?.length){data=d2;break;}}
-        }
-      }
-    }catch(e){console.warn('[std fetch]',e.message);}
-  }
-
-  const table=data?.standings?.[0]?.table;
-  if(!table?.length){
-    const code=data?.errorCode,msg=(data?.message||data?.error||'')+'';
-    const isRL=code===429||msg.toLowerCase().includes('rate')||msg.toLowerCase().includes('limit');
-    const isNoData=!data;
-    const errMsg=isNoData
-      ?'⚠ No response from server — check Netlify Function is deployed'
-      :isRL?`⏳ Rate limited (429) — auto-retry`
-      :code?`⚠ API Error ${code}: ${msg||'Unknown'}`
-      :`⚠ ${msg||'Standings not available for this league/season'}`;
-    body.innerHTML=`<div class="err-ban" style="flex-direction:column;align-items:flex-start;gap:6px;">
-      ${errMsg}
-      <div style="display:flex;gap:8px;margin-top:4px;">
-        <button onclick="renderStd()">🔄 Retry</button>
-        <button onclick="window.open('https://app.netlify.com','_blank')" style="font-size:11px;opacity:.7;">Check Netlify Logs</button>
-      </div>
-    </div>`;
-    if(isRL){let n=13;const ti=setInterval(()=>{n--;const b=body.querySelector('button');if(b)b.textContent=`🔄 Retry (${n}s)`;if(n<=0){clearInterval(ti);renderStd();}},1000);}
+  if(curLg==='KL1'||curLg==='KL2'){
+    await renderKLStd(body,curLg==='KL1'?KL_LG:KL2_LG);
     return;
   }
+
+  // Build the URL to call
+  const encPath=encodeURIComponent('/competitions/'+curLg+'/standings');
+  const testURL=ON_NETLIFY
+    ? `/api/football?type=fd&path=${encPath}`
+    : `${FD_BASE}/competitions/${curLg}/standings`;
+  console.log('[Standings] Calling:', testURL);
+
+  let data=null;
+  // Try current season first, then 2024, then 2025
+  // Build attempts list
+  let attempts;
+  if(ON_NETLIFY){
+    attempts=[testURL, testURL+'&season=2024', testURL+'&season=2025'];
+  } else {
+    // Direct calls to football-data.org with Auth header
+    attempts=[
+      {url:`${FD_BASE}/competitions/${curLg}/standings`,          headers:{'X-Auth-Token':FD_KEY}},
+      {url:`${FD_BASE}/competitions/${curLg}/standings?season=2024`, headers:{'X-Auth-Token':FD_KEY}},
+      {url:`${FD_BASE}/competitions/${curLg}/standings?season=2025`, headers:{'X-Auth-Token':FD_KEY}},
+    ];
+  }
+
+  for(const attempt of attempts){
+    const url=typeof attempt==='string'?attempt:attempt.url;
+    const headers=typeof attempt==='object'&&attempt.headers?attempt.headers:{};
+    try{
+      console.log('[Standings] Attempt:', url);
+      const r=await fetch(url,{headers,signal:AbortSignal.timeout(15000)});
+      console.log('[Standings] HTTP', r.status, url);
+      if(!r.ok){
+        body.innerHTML=`<div class="err-ban">
+          ⚠ Netlify Function returned HTTP ${r.status}<br>
+          <small style="opacity:.6">URL: ${url}</small>
+          <div style="margin-top:8px;display:flex;gap:8px">
+            <button onclick="renderStd()">🔄 Retry</button>
+          </div>
+        </div>`;
+        return;
+      }
+      const d=await r.json();
+      console.log('[Standings] Response keys:', Object.keys(d||{}).join(','), '| errorCode:', d?.errorCode, '| message:', d?.message);
+      if(d?.standings?.[0]?.table?.length){
+        data=d;
+        break;
+      }
+      if(d?.errorCode){
+        console.warn('[Standings] API error:', d.errorCode, d.message);
+        const isRL=d.errorCode===429||(d.message||'').toLowerCase().includes('rate');
+        if(isRL){
+          body.innerHTML=`<div class="err-ban">
+            ⏳ Rate limited (429) — auto-retry
+            <button onclick="renderStd()">🔄 Retry (13s)</button>
+          </div>`;
+          let n=13;
+          const ti=setInterval(()=>{n--;const b=body.querySelector('button');if(b)b.textContent=`🔄 Retry (${n}s)`;if(n<=0){clearInterval(ti);renderStd();}},1000);
+          return;
+        }
+        body.innerHTML=`<div class="err-ban">
+          ⚠ API Error ${d.errorCode}: ${d.message||'Unknown'}
+          <div style="margin-top:8px"><button onclick="renderStd()">🔄 Retry</button></div>
+        </div>`;
+        return;
+      }
+    }catch(e){
+      console.error('[Standings] Fetch error:', e.message, url);
+    }
+  }
+
+  if(!data){
+    body.innerHTML=`<div class="err-ban" style="flex-direction:column;align-items:flex-start">
+      <span>⚠ Could not load standings</span>
+      <small style="opacity:.6;margin-top:4px">Check browser console (F12) for details</small>
+      <small style="opacity:.6">Direct: ${FD_BASE}/competitions/${curLg}/standings</small>
+      <div style="margin-top:8px;display:flex;gap:8px">
+        <button onclick="renderStd()">🔄 Retry</button>
+        <button onclick="navigator.clipboard.writeText('${testURL}').then(()=>alert('Copied! Paste in browser to test'))">📋 Copy URL</button>
+      </div>
+    </div>`;
+    return;
+  }
+
   sc('/competitions/'+curLg+'/standings',data);
-  const rows=table,tot=rows.length,lg=LEAGUES.find(l=>l.c===curLg);
+  const rows=data.standings[0].table, tot=rows.length;
+  const lg=LEAGUES.find(l=>l.c===curLg);
   const fc={W:'var(--p)',D:'var(--am)',L:'var(--red)'};
-  const zM=tot===20?{cl:[1,2,3,4],el:[5],ecl:[6],rel:[18,19,20]}:tot===18?{cl:[1,2,3,4],el:[5],rel:[16,17,18]}:{cl:[1,2,3,4],el:[5],rel:[]};
+  const zM=tot===20?{cl:[1,2,3,4],el:[5],ecl:[6],rel:[18,19,20]}
+            :tot===18?{cl:[1,2,3,4],el:[5],rel:[16,17,18]}
+            :{cl:[1,2,3,4],el:[5],rel:[]};
   const zc=p=>zM.cl?.includes(p)?'zone-cl':zM.el?.includes(p)?'zone-el':zM.ecl?.includes(p)?'zone-ecl':zM.rel?.includes(p)?'zone-rel':'';
   const pc=p=>zM.cl?.includes(p)?'cl':zM.el?.includes(p)?'el':zM.rel?.includes(p)?'rel':'';
+
   body.innerHTML=`
     ${lg?`<div style="display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:11px 15px;background:var(--card2);border:1px solid var(--bd);border-radius:14px;">
       <img src="${lg.logo}" style="width:22px;height:22px;object-fit:contain;" onerror="this.style.opacity='.3'">
       <span style="font-family:var(--F);font-size:14px;font-weight:800;">${lg.n}</span>
-      <span style="margin-left:auto;font-size:11px;color:var(--t2);">2025–26</span>
+      <span style="margin-left:auto;font-size:11px;color:var(--t2);">Season ${data.filters?.season||'current'}</span>
     </div>`:''}
     <div class="std-scroll"><table class="std-tbl">
       <thead><tr><th>#</th><th>Club</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GD</th><th>Pts</th><th>Form</th></tr></thead>
@@ -1077,12 +1165,15 @@ async function renderStd(){
         const my=SEL.some(s=>s.id===row.team.id);
         const gd=row.goalsDiff>=0?'+'+row.goalsDiff:row.goalsDiff;
         const fm=(row.form||'').split('').slice(-5);
-        return`<tr class="${my?'my':''} ${zc(row.position)}"><td><span class="pos-n ${pc(row.position)}">${row.position}</span></td>
-          <td><div class="cc" style="cursor:pointer" onclick="openTeam(${row.team.id},'${ev(row.team.shortName||row.team.name)}')">
-            <img src="${row.team.crest||`https://crests.football-data.org/${row.team.id}.png`}" data-id="${row.team.id}" onerror="imgE(this)" width="20" height="20" style="object-fit:contain">${row.team.shortName||row.team.name}
+        return`<tr class="${my?'my':''} ${zc(row.position)}" style="cursor:pointer" onclick="openTeam(${row.team.id},'${ev(row.team.shortName||row.team.name)}')">
+          <td><span class="pos-n ${pc(row.position)}">${row.position}</span></td>
+          <td><div class="cc">
+            <img src="${row.team.crest||`https://crests.football-data.org/${row.team.id}.png`}" data-id="${row.team.id}" onerror="imgE(this)" width="20" height="20" style="object-fit:contain">
+            ${row.team.shortName||row.team.name}
           </div></td>
           <td>${row.all.played}</td><td>${row.all.win}</td><td>${row.all.draw}</td><td>${row.all.lose}</td>
-          <td><span class="gd">${gd}</span></td><td><span class="pts">${row.points}</span></td>
+          <td><span class="gd">${gd}</span></td>
+          <td><span class="pts">${row.points}</span></td>
           <td><div class="frm">${fm.map(f=>`<div class="fd" style="background:${fc[f]||'rgba(255,255,255,.1)'}"></div>`).join('')}</div></td>
         </tr>`;
       }).join('')}</tbody>
@@ -1094,6 +1185,8 @@ async function renderStd(){
       ${zM.rel?.length?`<div class="leg-it"><div class="leg-dot" style="background:var(--red)"></div>Relegation</div>`:''}
     </div>`;
 }
+
+
 async function renderKLStd(body,lgId){
   const d=await klAPI('/standings',{league:lgId,season:KL_SZ});
   if(!d?.response?.length){body.innerHTML=`<div class="err-ban">⚠ ${t('noData')}<button onclick="renderStd()">Retry</button></div>`;return;}
